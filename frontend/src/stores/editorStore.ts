@@ -228,7 +228,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
           scaleY: 1,
           opacity: 1,
           zIndex: nextZIndex(page.elements),
-          fill: shape === 'rect' ? '#e8a54b' : '#c9bfb3',
+          fill: shape === 'rect' ? '#4F80FF' : '#A855F7',
           cornerRadius: shape === 'rect' ? 0 : undefined,
         };
         set({ selectedIds: [el.id], tool: 'select' });

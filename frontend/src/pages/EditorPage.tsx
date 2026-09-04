@@ -99,7 +99,7 @@ export function EditorPage() {
         <div className="max-w-md text-center">
           <p className="font-display text-2xl text-paper">No se pudo abrir</p>
           <p className="mt-2 text-sm text-danger">{error}</p>
-          <Link to="/app" className="mt-5 inline-block text-sm font-semibold text-accent no-underline hover:underline">
+          <Link to="/app" className="mt-5 inline-block text-sm font-semibold text-neon no-underline hover:underline">
             Volver al estudio
           </Link>
         </div>
@@ -111,7 +111,7 @@ export function EditorPage() {
     return (
       <div className="grid min-h-svh place-items-center">
         <div className="text-center">
-          <Loader2 className="mx-auto mb-3 animate-spin text-accent" size={22} />
+          <Loader2 className="mx-auto mb-3 animate-spin text-neon" size={22} />
           <p className="text-sm text-paper-muted">Abriendo editor…</p>
         </div>
       </div>
@@ -221,7 +221,7 @@ export function EditorPage() {
           {project.published ? (
             <Link
               to={`/p/${project.slug}`}
-              className="hidden text-xs font-medium text-accent no-underline hover:underline md:inline"
+              className="hidden text-xs font-medium text-neon no-underline hover:underline md:inline"
               target="_blank"
             >
               /p/{project.slug}

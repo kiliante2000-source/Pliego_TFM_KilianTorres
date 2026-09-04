@@ -146,8 +146,8 @@ function TextProps({ el }: { el: TextElement }) {
           )
         }
       >
-        <option value="Fraunces">Fraunces</option>
-        <option value="Manrope">Manrope</option>
+        <option value="Space Grotesk">Space Grotesk</option>
+        <option value="JetBrains Mono">JetBrains Mono</option>
         <option value="Georgia">Georgia</option>
         <option value="Arial">Arial</option>
       </Select>
