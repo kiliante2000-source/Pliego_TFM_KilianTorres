@@ -43,7 +43,7 @@ export function EditorToolbar({ projectId }: { projectId: string }) {
           onClick={t.action}
           className={cn(
             'grid h-10 w-10 place-items-center rounded-lg text-paper-muted transition duration-150 hover:bg-ink-3 hover:text-paper',
-            tool === t.id && 'bg-accent-soft text-accent ring-1 ring-accent/30',
+            tool === t.id && 'bg-accent-soft text-neon ring-1 ring-neon/35',
           )}
         >
           <t.icon size={18} strokeWidth={1.75} />

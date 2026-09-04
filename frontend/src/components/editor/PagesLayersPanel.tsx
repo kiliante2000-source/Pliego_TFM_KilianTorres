@@ -40,7 +40,7 @@ export function PagesLayersPanel() {
                 className={cn(
                   'flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-sm transition',
                   p.id === activePageId
-                    ? 'bg-accent-soft text-accent ring-1 ring-accent/25'
+                    ? 'bg-accent-soft text-neon ring-1 ring-neon/30'
                     : 'text-paper-muted hover:bg-ink-3 hover:text-paper',
                 )}
                 onClick={() => setActivePage(p.id)}
@@ -111,7 +111,7 @@ export function PagesLayersPanel() {
                   className={cn(
                     'w-full rounded-lg px-2.5 py-2 text-left text-xs transition',
                     selectedIds.includes(el.id)
-                      ? 'bg-accent-soft text-accent ring-1 ring-accent/25'
+                      ? 'bg-accent-soft text-neon ring-1 ring-neon/30'
                       : 'text-paper-muted hover:bg-ink-3 hover:text-paper',
                   )}
                   onClick={() => select([el.id])}
