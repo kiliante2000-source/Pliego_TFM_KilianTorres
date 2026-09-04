@@ -4,28 +4,67 @@ import { useState } from 'react';
 import { Logo, Button, ButtonLink, Input } from '../components/ui/primitives';
 import { useAuthStore } from '../stores/authStore';
 
+const ease = [0.16, 1, 0.3, 1] as const;
+
 export function LandingPage() {
   const user = useAuthStore((s) => s.user);
 
   return (
     <div className="relative min-h-svh overflow-hidden">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-40"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(242,235,227,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(242,235,227,0.04) 1px, transparent 1px)',
-          backgroundSize: '72px 72px',
-        }}
-      />
+      {/* Full-bleed editorial plane */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-y-0 right-0 w-full lg:w-[54%]">
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9, ease }}
+            className="relative h-full min-h-svh overflow-hidden bg-[#0c0b0a]"
+          >
+            <div
+              className="absolute inset-0 opacity-[0.07]"
+              style={{
+                backgroundImage:
+                  'linear-gradient(rgba(244,238,230,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(244,238,230,0.5) 1px, transparent 1px)',
+                backgroundSize: '64px 64px',
+              }}
+            />
+            <motion.div
+              initial={{ scaleY: 0 }}
+              animate={{ scaleY: 1 }}
+              transition={{ duration: 0.85, delay: 0.25, ease }}
+              className="absolute inset-x-0 bottom-0 h-[32%] origin-bottom bg-accent"
+            />
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.35, ease }}
+              className="absolute left-[8%] top-[18%] right-[10%]"
+            >
+              <p className="font-display text-[clamp(3.5rem,8vw,7rem)] font-semibold leading-[0.9] tracking-[-0.04em] text-paper">
+                PLIEGO
+              </p>
+              <p className="mt-6 max-w-sm text-base leading-relaxed text-paper-muted sm:text-lg">
+                Diseño editorial desde el navegador
+              </p>
+            </motion.div>
+            <div className="absolute bottom-[10%] left-[8%] text-[11px] font-bold tracking-[0.28em] text-ink">
+              Nº 01 · COLECCIÓN VISUAL
+            </div>
+          </motion.div>
+        </div>
+      </div>
 
-      <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
+      <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6 lg:px-8">
         <Logo />
-        <nav className="flex items-center gap-3">
+        <nav className="flex items-center gap-2 sm:gap-3">
           {user ? (
             <ButtonLink to="/app">Ir al estudio</ButtonLink>
           ) : (
             <>
-              <Link to="/login" className="text-sm text-paper-muted no-underline hover:text-paper">
+              <Link
+                to="/login"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-paper-muted no-underline transition hover:bg-ink-3/60 hover:text-paper"
+              >
                 Entrar
               </Link>
               <ButtonLink to="/register">Crear cuenta</ButtonLink>
@@ -34,59 +73,26 @@ export function LandingPage() {
         </nav>
       </header>
 
-      <main className="relative z-10 mx-auto grid min-h-[calc(100svh-88px)] w-full max-w-6xl items-center gap-10 px-6 pb-16 pt-4 lg:grid-cols-[1.1fr_0.9fr]">
+      <main className="relative z-10 mx-auto flex min-h-[calc(100svh-88px)] w-full max-w-6xl items-center px-6 pb-16 pt-8 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 text-left"
+          transition={{ duration: 0.7, ease }}
+          className="w-full max-w-xl text-left lg:w-[46%]"
         >
-          <p className="mb-5 font-display text-5xl leading-[0.95] tracking-tight text-paper sm:text-7xl">
+          <p className="font-display text-[clamp(3.25rem,9vw,5.75rem)] font-semibold leading-[0.92] tracking-[-0.04em] text-paper">
             Pliego
           </p>
-          <h1 className="max-w-xl text-xl font-medium leading-snug text-paper-muted sm:text-2xl">
-            Composición editorial digital con la precisión de un estudio y la fluidez de un producto SaaS.
+          <h1 className="mt-6 max-w-md text-lg font-medium leading-snug text-paper-muted sm:text-xl">
+            Maqueta, versiona y publica piezas editoriales con la fluidez de un estudio digital.
           </h1>
-          <p className="mt-5 max-w-lg text-sm leading-relaxed text-paper-muted/80">
-            Crea páginas, organiza capas, versiona documentos, exporta a PDF y publica con un enlace.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink to={user ? '/app' : '/register'} className="min-w-40">
+          <div className="mt-9 flex flex-wrap gap-3">
+            <ButtonLink to={user ? '/app' : '/register'} className="min-w-44">
               Empezar a diseñar
             </ButtonLink>
             <ButtonLink to="/p/portada-demo-pliego" variant="soft">
-              Ver publicación demo
+              Ver demo publicada
             </ButtonLink>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="relative"
-          aria-hidden
-        >
-          <div className="absolute -inset-6 rounded-[2rem] bg-accent/10 blur-2xl" />
-          <div className="relative overflow-hidden rounded-[1.5rem] border border-line bg-ink-2 shadow-[0_40px_80px_rgba(0,0,0,0.45)]">
-            <div className="flex items-center gap-2 border-b border-line px-4 py-3">
-              <span className="h-2.5 w-2.5 rounded-full bg-line" />
-              <span className="h-2.5 w-2.5 rounded-full bg-line" />
-              <span className="h-2.5 w-2.5 rounded-full bg-line" />
-              <span className="ml-3 text-xs text-paper-muted">editor · portada</span>
-            </div>
-            <div className="grid aspect-[4/5] place-items-center bg-[#0f0e0c] p-8">
-              <div className="relative h-full w-full max-w-sm overflow-hidden bg-[#0c0b0a]">
-                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-accent" />
-                <div className="absolute left-8 top-16 font-display text-5xl text-paper">PLIEGO</div>
-                <div className="absolute left-8 top-36 max-w-[14rem] text-sm leading-relaxed text-paper-muted">
-                  Diseño editorial desde el navegador
-                </div>
-                <div className="absolute bottom-10 left-8 text-xs font-semibold tracking-[0.18em] text-ink">
-                  Nº 01 · COLECCIÓN VISUAL
-                </div>
-              </div>
-            </div>
           </div>
         </motion.div>
       </main>
@@ -104,12 +110,49 @@ function AuthShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="grid min-h-svh place-items-center px-4 py-10">
-      <div className="w-full max-w-md rounded-2xl border border-line bg-ink-2/90 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.35)] backdrop-blur">
-        <Logo className="mb-8" />
-        <h1 className="font-display text-3xl text-paper">{title}</h1>
-        <p className="mt-2 text-sm text-paper-muted">{subtitle}</p>
-        <div className="mt-8">{children}</div>
+    <div className="relative grid min-h-svh lg:grid-cols-2">
+      <aside className="relative hidden overflow-hidden bg-[#0c0b0a] lg:block">
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(244,238,230,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(244,238,230,0.6) 1px, transparent 1px)',
+            backgroundSize: '56px 56px',
+          }}
+        />
+        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-accent" />
+        <div className="relative flex h-full flex-col justify-between p-12">
+          <Logo />
+          <div>
+            <p className="font-display text-5xl font-semibold leading-none tracking-tight text-paper xl:text-6xl">
+              El taller
+              <br />
+              editorial
+            </p>
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-paper-muted">
+              Capas, tipografía, versiones y publicación en un solo flujo de trabajo.
+            </p>
+          </div>
+          <p className="text-[11px] font-semibold tracking-[0.22em] text-ink">PLIEGO · STUDIO</p>
+        </div>
+      </aside>
+
+      <div className="relative grid place-items-center px-5 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease }}
+          className="w-full max-w-md"
+        >
+          <div className="mb-10 lg:hidden">
+            <Logo />
+          </div>
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-paper sm:text-4xl">
+            {title}
+          </h1>
+          <p className="mt-2 text-sm leading-relaxed text-paper-muted">{subtitle}</p>
+          <div className="mt-8">{children}</div>
+        </motion.div>
       </div>
     </div>
   );
@@ -124,7 +167,7 @@ export function LoginPage() {
   const [password, setPassword] = useState('demo1234');
 
   return (
-    <AuthShell title="Entrar al estudio" subtitle="Continúa tus proyectos editoriales.">
+    <AuthShell title="Entrar al estudio" subtitle="Continúa tus proyectos editoriales donde los dejaste.">
       <form
         className="space-y-4"
         onSubmit={async (e) => {
@@ -145,14 +188,18 @@ export function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {error ? <p className="text-sm text-danger">{error}</p> : null}
+        {error ? (
+          <p className="rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger" role="alert">
+            {error}
+          </p>
+        ) : null}
         <Button className="w-full" type="submit" disabled={loading}>
           {loading ? 'Entrando…' : 'Iniciar sesión'}
         </Button>
       </form>
-      <p className="mt-6 text-sm text-paper-muted">
+      <p className="mt-7 text-sm text-paper-muted">
         ¿Nuevo en Pliego?{' '}
-        <Link to="/register" className="text-accent no-underline hover:underline">
+        <Link to="/register" className="font-semibold text-accent no-underline hover:underline">
           Crear cuenta
         </Link>
       </p>
@@ -170,7 +217,7 @@ export function RegisterPage() {
   const [password, setPassword] = useState('');
 
   return (
-    <AuthShell title="Crear cuenta" subtitle="Empieza a maquetar en minutos.">
+    <AuthShell title="Crear cuenta" subtitle="Abre tu estudio y empieza a componer en minutos.">
       <form
         className="space-y-4"
         onSubmit={async (e) => {
@@ -193,14 +240,18 @@ export function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {error ? <p className="text-sm text-danger">{error}</p> : null}
-        <Button className="w-full" disabled={loading}>
+        {error ? (
+          <p className="rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger" role="alert">
+            {error}
+          </p>
+        ) : null}
+        <Button className="w-full" type="submit" disabled={loading}>
           {loading ? 'Creando…' : 'Registrarme'}
         </Button>
       </form>
-      <p className="mt-6 text-sm text-paper-muted">
+      <p className="mt-7 text-sm text-paper-muted">
         ¿Ya tienes cuenta?{' '}
-        <Link to="/login" className="text-accent no-underline hover:underline">
+        <Link to="/login" className="font-semibold text-accent no-underline hover:underline">
           Entrar
         </Link>
       </p>

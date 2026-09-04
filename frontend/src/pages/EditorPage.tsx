@@ -95,10 +95,11 @@ export function EditorPage() {
 
   if (error) {
     return (
-      <div className="grid min-h-svh place-items-center">
-        <div className="text-center">
-          <p className="text-danger">{error}</p>
-          <Link to="/app" className="mt-4 inline-block text-accent">
+      <div className="grid min-h-svh place-items-center px-6">
+        <div className="max-w-md text-center">
+          <p className="font-display text-2xl text-paper">No se pudo abrir</p>
+          <p className="mt-2 text-sm text-danger">{error}</p>
+          <Link to="/app" className="mt-5 inline-block text-sm font-semibold text-accent no-underline hover:underline">
             Volver al estudio
           </Link>
         </div>
@@ -107,23 +108,30 @@ export function EditorPage() {
   }
 
   if (!project || !documentModel || !projectId) {
-    return <div className="grid min-h-svh place-items-center text-paper-muted">Abriendo editor…</div>;
+    return (
+      <div className="grid min-h-svh place-items-center">
+        <div className="text-center">
+          <Loader2 className="mx-auto mb-3 animate-spin text-accent" size={22} />
+          <p className="text-sm text-paper-muted">Abriendo editor…</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="flex h-svh flex-col overflow-hidden bg-ink">
-      <header className="flex items-center justify-between gap-3 border-b border-line bg-ink-2/95 px-3 py-2">
-        <div className="flex min-w-0 items-center gap-3">
+      <header className="flex items-center justify-between gap-3 border-b border-line studio-rail px-3 py-2.5">
+        <div className="flex min-w-0 items-center gap-2.5">
           <Link
             to="/app"
-            className="grid h-9 w-9 place-items-center rounded-md text-paper-muted no-underline hover:bg-ink-3 hover:text-paper"
-            title="Volver"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-paper-muted no-underline transition hover:bg-ink-3 hover:text-paper"
+            title="Volver al estudio"
           >
             <ArrowLeft size={18} />
           </Link>
           <div className="min-w-0">
             <Input
-              className="border-transparent bg-transparent px-1 py-1 font-display text-lg"
+              className="border-transparent bg-transparent px-1 py-0.5 font-display text-lg font-semibold tracking-tight focus:border-line focus:bg-ink/40"
               value={documentModel.meta.title}
               onChange={(e) => {
                 useEditorStore.getState().updateDocument((doc) => ({
@@ -136,7 +144,7 @@ export function EditorPage() {
             <div className="flex items-center gap-2 px-1 text-[11px] text-paper-muted">
               {saveStatus === 'saving' ? (
                 <>
-                  <Loader2 size={12} className="animate-spin" /> Guardando…
+                  <Loader2 size={12} className="animate-spin text-accent" /> Guardando…
                 </>
               ) : saveStatus === 'saved' ? (
                 <>
@@ -148,7 +156,7 @@ export function EditorPage() {
                   <CloudOff size={12} className="text-danger" /> Error al guardar
                 </>
               ) : (
-                'Listo'
+                'Listo para editar'
               )}
             </div>
           </div>
@@ -157,6 +165,7 @@ export function EditorPage() {
         <div className="flex flex-wrap items-center justify-end gap-2">
           <Button
             variant="soft"
+            className="hidden sm:inline-flex"
             onClick={async () => {
               setVersionsOpen(true);
               await refreshVersions();
@@ -212,7 +221,7 @@ export function EditorPage() {
           {project.published ? (
             <Link
               to={`/p/${project.slug}`}
-              className="text-xs text-accent no-underline hover:underline"
+              className="hidden text-xs font-medium text-accent no-underline hover:underline md:inline"
               target="_blank"
             >
               /p/{project.slug}
@@ -231,11 +240,18 @@ export function EditorPage() {
       </div>
 
       {versionsOpen ? (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-line bg-ink-2 p-5 shadow-2xl">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="font-display text-xl text-paper">Versiones</h3>
-              <button className="text-paper-muted hover:text-paper" onClick={() => setVersionsOpen(false)}>
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg rounded-2xl border border-line bg-ink-2 p-6 shadow-[0_40px_100px_rgba(0,0,0,0.55)]">
+            <div className="mb-5 flex items-center justify-between">
+              <div>
+                <h3 className="font-display text-2xl text-paper">Versiones</h3>
+                <p className="mt-1 text-xs text-paper-muted">Snapshots manuales del documento.</p>
+              </div>
+              <button
+                type="button"
+                className="rounded-lg px-3 py-1.5 text-sm text-paper-muted transition hover:bg-ink-3 hover:text-paper"
+                onClick={() => setVersionsOpen(false)}
+              >
                 Cerrar
               </button>
             </div>
@@ -253,15 +269,19 @@ export function EditorPage() {
             </Button>
             <ul className="max-h-80 space-y-2 overflow-auto scrollbar-thin">
               {versions.length === 0 ? (
-                <li className="text-sm text-paper-muted">Aún no hay versiones.</li>
+                <li className="rounded-lg border border-dashed border-line px-4 py-8 text-center text-sm text-paper-muted">
+                  Aún no hay versiones.
+                </li>
               ) : (
                 versions.map((v) => (
                   <li
                     key={v.id}
-                    className="flex items-center justify-between rounded-lg border border-line px-3 py-2"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-line bg-ink/40 px-3 py-2.5"
                   >
-                    <div>
-                      <p className="text-sm text-paper">{v.label || `v${v.versionNumber}`}</p>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-paper">
+                        {v.label || `v${v.versionNumber}`}
+                      </p>
                       <p className="text-[11px] text-paper-muted">
                         v{v.versionNumber} · {formatDate(v.createdAt)}
                         {v.user ? ` · ${v.user.name}` : ''}

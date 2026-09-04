@@ -87,7 +87,7 @@ export function EditorCanvas() {
   };
 
   return (
-    <div ref={containerRef} className="relative h-full w-full overflow-auto scrollbar-thin bg-[#090807]">
+    <div ref={containerRef} className="canvas-stage relative h-full w-full overflow-auto scrollbar-thin">
       <div
         className="flex min-h-full min-w-full items-center justify-center p-10"
         style={{

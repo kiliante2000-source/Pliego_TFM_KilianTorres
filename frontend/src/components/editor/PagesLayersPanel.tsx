@@ -19,14 +19,15 @@ export function PagesLayersPanel() {
   const layers = page ? [...sortElements(page.elements)].reverse() : [];
 
   return (
-    <aside className="flex w-60 flex-col border-r border-line bg-ink-2/80">
+    <aside className="studio-rail flex w-60 flex-col border-r">
       <div className="border-b border-line px-3 py-3">
-        <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-paper-muted">
+        <div className="mb-2.5 flex items-center justify-between">
+          <h2 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-paper-muted">
             Páginas
           </h2>
           <button
-            className="rounded bg-ink-3 px-2 py-1 text-[11px] text-paper hover:bg-line"
+            type="button"
+            className="rounded-md bg-ink-3 px-2 py-1 text-[11px] font-semibold text-paper transition hover:bg-ink-4"
             onClick={addPage}
           >
             + Página
@@ -37,8 +38,10 @@ export function PagesLayersPanel() {
             <li key={p.id}>
               <button
                 className={cn(
-                  'flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm transition',
-                  p.id === activePageId ? 'bg-accent/15 text-accent' : 'text-paper-muted hover:bg-ink-3',
+                  'flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-sm transition',
+                  p.id === activePageId
+                    ? 'bg-accent-soft text-accent ring-1 ring-accent/25'
+                    : 'text-paper-muted hover:bg-ink-3 hover:text-paper',
                 )}
                 onClick={() => setActivePage(p.id)}
               >
@@ -92,20 +95,23 @@ export function PagesLayersPanel() {
       </div>
 
       <div className="flex-1 overflow-auto p-3 scrollbar-thin">
-        <h2 className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-paper-muted">
+        <h2 className="mb-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-paper-muted">
           Capas
         </h2>
         {layers.length === 0 ? (
-          <p className="text-xs text-paper-muted">Sin elementos en esta página.</p>
+          <p className="rounded-lg border border-dashed border-line px-3 py-6 text-center text-xs text-paper-muted">
+            Sin elementos en esta página.
+          </p>
         ) : (
           <ul className="space-y-1">
             {layers.map((el) => (
               <li key={el.id}>
                 <button
+                  type="button"
                   className={cn(
-                    'w-full rounded-md px-2 py-2 text-left text-xs transition',
+                    'w-full rounded-lg px-2.5 py-2 text-left text-xs transition',
                     selectedIds.includes(el.id)
-                      ? 'bg-accent/15 text-accent'
+                      ? 'bg-accent-soft text-accent ring-1 ring-accent/25'
                       : 'text-paper-muted hover:bg-ink-3 hover:text-paper',
                   )}
                   onClick={() => select([el.id])}

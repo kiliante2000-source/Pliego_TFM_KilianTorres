@@ -18,24 +18,24 @@ export function PropertiesPanel() {
   const el = selected[0] as CanvasElement | undefined;
 
   return (
-    <aside className="flex w-72 flex-col border-l border-line bg-ink-2/90">
-      <div className="border-b border-line px-4 py-3">
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-paper-muted">
+    <aside className="studio-rail flex w-72 flex-col border-l">
+      <div className="border-b border-line px-4 py-3.5">
+        <h2 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-paper-muted">
           Propiedades
         </h2>
       </div>
       <div className="flex-1 space-y-4 overflow-auto p-4 scrollbar-thin">
         {!el ? (
           <div className="space-y-3">
-            <p className="text-sm text-paper-muted">Página activa</p>
+            <p className="text-sm font-medium text-paper">Página activa</p>
             <Input
               label="Fondo"
               type="color"
               value={page?.background.fill || '#ffffff'}
               onChange={(e) => setBackground(e.target.value)}
             />
-            <p className="text-xs text-paper-muted">
-              Selecciona un elemento para editar tipografía, posición y capas.
+            <p className="text-xs leading-relaxed text-paper-muted">
+              Selecciona un elemento en el lienzo o en Capas para editar tipografía, posición y estilo.
             </p>
           </div>
         ) : (
