@@ -144,7 +144,7 @@ export function EditorPage() {
             <div className="flex items-center gap-2 px-1 text-[11px] text-paper-muted">
               {saveStatus === 'saving' ? (
                 <>
-                  <Loader2 size={12} className="animate-spin text-accent" /> Guardando…
+                  <Loader2 size={12} className="animate-spin text-neon" /> Guardando…
                 </>
               ) : saveStatus === 'saved' ? (
                 <>

@@ -9,10 +9,10 @@ import type { Project, TemplateInfo } from '../types/document';
 import { cn, formatDate } from '../utils/cn';
 
 const templateAccent: Record<string, string> = {
-  portada: 'from-neon/40 via-violet/30 to-rosa/40',
-  revista: 'from-violet/35 via-ink-3 to-neon/25',
-  catalogo: 'from-paper/20 via-ink-3 to-naranja/30',
-  presentacion: 'from-neon/30 via-rosa/25 to-lima/20',
+  portada: 'from-neon/50 via-violet/35 to-rosa/40',
+  revista: 'from-violet/40 via-ink-3 to-neon/30',
+  catalogo: 'from-violet/35 via-rosa/25 to-lima/20',
+  presentacion: 'from-neon/35 via-rosa/30 to-violet/25',
 };
 
 const categoryLabel: Record<string, string> = {

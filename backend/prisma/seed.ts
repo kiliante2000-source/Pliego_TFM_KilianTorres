@@ -19,24 +19,40 @@ async function main() {
     },
   });
 
-  const existing = await prisma.project.count({ where: { ownerId: user.id } });
-  if (existing === 0) {
-    const template = templates[0];
-    const doc = template.build();
-    await prisma.project.create({
-      data: {
-        ownerId: user.id,
-        title: 'Portada demo',
-        slug: 'portada-demo-pliego',
-        width: template.width,
-        height: template.height,
-        orientation: template.orientation,
-        documentJson: JSON.stringify(doc),
-        visibility: 'public',
-        published: true,
-      },
-    });
+  const template = templates[0];
+  const brandedDoc = template.build();
+  brandedDoc.meta.title = 'Portada demo';
 
+  await prisma.project.upsert({
+    where: { slug: 'portada-demo-pliego' },
+    update: {
+      title: 'Portada demo',
+      width: template.width,
+      height: template.height,
+      orientation: template.orientation,
+      documentJson: JSON.stringify(brandedDoc),
+      visibility: 'public',
+      published: true,
+      status: 'active',
+      ownerId: user.id,
+    },
+    create: {
+      ownerId: user.id,
+      title: 'Portada demo',
+      slug: 'portada-demo-pliego',
+      width: template.width,
+      height: template.height,
+      orientation: template.orientation,
+      documentJson: JSON.stringify(brandedDoc),
+      visibility: 'public',
+      published: true,
+    },
+  });
+
+  const blank = await prisma.project.findFirst({
+    where: { slug: 'borrador-vacio-pliego' },
+  });
+  if (!blank) {
     await prisma.project.create({
       data: {
         ownerId: user.id,
@@ -50,7 +66,7 @@ async function main() {
     });
   }
 
-  console.log('Seed OK — demo@pliego.app / demo1234');
+  console.log('Seed OK — demo@pliego.app / demo1234 (plantillas marca PLIEGO)');
 }
 
 main()

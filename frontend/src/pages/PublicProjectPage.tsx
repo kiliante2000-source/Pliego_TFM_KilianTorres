@@ -48,7 +48,7 @@ export function PublicProjectPage() {
   }
 
   return (
-    <div className="min-h-svh bg-ink">
+    <div className="min-h-svh bg-ink mesh-bg-soft">
       <header className="border-b border-line/60 bg-ink/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
           <Logo />

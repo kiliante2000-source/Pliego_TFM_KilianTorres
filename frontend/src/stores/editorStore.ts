@@ -198,7 +198,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
           text: 'Escribe aquí',
           style: {
             fontSize: 36,
-            fontFamily: 'Fraunces',
+            fontFamily: 'Space Grotesk',
             fontWeight: 600,
             color: '#111111',
             align: 'left',
