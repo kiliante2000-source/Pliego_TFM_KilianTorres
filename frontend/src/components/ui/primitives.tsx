@@ -14,25 +14,47 @@ export function Logo({ className }: { className?: string }) {
   );
 }
 
+const buttonVariants = {
+  primary: 'bg-accent text-ink hover:bg-accent-2',
+  ghost: 'bg-transparent text-paper hover:bg-ink-3',
+  soft: 'bg-ink-3 text-paper hover:bg-line',
+  danger: 'bg-danger/20 text-danger hover:bg-danger/30',
+} as const;
+
+type ButtonVariant = keyof typeof buttonVariants;
+
+function buttonClassName(variant: ButtonVariant, className?: string) {
+  return cn(
+    'inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold no-underline transition disabled:cursor-not-allowed disabled:opacity-50',
+    buttonVariants[variant],
+    className,
+  );
+}
+
 export function Button({
   className,
   variant = 'primary',
+  type = 'button',
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'ghost' | 'danger' | 'soft';
+  variant?: ButtonVariant;
+}) {
+  return <button type={type} className={buttonClassName(variant, className)} {...props} />;
+}
+
+export function ButtonLink({
+  className,
+  variant = 'primary',
+  to,
+  children,
+  ...props
+}: React.ComponentProps<typeof Link> & {
+  variant?: ButtonVariant;
 }) {
   return (
-    <button
-      className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50',
-        variant === 'primary' && 'bg-accent text-ink hover:bg-accent-2',
-        variant === 'ghost' && 'bg-transparent text-paper hover:bg-ink-3',
-        variant === 'soft' && 'bg-ink-3 text-paper hover:bg-line',
-        variant === 'danger' && 'bg-danger/20 text-danger hover:bg-danger/30',
-        className,
-      )}
-      {...props}
-    />
+    <Link to={to} className={buttonClassName(variant, className)} {...props}>
+      {children}
+    </Link>
   );
 }
 

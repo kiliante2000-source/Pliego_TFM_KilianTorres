@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { Logo, Button, Input } from '../components/ui/primitives';
+import { Logo, Button, ButtonLink, Input } from '../components/ui/primitives';
 import { useAuthStore } from '../stores/authStore';
 
 export function LandingPage() {
@@ -18,21 +18,17 @@ export function LandingPage() {
         }}
       />
 
-      <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
+      <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
         <Logo />
         <nav className="flex items-center gap-3">
           {user ? (
-            <Link to="/app" className="no-underline">
-              <Button>Ir al estudio</Button>
-            </Link>
+            <ButtonLink to="/app">Ir al estudio</ButtonLink>
           ) : (
             <>
               <Link to="/login" className="text-sm text-paper-muted no-underline hover:text-paper">
                 Entrar
               </Link>
-              <Link to="/register" className="no-underline">
-                <Button>Crear cuenta</Button>
-              </Link>
+              <ButtonLink to="/register">Crear cuenta</ButtonLink>
             </>
           )}
         </nav>
@@ -43,7 +39,7 @@ export function LandingPage() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="text-left"
+          className="relative z-10 text-left"
         >
           <p className="mb-5 font-display text-5xl leading-[0.95] tracking-tight text-paper sm:text-7xl">
             Pliego
@@ -55,12 +51,12 @@ export function LandingPage() {
             Crea páginas, organiza capas, versiona documentos, exporta a PDF y publica con un enlace.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to={user ? '/app' : '/register'} className="no-underline">
-              <Button className="min-w-40">Empezar a diseñar</Button>
-            </Link>
-            <Link to="/p/portada-demo-pliego" className="no-underline">
-              <Button variant="soft">Ver publicación demo</Button>
-            </Link>
+            <ButtonLink to={user ? '/app' : '/register'} className="min-w-40">
+              Empezar a diseñar
+            </ButtonLink>
+            <ButtonLink to="/p/portada-demo-pliego" variant="soft">
+              Ver publicación demo
+            </ButtonLink>
           </div>
         </motion.div>
 
@@ -150,7 +146,7 @@ export function LoginPage() {
           required
         />
         {error ? <p className="text-sm text-danger">{error}</p> : null}
-        <Button className="w-full" disabled={loading}>
+        <Button className="w-full" type="submit" disabled={loading}>
           {loading ? 'Entrando…' : 'Iniciar sesión'}
         </Button>
       </form>
