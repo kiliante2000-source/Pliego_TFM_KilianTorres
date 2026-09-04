@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("user") // user | admin
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  projects Project[]
+  versions ProjectVersion[]
+}
+
+model Project {
+  id           String   @id @default(cuid())
+  ownerId      String
+  title        String
+  slug         String   @unique
+  width        Int      @default(1080)
+  height       Int      @default(1350)
+  orientation  String   @default("portrait") // portrait | landscape
+  status       String   @default("active") // active | archived
+  visibility   String   @default("private") // private | public
+  published    Boolean  @default(false)
+  documentJson String   @default("{}")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  owner    User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  versions ProjectVersion[]
+  assets   Asset[]
+  exports  Export[]
+
+  @@index([ownerId])
+  @@index([slug])
+}
+
+model ProjectVersion {
+  id            String   @id @default(cuid())
+  projectId     String
+  userId        String
+  versionNumber Int
+  label         String?
+  documentJson  String
+  createdAt     DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, versionNumber])
+  @@index([projectId])
+}
+
+model Asset {
+  id         String   @id @default(cuid())
+  projectId  String
+  filename   String
+  mimeType   String
+  size       Int
+  storageKey String
+  createdAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model Export {
+  id        String   @id @default(cuid())
+  projectId String
+  versionId String?
+  status    String   @default("pending") // pending | processing | ready | failed
+  fileKey   String?
+  error     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}

@@ -1,0 +1,407 @@
+import type { DocumentModel } from '../types/document.js';
+import { createEmptyDocument } from '../types/document.js';
+
+function id() {
+  return crypto.randomUUID();
+}
+
+export type TemplateDef = {
+  id: string;
+  name: string;
+  category: 'portada' | 'revista' | 'catalogo' | 'presentacion';
+  description: string;
+  width: number;
+  height: number;
+  orientation: 'portrait' | 'landscape';
+  build: () => DocumentModel;
+};
+
+export const templates: TemplateDef[] = [
+  {
+    id: 'portada-editorial',
+    name: 'Portada editorial',
+    category: 'portada',
+    description: 'Portada tipográfica con acento gráfico.',
+    width: 1080,
+    height: 1350,
+    orientation: 'portrait',
+    build: () => {
+      const doc = createEmptyDocument('Portada editorial', 1080, 1350);
+      doc.pages[0].background.fill = '#0c0b0a';
+      doc.pages[0].elements = [
+        {
+          id: id(),
+          type: 'shape',
+          shape: 'rect',
+          x: 0,
+          y: 980,
+          width: 1080,
+          height: 370,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 0,
+          fill: '#e8a54b',
+        },
+        {
+          id: id(),
+          type: 'text',
+          x: 72,
+          y: 180,
+          width: 900,
+          height: 200,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 1,
+          text: 'PLIEGO',
+          style: {
+            fontSize: 96,
+            fontFamily: 'Fraunces',
+            fontWeight: 600,
+            color: '#f2ebe3',
+            align: 'left',
+            letterSpacing: 4,
+          },
+        },
+        {
+          id: id(),
+          type: 'text',
+          x: 72,
+          y: 400,
+          width: 800,
+          height: 120,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 2,
+          text: 'Diseño editorial\ndesde el navegador',
+          style: {
+            fontSize: 42,
+            fontFamily: 'Manrope',
+            fontWeight: 400,
+            color: '#c9bfb3',
+            align: 'left',
+            lineHeight: 1.2,
+          },
+        },
+        {
+          id: id(),
+          type: 'text',
+          x: 72,
+          y: 1080,
+          width: 900,
+          height: 60,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 3,
+          text: 'Nº 01  ·  COLECCIÓN VISUAL',
+          style: {
+            fontSize: 22,
+            fontFamily: 'Manrope',
+            fontWeight: 600,
+            color: '#0c0b0a',
+            align: 'left',
+            letterSpacing: 2,
+          },
+        },
+      ];
+      return doc;
+    },
+  },
+  {
+    id: 'revista-doble',
+    name: 'Página de revista',
+    category: 'revista',
+    description: 'Maquetación tipográfica con columna y cita.',
+    width: 1200,
+    height: 1600,
+    orientation: 'portrait',
+    build: () => {
+      const doc = createEmptyDocument('Revista', 1200, 1600);
+      doc.pages[0].background.fill = '#f7f2ea';
+      doc.pages[0].elements = [
+        {
+          id: id(),
+          type: 'text',
+          x: 80,
+          y: 90,
+          width: 400,
+          height: 40,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 0,
+          text: 'REPORTAJE',
+          style: {
+            fontSize: 16,
+            fontFamily: 'Manrope',
+            fontWeight: 700,
+            color: '#a67c3a',
+            align: 'left',
+            letterSpacing: 3,
+          },
+        },
+        {
+          id: id(),
+          type: 'text',
+          x: 80,
+          y: 160,
+          width: 1000,
+          height: 180,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 1,
+          text: 'La forma como\nsistema editorial',
+          style: {
+            fontSize: 64,
+            fontFamily: 'Fraunces',
+            fontWeight: 600,
+            color: '#1a1612',
+            align: 'left',
+            lineHeight: 1.05,
+          },
+        },
+        {
+          id: id(),
+          type: 'shape',
+          shape: 'rect',
+          x: 80,
+          y: 420,
+          width: 1040,
+          height: 420,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 2,
+          fill: '#d9cfc0',
+        },
+        {
+          id: id(),
+          type: 'text',
+          x: 80,
+          y: 900,
+          width: 480,
+          height: 400,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 3,
+          text: 'El diseño gráfico deja de ser ornamentación cuando se convierte en estructura: jerarquía, ritmo, margen y contraste.',
+          style: {
+            fontSize: 22,
+            fontFamily: 'Manrope',
+            fontWeight: 400,
+            color: '#3a342c',
+            align: 'left',
+            lineHeight: 1.45,
+          },
+        },
+        {
+          id: id(),
+          type: 'text',
+          x: 620,
+          y: 900,
+          width: 500,
+          height: 280,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 4,
+          text: '“Componer es decidir qué debe leerse primero.”',
+          style: {
+            fontSize: 28,
+            fontFamily: 'Fraunces',
+            fontWeight: 500,
+            color: '#1a1612',
+            align: 'left',
+            lineHeight: 1.3,
+          },
+        },
+      ];
+      return doc;
+    },
+  },
+  {
+    id: 'catalogo-producto',
+    name: 'Catálogo de producto',
+    category: 'catalogo',
+    description: 'Ficha limpia para colecciones y producto.',
+    width: 1080,
+    height: 1080,
+    orientation: 'portrait',
+    build: () => {
+      const doc = createEmptyDocument('Catálogo', 1080, 1080);
+      doc.pages[0].background.fill = '#ffffff';
+      doc.pages[0].elements = [
+        {
+          id: id(),
+          type: 'shape',
+          shape: 'rect',
+          x: 60,
+          y: 60,
+          width: 960,
+          height: 620,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 0,
+          fill: '#ece7df',
+        },
+        {
+          id: id(),
+          type: 'text',
+          x: 60,
+          y: 720,
+          width: 700,
+          height: 80,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 1,
+          text: 'Colección Norte',
+          style: {
+            fontSize: 40,
+            fontFamily: 'Fraunces',
+            fontWeight: 600,
+            color: '#12100e',
+            align: 'left',
+          },
+        },
+        {
+          id: id(),
+          type: 'text',
+          x: 60,
+          y: 810,
+          width: 700,
+          height: 80,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 2,
+          text: 'Objeto 04  ·  Edición limitada',
+          style: {
+            fontSize: 20,
+            fontFamily: 'Manrope',
+            fontWeight: 500,
+            color: '#6b6258',
+            align: 'left',
+          },
+        },
+        {
+          id: id(),
+          type: 'text',
+          x: 760,
+          y: 730,
+          width: 260,
+          height: 60,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 3,
+          text: '128 €',
+          style: {
+            fontSize: 36,
+            fontFamily: 'Manrope',
+            fontWeight: 700,
+            color: '#12100e',
+            align: 'right',
+          },
+        },
+      ];
+      return doc;
+    },
+  },
+  {
+    id: 'presentacion-slide',
+    name: 'Presentación',
+    category: 'presentacion',
+    description: 'Diapositiva panorámica con título y apoyo.',
+    width: 1920,
+    height: 1080,
+    orientation: 'landscape',
+    build: () => {
+      const doc = createEmptyDocument('Presentación', 1920, 1080);
+      doc.pages[0].background.fill = '#141210';
+      doc.pages[0].elements = [
+        {
+          id: id(),
+          type: 'shape',
+          shape: 'rect',
+          x: 0,
+          y: 0,
+          width: 18,
+          height: 1080,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 0,
+          fill: '#e8a54b',
+        },
+        {
+          id: id(),
+          type: 'text',
+          x: 120,
+          y: 320,
+          width: 1400,
+          height: 160,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 1,
+          text: 'Sistemas de publicación digital',
+          style: {
+            fontSize: 72,
+            fontFamily: 'Fraunces',
+            fontWeight: 600,
+            color: '#f2ebe3',
+            align: 'left',
+          },
+        },
+        {
+          id: id(),
+          type: 'text',
+          x: 120,
+          y: 520,
+          width: 900,
+          height: 80,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          zIndex: 2,
+          text: 'De la composición gráfica a la arquitectura de producto.',
+          style: {
+            fontSize: 28,
+            fontFamily: 'Manrope',
+            fontWeight: 400,
+            color: '#b7ada1',
+            align: 'left',
+          },
+        },
+      ];
+      return doc;
+    },
+  },
+];
+
+export function getTemplate(id: string): TemplateDef | undefined {
+  return templates.find((t) => t.id === id);
+}
