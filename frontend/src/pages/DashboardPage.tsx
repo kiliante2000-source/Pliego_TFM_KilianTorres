@@ -81,12 +81,15 @@ export function DashboardPage() {
   };
 
   return (
-    <main className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
+    <main className="relative mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
+      <div className="pointer-events-none absolute -left-20 top-0 h-64 w-64 rounded-full bg-neon/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-16 top-40 h-72 w-72 rounded-full bg-rosa/10 blur-3xl" />
+
       <motion.section
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        className="mb-10"
+        initial={{ opacity: 0, y: 14, filter: 'blur(6px)' }}
+        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        className="relative mb-10"
       >
         <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-neon">
           {tab === 'templates'
@@ -99,7 +102,7 @@ export function DashboardPage() {
                   ? 'Ajustes'
                   : 'Proyectos'}
         </p>
-        <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-paper sm:text-5xl">
+        <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-paper sm:text-6xl">
           {tab === 'projects' || tab === 'templates'
             ? `Hola, ${user?.name?.split(' ')[0] || 'creador'}`
             : tab === 'assets'
@@ -108,9 +111,9 @@ export function DashboardPage() {
                 ? 'Versiones'
                 : 'Ajustes'}
         </h1>
-        <p className="mt-3 max-w-xl text-sm leading-relaxed text-paper-muted">
+        <p className="mt-3 max-w-xl text-sm leading-relaxed text-paper-muted sm:text-base">
           {tab === 'projects' || tab === 'templates'
-            ? 'Diseña, edita y publica tus proyectos editoriales desde el navegador.'
+            ? 'Diseña, edita y publica piezas editoriales con la energía de un estudio creativo.'
             : tab === 'assets'
               ? 'Los recursos de cada proyecto se gestionan dentro del editor.'
               : tab === 'versions'
@@ -229,16 +232,22 @@ export function DashboardPage() {
                   {projects.map((project, index) => (
                     <motion.li
                       key={project.id}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.04 }}
-                      className="group overflow-hidden rounded-2xl border border-line bg-ink-2/40 transition hover:border-neon/30 hover:bg-ink-2/70"
+                      initial={{ opacity: 0, y: 18, filter: 'blur(4px)' }}
+                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                      transition={{ delay: index * 0.05, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      whileHover={{ y: -6 }}
+                      className="group overflow-hidden rounded-3xl border border-line bg-ink-2/40 transition hover:border-neon/40 hover:shadow-[0_20px_60px_rgba(79,128,255,0.12)]"
                     >
                       <Link to={`/app/editor/${project.id}`} className="block no-underline">
                         <div className="relative aspect-[4/3] overflow-hidden mesh-bg">
-                          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent"
+                            whileHover={{ opacity: 0.85 }}
+                          />
                           <div className="absolute inset-0 flex flex-col justify-end p-4">
-                            <p className="font-display text-xl font-bold text-paper">{project.title}</p>
+                            <p className="font-display text-xl font-bold text-paper sm:text-2xl">
+                              {project.title}
+                            </p>
                             <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-paper-muted">
                               {project.width}×{project.height}
                               {project.published ? ' · Publicado' : ''}

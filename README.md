@@ -1,6 +1,8 @@
-# Pliego — plataforma editorial digital
+# Pliego — estudio editorial visual
 
 Producto SaaS para crear, gestionar, versionar, exportar (PDF) y publicar proyectos editoriales desde el navegador.
+
+La interfaz busca la energía de estudios creativos digitales (tipografía expuesta, mesh neón, microinteracciones y motion) sin perder utilidad: canvas, capas, autoguardado, versiones, PDF y publicación.
 
 ## Stack
 
