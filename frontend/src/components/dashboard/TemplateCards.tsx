@@ -66,25 +66,27 @@ const FALLBACK: Visual = {
 
 /** Wireframes vectoriales que sugieren el formato, sin tipografía ni rellenos pesados. */
 function FormatVectors({ kind }: { kind: Visual['vector'] }) {
-  const stroke = 'rgba(255,255,255,0.55)';
-  const soft = 'rgba(255,255,255,0.22)';
+  const stroke = 'rgba(255,255,255,0.88)';
+  const soft = 'rgba(255,255,255,0.5)';
+  const ink = 'rgba(0,0,0,0.28)';
 
   if (kind === 'magazine') {
     return (
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
-        {/* Página con módulos tipográficos */}
-        <rect x="14" y="12" width="132" height="88" rx="4" stroke={soft} strokeWidth="1.2" />
-        <line x1="52" y1="12" x2="52" y2="100" stroke={stroke} strokeWidth="1.2" />
-        <rect x="20" y="20" width="26" height="8" rx="1" stroke={stroke} strokeWidth="1" />
-        <rect x="20" y="34" width="26" height="26" rx="2" stroke={soft} strokeWidth="1" />
-        <rect x="20" y="66" width="26" height="4" rx="1" stroke={soft} strokeWidth="1" />
-        <rect x="20" y="74" width="26" height="4" rx="1" stroke={soft} strokeWidth="1" />
-        <rect x="20" y="82" width="18" height="4" rx="1" stroke={soft} strokeWidth="1" />
-        <rect x="60" y="20" width="78" height="10" rx="1.5" stroke={stroke} strokeWidth="1.2" />
-        <rect x="60" y="36" width="78" height="3" rx="1" stroke={soft} strokeWidth="1" />
-        <rect x="60" y="44" width="78" height="3" rx="1" stroke={soft} strokeWidth="1" />
-        <rect x="60" y="52" width="62" height="3" rx="1" stroke={soft} strokeWidth="1" />
-        <rect x="60" y="64" width="78" height="28" rx="2" stroke={stroke} strokeWidth="1.1" />
+      <svg className="absolute inset-0 h-full w-full drop-shadow-sm" viewBox="0 0 160 112" fill="none" aria-hidden>
+        <rect x="14" y="12" width="132" height="88" rx="4" stroke={ink} strokeWidth="4" />
+        <rect x="14" y="12" width="132" height="88" rx="4" stroke={soft} strokeWidth="2.4" />
+        <line x1="52" y1="12" x2="52" y2="100" stroke={ink} strokeWidth="4" />
+        <line x1="52" y1="12" x2="52" y2="100" stroke={stroke} strokeWidth="2.5" />
+        <rect x="20" y="20" width="26" height="8" rx="1" stroke={stroke} strokeWidth="2.2" />
+        <rect x="20" y="34" width="26" height="26" rx="2" stroke={soft} strokeWidth="2.2" />
+        <rect x="20" y="66" width="26" height="5" rx="1" stroke={soft} strokeWidth="2" />
+        <rect x="20" y="76" width="26" height="5" rx="1" stroke={soft} strokeWidth="2" />
+        <rect x="20" y="86" width="18" height="5" rx="1" stroke={soft} strokeWidth="2" />
+        <rect x="60" y="20" width="78" height="10" rx="1.5" stroke={stroke} strokeWidth="2.4" />
+        <rect x="60" y="36" width="78" height="4" rx="1" stroke={soft} strokeWidth="2" />
+        <rect x="60" y="46" width="78" height="4" rx="1" stroke={soft} strokeWidth="2" />
+        <rect x="60" y="56" width="62" height="4" rx="1" stroke={soft} strokeWidth="2" />
+        <rect x="60" y="68" width="78" height="24" rx="2" stroke={stroke} strokeWidth="2.3" />
       </svg>
     );
   }
@@ -92,12 +94,14 @@ function FormatVectors({ kind }: { kind: Visual['vector'] }) {
   if (kind === 'portfolio') {
     return (
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
-        {/* Stack de piezas / cases */}
-        <rect x="18" y="18" width="70" height="76" rx="5" stroke={stroke} strokeWidth="1.3" />
-        <rect x="28" y="28" width="88" height="68" rx="5" stroke={soft} strokeWidth="1.1" />
-        <rect x="40" y="22" width="96" height="72" rx="5" stroke={stroke} strokeWidth="1.4" />
-        <line x1="52" y1="72" x2="112" y2="72" stroke={soft} strokeWidth="1" />
-        <line x1="52" y1="80" x2="96" y2="80" stroke={soft} strokeWidth="1" />
+        <rect x="18" y="18" width="70" height="76" rx="5" stroke={ink} strokeWidth="4" />
+        <rect x="18" y="18" width="70" height="76" rx="5" stroke={soft} strokeWidth="2.4" />
+        <rect x="28" y="28" width="88" height="68" rx="5" stroke={ink} strokeWidth="3.5" />
+        <rect x="28" y="28" width="88" height="68" rx="5" stroke={soft} strokeWidth="2.2" />
+        <rect x="40" y="22" width="96" height="72" rx="5" stroke={ink} strokeWidth="4.5" />
+        <rect x="40" y="22" width="96" height="72" rx="5" stroke={stroke} strokeWidth="2.6" />
+        <line x1="52" y1="72" x2="112" y2="72" stroke={stroke} strokeWidth="2.2" />
+        <line x1="52" y1="82" x2="96" y2="82" stroke={soft} strokeWidth="2.2" />
       </svg>
     );
   }
@@ -105,12 +109,14 @@ function FormatVectors({ kind }: { kind: Visual['vector'] }) {
   if (kind === 'cover') {
     return (
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
-        {/* Portada: margen + círculo + baseline */}
-        <rect x="16" y="10" width="128" height="92" rx="3" stroke={soft} strokeWidth="1" />
-        <circle cx="108" cy="42" r="28" stroke={stroke} strokeWidth="1.4" />
-        <line x1="28" y1="78" x2="100" y2="78" stroke={stroke} strokeWidth="1.5" />
-        <line x1="28" y1="86" x2="72" y2="86" stroke={soft} strokeWidth="1.1" />
-        <line x1="22" y1="10" x2="22" y2="102" stroke={stroke} strokeWidth="2" />
+        <rect x="16" y="10" width="128" height="92" rx="3" stroke={soft} strokeWidth="2.2" />
+        <circle cx="108" cy="42" r="28" stroke={ink} strokeWidth="4.5" />
+        <circle cx="108" cy="42" r="28" stroke={stroke} strokeWidth="2.8" />
+        <line x1="28" y1="78" x2="100" y2="78" stroke={ink} strokeWidth="4" />
+        <line x1="28" y1="78" x2="100" y2="78" stroke={stroke} strokeWidth="2.8" />
+        <line x1="28" y1="88" x2="72" y2="88" stroke={soft} strokeWidth="2.4" />
+        <line x1="22" y1="10" x2="22" y2="102" stroke={ink} strokeWidth="5" />
+        <line x1="22" y1="10" x2="22" y2="102" stroke={stroke} strokeWidth="3" />
       </svg>
     );
   }
@@ -118,15 +124,16 @@ function FormatVectors({ kind }: { kind: Visual['vector'] }) {
   if (kind === 'catalog') {
     return (
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
-        {/* Lookbook: dos fichas producto */}
-        <rect x="16" y="14" width="58" height="84" rx="4" stroke={stroke} strokeWidth="1.3" />
-        <rect x="86" y="14" width="58" height="84" rx="4" stroke={stroke} strokeWidth="1.3" />
-        <rect x="24" y="22" width="42" height="42" rx="2" stroke={soft} strokeWidth="1" />
-        <rect x="94" y="22" width="42" height="42" rx="2" stroke={soft} strokeWidth="1" />
-        <line x1="24" y1="74" x2="58" y2="74" stroke={soft} strokeWidth="1" />
-        <line x1="24" y1="82" x2="48" y2="82" stroke={soft} strokeWidth="1" />
-        <line x1="94" y1="74" x2="128" y2="74" stroke={soft} strokeWidth="1" />
-        <line x1="94" y1="82" x2="118" y2="82" stroke={soft} strokeWidth="1" />
+        <rect x="16" y="14" width="58" height="84" rx="4" stroke={ink} strokeWidth="4" />
+        <rect x="16" y="14" width="58" height="84" rx="4" stroke={stroke} strokeWidth="2.5" />
+        <rect x="86" y="14" width="58" height="84" rx="4" stroke={ink} strokeWidth="4" />
+        <rect x="86" y="14" width="58" height="84" rx="4" stroke={stroke} strokeWidth="2.5" />
+        <rect x="24" y="22" width="42" height="42" rx="2" stroke={soft} strokeWidth="2.3" />
+        <rect x="94" y="22" width="42" height="42" rx="2" stroke={soft} strokeWidth="2.3" />
+        <line x1="24" y1="74" x2="58" y2="74" stroke={stroke} strokeWidth="2.3" />
+        <line x1="24" y1="84" x2="48" y2="84" stroke={soft} strokeWidth="2.2" />
+        <line x1="94" y1="74" x2="128" y2="74" stroke={stroke} strokeWidth="2.3" />
+        <line x1="94" y1="84" x2="118" y2="84" stroke={soft} strokeWidth="2.2" />
       </svg>
     );
   }
@@ -134,26 +141,31 @@ function FormatVectors({ kind }: { kind: Visual['vector'] }) {
   if (kind === 'slide') {
     return (
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
-        {/* Widescreen + tipografía display en líneas */}
-        <rect x="12" y="22" width="136" height="68" rx="4" stroke={stroke} strokeWidth="1.3" />
-        <line x1="28" y1="42" x2="100" y2="42" stroke={stroke} strokeWidth="2" />
-        <line x1="28" y1="54" x2="86" y2="54" stroke={soft} strokeWidth="1.4" />
-        <circle cx="128" cy="56" r="10" stroke={soft} strokeWidth="1.1" />
-        <path d="M125 51 L134 56 L125 61 Z" stroke={stroke} strokeWidth="1.1" fill="none" />
+        <rect x="12" y="22" width="136" height="68" rx="4" stroke={ink} strokeWidth="4" />
+        <rect x="12" y="22" width="136" height="68" rx="4" stroke={stroke} strokeWidth="2.6" />
+        <line x1="28" y1="42" x2="100" y2="42" stroke={ink} strokeWidth="5" />
+        <line x1="28" y1="42" x2="100" y2="42" stroke={stroke} strokeWidth="3.2" />
+        <line x1="28" y1="56" x2="86" y2="56" stroke={soft} strokeWidth="2.6" />
+        <circle cx="128" cy="56" r="11" stroke={soft} strokeWidth="2.4" />
+        <path d="M124 50 L136 56 L124 62 Z" stroke={stroke} strokeWidth="2.3" fill="none" />
       </svg>
     );
   }
 
-  // manifesto — plano diagonal + bloques narrativos
   return (
     <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
-      <rect x="14" y="12" width="132" height="88" rx="3" stroke={soft} strokeWidth="1" />
-      <line x1="14" y1="12" x2="100" y2="100" stroke={stroke} strokeWidth="1.2" />
-      <line x1="28" y1="28" x2="90" y2="28" stroke={stroke} strokeWidth="2.2" />
-      <line x1="28" y1="40" x2="78" y2="40" stroke={stroke} strokeWidth="2.2" />
-      <line x1="28" y1="52" x2="70" y2="52" stroke={stroke} strokeWidth="2.2" />
-      <rect x="28" y="72" width="36" height="10" rx="5" stroke={stroke} strokeWidth="1.2" />
-      <circle cx="122" cy="36" r="22" stroke={soft} strokeWidth="1.1" />
+      <rect x="14" y="12" width="132" height="88" rx="3" stroke={soft} strokeWidth="2.2" />
+      <line x1="14" y1="12" x2="100" y2="100" stroke={ink} strokeWidth="3.5" />
+      <line x1="14" y1="12" x2="100" y2="100" stroke={stroke} strokeWidth="2.2" />
+      <line x1="28" y1="28" x2="90" y2="28" stroke={ink} strokeWidth="5" />
+      <line x1="28" y1="28" x2="90" y2="28" stroke={stroke} strokeWidth="3.2" />
+      <line x1="28" y1="42" x2="78" y2="42" stroke={ink} strokeWidth="5" />
+      <line x1="28" y1="42" x2="78" y2="42" stroke={stroke} strokeWidth="3.2" />
+      <line x1="28" y1="56" x2="70" y2="56" stroke={ink} strokeWidth="5" />
+      <line x1="28" y1="56" x2="70" y2="56" stroke={stroke} strokeWidth="3.2" />
+      <rect x="28" y="74" width="40" height="12" rx="6" stroke={ink} strokeWidth="3.5" />
+      <rect x="28" y="74" width="40" height="12" rx="6" stroke={stroke} strokeWidth="2.4" />
+      <circle cx="122" cy="36" r="22" stroke={soft} strokeWidth="2.4" />
     </svg>
   );
 }
