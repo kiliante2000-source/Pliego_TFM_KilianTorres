@@ -26,7 +26,7 @@ import {
   Lock,
   Unlock,
   ChevronRight,
-  TextAlignLeft,
+  Pilcrow,
 } from 'lucide-react';
 import { useEditorStore, type AlignMode } from '../../stores/editorStore';
 import { api } from '../../services/api';
@@ -285,7 +285,7 @@ export function EditorToolbar({ projectId }: { projectId: string }) {
               }}
             />
             <MenuRow
-              icon={<TextAlignLeft size={15} />}
+              icon={<Pilcrow size={15} />}
               label="Cuerpo"
               hint="Párrafo de lectura"
               onClick={() => {
