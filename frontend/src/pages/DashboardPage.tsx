@@ -1,28 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Copy, Archive, Trash2, Plus, ExternalLink, ArrowRight, Sparkles } from 'lucide-react';
+import { Copy, Archive, Trash2, Plus, ExternalLink, ArrowRight } from 'lucide-react';
 import { Button, Input } from '../components/ui/primitives';
+import { BlankTemplateCard, TemplateCard } from '../components/dashboard/TemplateCards';
 import { api } from '../services/api';
 import { useAuthStore } from '../stores/authStore';
 import type { Project, TemplateInfo } from '../types/document';
 import { cn, formatDate } from '../utils/cn';
-
-const templateAccent: Record<string, string> = {
-  portada: 'from-neon/50 via-violet/35 to-rosa/40',
-  revista: 'from-violet/40 via-ink-3 to-neon/30',
-  catalogo: 'from-violet/35 via-rosa/25 to-lima/20',
-  presentacion: 'from-neon/35 via-rosa/30 to-violet/25',
-  editorial: 'from-rosa/45 via-violet/40 to-neon/35',
-};
-
-const categoryLabel: Record<string, string> = {
-  portada: 'Portada',
-  revista: 'Revista',
-  catalogo: 'Catálogo',
-  presentacion: 'Presentación',
-  editorial: 'Editorial digital',
-};
 
 export function DashboardPage() {
   const user = useAuthStore((s) => s.user);
@@ -136,48 +121,19 @@ export function DashboardPage() {
               </div>
             </div>
 
-            <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-              <button
-                type="button"
-                onClick={() => setTemplateId('')}
-                className={cn(
-                  'group relative overflow-hidden rounded-2xl border p-4 text-left transition',
-                  !templateId
-                    ? 'border-neon/60 bg-accent-soft'
-                    : 'border-line bg-ink-2/50 hover:border-paper-muted/25',
-                )}
-              >
-                <div className="mb-6 flex h-16 items-end">
-                  <Sparkles className={cn('text-paper-muted', !templateId && 'text-neon')} size={22} />
-                </div>
-                <p className="text-sm font-semibold text-paper">En blanco</p>
-                <p className="mt-1 font-mono text-[10px] text-paper-muted">1080 × 1350</p>
-              </button>
+            <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+              <BlankTemplateCard selected={!templateId} onSelect={() => setTemplateId('')} />
 
               {templates.map((t) => (
-                <button
+                <TemplateCard
                   key={t.id}
-                  type="button"
-                  onClick={() => {
+                  template={t}
+                  selected={templateId === t.id}
+                  onSelect={() => {
                     setTemplateId(t.id);
                     if (title === 'Nuevo proyecto' || !title) setTitle(t.name);
                   }}
-                  className={cn(
-                    'overflow-hidden rounded-2xl border text-left transition',
-                    templateId === t.id
-                      ? 'border-neon ring-1 ring-neon/40'
-                      : 'border-line hover:border-paper-muted/25',
-                  )}
-                >
-                  <div className={cn('h-24 bg-gradient-to-br', templateAccent[t.category])} />
-                  <div className="p-4">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-paper-muted">
-                      {categoryLabel[t.category] || t.category}
-                    </p>
-                    <p className="mt-1 text-sm font-semibold text-paper">{t.name}</p>
-                    <p className="mt-1 line-clamp-2 text-xs text-paper-muted">{t.description}</p>
-                  </div>
-                </button>
+                />
               ))}
             </div>
 
