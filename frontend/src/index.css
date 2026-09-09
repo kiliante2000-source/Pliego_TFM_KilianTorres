@@ -166,6 +166,29 @@ body {
   }
 }
 
+/* Barra / superficies con el mismo flujo de marca */
+.brand-flow-bar {
+  background-image: linear-gradient(
+    90deg,
+    #4f80ff 0%,
+    #a855f7 25%,
+    #ff4edb 50%,
+    #ff7a45 75%,
+    #4f80ff 100%
+  );
+  background-size: 300% 100%;
+  background-position: 0% 50%;
+  animation: wordmark-flow 7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-flow-bar {
+    animation: none;
+    background-size: 100% 100%;
+    background-image: linear-gradient(90deg, #4f80ff, #a855f7, #ff4edb, #ff7a45);
+  }
+}
+
 .wordmark-stroke {
   color: transparent;
   -webkit-text-stroke: 1.5px rgba(244, 246, 248, 0.35);

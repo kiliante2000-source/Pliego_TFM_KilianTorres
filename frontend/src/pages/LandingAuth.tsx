@@ -70,12 +70,12 @@ function FloatingStage() {
             Capas, tipografía y publicación en un canvas vivo.
           </div>
           <motion.div
-            className="absolute inset-x-0 bottom-0 h-[34%] bg-gradient-to-r from-neon via-violet to-rosa"
+            className="brand-flow-bar absolute inset-x-0 bottom-0 h-[36%] rounded-b-[1.75rem]"
             initial={{ y: 40 }}
             animate={{ y: 0 }}
             transition={{ delay: 0.3, duration: 0.8, ease }}
           />
-          <div className="absolute bottom-8 left-8 font-mono text-[11px] font-semibold tracking-[0.22em] text-ink">
+          <div className="absolute bottom-6 left-8 z-[1] font-mono text-[11px] font-semibold tracking-[0.22em] text-ink">
             Nº 01 · STUDIO
           </div>
         </div>
