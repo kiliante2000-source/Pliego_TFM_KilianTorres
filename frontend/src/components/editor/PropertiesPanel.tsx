@@ -339,8 +339,10 @@ function ShapeProps({ el }: { el: ShapeElement }) {
                         angle: 135,
                         stops: [
                           { offset: 0, color: '#4F80FF' },
-                          { offset: 0.55, color: '#A855F7' },
-                          { offset: 1, color: '#FF4EDB' },
+                          { offset: 0.25, color: '#FF4EDB' },
+                          { offset: 0.5, color: '#A855F7' },
+                          { offset: 0.75, color: '#B2FF3A' },
+                          { offset: 1, color: '#FF7A45' },
                         ],
                       },
                 }

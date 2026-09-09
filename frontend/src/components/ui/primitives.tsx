@@ -16,8 +16,10 @@ export function PliegoMark({ className, size = 28 }: { className?: string; size?
       <defs>
         <linearGradient id="pliegoP" x1="12" y1="8" x2="52" y2="56" gradientUnits="userSpaceOnUse">
           <stop stopColor="#4F80FF" />
-          <stop offset="0.45" stopColor="#A855F7" />
-          <stop offset="1" stopColor="#FF4EDB" />
+          <stop offset="0.25" stopColor="#FF4EDB" />
+          <stop offset="0.5" stopColor="#A855F7" />
+          <stop offset="0.75" stopColor="#B2FF3A" />
+          <stop offset="1" stopColor="#FF7A45" />
         </linearGradient>
       </defs>
       <path
