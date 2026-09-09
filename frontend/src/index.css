@@ -133,43 +133,59 @@ body {
 }
 
 /*
- * Paleta corporativa PLIEGO (flujo del proceso):
- * neon → rosa → violet → lima → naranja → neon…
- * Patrón duplicado + slide de un periodo = bucle sin salto.
+ * Degradado corporativo suave (neon → rosa → violet → lima → naranja).
+ * Puentes intermedios + longitud de onda larga (viewport ve un lavado,
+ * no franjas) + patrón ×2 para bucle sin salto.
  */
 :root {
+  /* Un periodo = 0–50% (acaba en neon); copia = 50–100% → bucle perfecto */
   --brand-flow: linear-gradient(
     90deg,
     #4f80ff 0%,
-    #ff4edb 10%,
-    #a855f7 20%,
-    #b2ff3a 30%,
-    #ff7a45 40%,
+    #8b6ef5 5%,
+    #ff4edb 11%,
+    #d850f2 16%,
+    #a855f7 22%,
+    #8b8ad4 28%,
+    #7ec9a0 33%,
+    #b2ff3a 38%,
+    #e0d04a 42%,
+    #ff7a45 45%,
+    #ff8a78 47%,
+    #c070e0 49%,
     #4f80ff 50%,
-    #ff4edb 60%,
-    #a855f7 70%,
-    #b2ff3a 80%,
-    #ff7a45 90%,
+    #8b6ef5 55%,
+    #ff4edb 61%,
+    #d850f2 66%,
+    #a855f7 72%,
+    #8b8ad4 78%,
+    #7ec9a0 83%,
+    #b2ff3a 88%,
+    #e0d04a 92%,
+    #ff7a45 95%,
+    #ff8a78 97%,
+    #c070e0 99%,
     #4f80ff 100%
   );
   --brand-flow-static: linear-gradient(
-    90deg,
-    #4f80ff,
-    #ff4edb,
-    #a855f7,
-    #b2ff3a,
-    #ff7a45
+    100deg,
+    #4f80ff 0%,
+    #ff4edb 26%,
+    #a855f7 48%,
+    #b2ff3a 72%,
+    #ff7a45 100%
   );
 }
 
 .wordmark-cutout {
   background-image: var(--brand-flow);
-  background-size: 200% 100%;
+  /* 400%: el viewport solo muestra ~½ periodo → lavado suave, no bandas */
+  background-size: 400% 100%;
   background-position: 0% 50%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: wordmark-flow 10s linear infinite;
+  animation: wordmark-flow 14s linear infinite;
 }
 
 @keyframes wordmark-flow {
@@ -177,8 +193,8 @@ body {
     background-position: 0% 50%;
   }
   to {
-    /* Con background-size 200%, 100% ≡ un periodo exacto del patrón duplicado */
-    background-position: 100% 50%;
+    /* size 400% → 66.666% ≡ desplazar exactamente un periodo (2× el ancho) */
+    background-position: 66.6667% 50%;
   }
 }
 
@@ -191,12 +207,11 @@ body {
   }
 }
 
-/* Barra / superficies: slide por transform (bucle perfecto, sin reset de position) */
+/* Barra / superficies: misma onda larga + slide por transform */
 .brand-flow-bar {
   overflow: hidden;
   isolation: isolate;
   background-color: #4f80ff;
-  /* Covers subpixel fringe under parent radius */
   box-shadow: 0 3px 0 0 #4f80ff;
 }
 
@@ -207,9 +222,10 @@ body {
   left: 0;
   top: 0;
   bottom: -3px;
-  width: 200%;
+  /* 400% del contenedor = 2 periodos; -50% = un periodo exacto */
+  width: 400%;
   background-image: var(--brand-flow);
-  animation: brand-flow-slide 10s linear infinite;
+  animation: brand-flow-slide 14s linear infinite;
   will-change: transform;
 }
 
