@@ -131,29 +131,42 @@ body {
   background: transparent;
 }
 
-/* Degradado corporativo PLIEGO en secuencia: neon → violet → rosa → naranja → neon */
-.wordmark-cutout {
-  background-image: linear-gradient(
+/*
+ * Degradado de marca en bucle continuo (neon → violet → rosa → naranja → neon…).
+ * El patrón se duplica y se desplaza exactamente media longitud (−50% / 100% pos)
+ * para que el reinicio del keyframe sea visualmente idéntico: sin salto ni “parón” en azul.
+ */
+:root {
+  --brand-flow: linear-gradient(
     90deg,
     #4f80ff 0%,
-    #a855f7 25%,
-    #ff4edb 50%,
-    #ff7a45 75%,
+    #a855f7 12.5%,
+    #ff4edb 25%,
+    #ff7a45 37.5%,
+    #4f80ff 50%,
+    #a855f7 62.5%,
+    #ff4edb 75%,
+    #ff7a45 87.5%,
     #4f80ff 100%
   );
-  background-size: 300% 100%;
+}
+
+.wordmark-cutout {
+  background-image: var(--brand-flow);
+  background-size: 200% 100%;
   background-position: 0% 50%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: wordmark-flow 7s linear infinite;
+  animation: wordmark-flow 8s linear infinite;
 }
 
 @keyframes wordmark-flow {
-  0% {
+  from {
     background-position: 0% 50%;
   }
-  100% {
+  to {
+    /* Con background-size 200%, 100% ≡ un periodo exacto del patrón duplicado */
     background-position: 100% 50%;
   }
 }
@@ -163,32 +176,50 @@ body {
     animation: none;
     background-position: 0% 50%;
     background-size: 100% 100%;
+    background-image: linear-gradient(90deg, #4f80ff, #a855f7, #ff4edb, #ff7a45);
   }
 }
 
-/* Barra / superficies con el mismo flujo de marca */
+/* Barra / superficies: slide por transform (bucle perfecto, sin reset de position) */
 .brand-flow-bar {
+  overflow: hidden;
+  isolation: isolate;
   background-color: #4f80ff;
-  background-image: linear-gradient(
-    90deg,
-    #4f80ff 0%,
-    #a855f7 25%,
-    #ff4edb 50%,
-    #ff7a45 75%,
-    #4f80ff 100%
-  );
-  background-size: 300% 100%;
-  background-position: 0% 50%;
-  background-repeat: no-repeat;
-  /* Covers subpixel fringe under overflow:hidden + border-radius */
+  /* Covers subpixel fringe under parent radius */
   box-shadow: 0 3px 0 0 #4f80ff;
-  animation: wordmark-flow 7s linear infinite;
+}
+
+.brand-flow-bar::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  top: 0;
+  bottom: -3px;
+  width: 200%;
+  background-image: var(--brand-flow);
+  animation: brand-flow-slide 8s linear infinite;
+  will-change: transform;
+}
+
+.brand-flow-bar > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes brand-flow-slide {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brand-flow-bar {
+  .brand-flow-bar::before {
     animation: none;
-    background-size: 100% 100%;
+    width: 100%;
     background-image: linear-gradient(90deg, #4f80ff, #a855f7, #ff4edb, #ff7a45);
   }
 }
