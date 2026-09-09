@@ -3,6 +3,25 @@ import { Sparkles } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import type { TemplateInfo } from '../../types/document';
 
+/** Colores exactos de la identidad PLIEGO (index.css) */
+const BRAND = {
+  neon: '#4F80FF',
+  accent2: '#3A6AEF',
+  violet: '#A855F7',
+  rosa: '#FF4EDB',
+  lima: '#B2FF3A',
+  naranja: '#FF7A45',
+  ink: '#0B0E11',
+  paper: '#F4F6F8',
+} as const;
+
+function glow(hex: string, alpha = 0.55) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 type Visual = {
   label: string;
   flat: string;
@@ -11,56 +30,57 @@ type Visual = {
   vector: 'manifesto' | 'portfolio' | 'cover' | 'magazine' | 'catalog' | 'slide';
 };
 
+/** Un color corporativo protagonista por plantilla; mesh solo con paleta Pliego. */
 const VISUALS: Record<string, Visual> = {
   'manifesto-digital': {
     label: 'Editorial digital',
-    flat: '#FF2D95',
-    glow: 'rgba(255, 45, 149, 0.55)',
-    mesh: ['#FF2D95', '#7C3AED', '#1D4ED8'],
+    flat: BRAND.rosa,
+    glow: glow(BRAND.rosa),
+    mesh: [BRAND.rosa, BRAND.violet, BRAND.neon],
     vector: 'manifesto',
   },
   'portfolio-kinetic': {
     label: 'Editorial digital',
-    flat: '#22D3EE',
-    glow: 'rgba(34, 211, 238, 0.5)',
-    mesh: ['#22D3EE', '#6366F1', '#F472B6'],
+    flat: BRAND.neon,
+    glow: glow(BRAND.neon),
+    mesh: [BRAND.neon, BRAND.violet, BRAND.rosa],
     vector: 'portfolio',
   },
   'portada-editorial': {
     label: 'Portada',
-    flat: '#4F80FF',
-    glow: 'rgba(79, 128, 255, 0.55)',
-    mesh: ['#4F80FF', '#A855F7', '#FF4EDB'],
+    flat: BRAND.violet,
+    glow: glow(BRAND.violet),
+    mesh: [BRAND.violet, BRAND.rosa, BRAND.naranja],
     vector: 'cover',
   },
   'revista-doble': {
     label: 'Revista',
-    flat: '#A3E635',
-    glow: 'rgba(163, 230, 53, 0.45)',
-    mesh: ['#A3E635', '#14B8A6', '#0EA5E9'],
+    flat: BRAND.lima,
+    glow: glow(BRAND.lima, 0.45),
+    mesh: [BRAND.lima, BRAND.neon, BRAND.violet],
     vector: 'magazine',
   },
   'catalogo-producto': {
     label: 'Catálogo',
-    flat: '#F59E0B',
-    glow: 'rgba(245, 158, 11, 0.5)',
-    mesh: ['#F59E0B', '#EF4444', '#EC4899'],
+    flat: BRAND.naranja,
+    glow: glow(BRAND.naranja),
+    mesh: [BRAND.naranja, BRAND.rosa, BRAND.violet],
     vector: 'catalog',
   },
   'presentacion-slide': {
     label: 'Presentación',
-    flat: '#C084FC',
-    glow: 'rgba(192, 132, 252, 0.55)',
-    mesh: ['#C084FC', '#F472B6', '#38BDF8'],
+    flat: BRAND.accent2,
+    glow: glow(BRAND.accent2),
+    mesh: [BRAND.accent2, BRAND.neon, BRAND.violet],
     vector: 'slide',
   },
 };
 
 const FALLBACK: Visual = {
   label: 'Plantilla',
-  flat: '#4F80FF',
-  glow: 'rgba(79, 128, 255, 0.45)',
-  mesh: ['#4F80FF', '#A855F7', '#FF4EDB'],
+  flat: BRAND.neon,
+  glow: glow(BRAND.neon, 0.45),
+  mesh: [BRAND.neon, BRAND.violet, BRAND.rosa],
   vector: 'cover',
 };
 
