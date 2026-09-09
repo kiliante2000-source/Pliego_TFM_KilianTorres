@@ -45,7 +45,7 @@ export function PliegoWordmark({
         className,
       )}
     >
-      PLiEGO
+      PLIEGO
     </span>
   );
 }

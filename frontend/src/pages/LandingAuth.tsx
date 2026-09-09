@@ -64,7 +64,7 @@ function FloatingStage() {
             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
           />
           <div className="absolute left-8 top-14 font-display text-5xl font-bold tracking-[-0.06em] text-paper sm:text-6xl">
-            PLiEGO
+            PLIEGO
           </div>
           <div className="absolute left-8 top-32 max-w-[15rem] text-sm leading-relaxed text-paper/60">
             Capas, tipografía y publicación en un canvas vivo.
