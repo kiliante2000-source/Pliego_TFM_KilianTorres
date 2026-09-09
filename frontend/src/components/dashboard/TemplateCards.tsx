@@ -8,59 +8,51 @@ type Visual = {
   flat: string;
   glow: string;
   mesh: string[];
-  mark: string;
-  motif: 'slash' | 'circle' | 'bars' | 'type' | 'grid' | 'wave';
+  vector: 'manifesto' | 'portfolio' | 'cover' | 'magazine' | 'catalog' | 'slide';
 };
 
-/** Identidad visual por plantilla — color memorable, no degradado genérico. */
 const VISUALS: Record<string, Visual> = {
   'manifesto-digital': {
     label: 'Editorial digital',
     flat: '#FF2D95',
     glow: 'rgba(255, 45, 149, 0.55)',
     mesh: ['#FF2D95', '#7C3AED', '#1D4ED8'],
-    mark: 'M',
-    motif: 'slash',
+    vector: 'manifesto',
   },
   'portfolio-kinetic': {
     label: 'Editorial digital',
     flat: '#22D3EE',
     glow: 'rgba(34, 211, 238, 0.5)',
     mesh: ['#22D3EE', '#6366F1', '#F472B6'],
-    mark: 'PK',
-    motif: 'type',
+    vector: 'portfolio',
   },
   'portada-editorial': {
     label: 'Portada',
     flat: '#4F80FF',
     glow: 'rgba(79, 128, 255, 0.55)',
     mesh: ['#4F80FF', '#A855F7', '#FF4EDB'],
-    mark: '01',
-    motif: 'circle',
+    vector: 'cover',
   },
   'revista-doble': {
     label: 'Revista',
     flat: '#A3E635',
     glow: 'rgba(163, 230, 53, 0.45)',
     mesh: ['#A3E635', '#14B8A6', '#0EA5E9'],
-    mark: 'R',
-    motif: 'bars',
+    vector: 'magazine',
   },
   'catalogo-producto': {
     label: 'Catálogo',
     flat: '#F59E0B',
     glow: 'rgba(245, 158, 11, 0.5)',
     mesh: ['#F59E0B', '#EF4444', '#EC4899'],
-    mark: 'LK',
-    motif: 'grid',
+    vector: 'catalog',
   },
   'presentacion-slide': {
     label: 'Presentación',
     flat: '#C084FC',
     glow: 'rgba(192, 132, 252, 0.55)',
     mesh: ['#C084FC', '#F472B6', '#38BDF8'],
-    mark: '▶',
-    motif: 'wave',
+    vector: 'slide',
   },
 };
 
@@ -69,79 +61,129 @@ const FALLBACK: Visual = {
   flat: '#4F80FF',
   glow: 'rgba(79, 128, 255, 0.45)',
   mesh: ['#4F80FF', '#A855F7', '#FF4EDB'],
-  mark: 'P',
-  motif: 'circle',
+  vector: 'cover',
 };
 
-function Motif({ kind, mark }: { kind: Visual['motif']; mark: string }) {
-  if (kind === 'slash') {
+/** Wireframes vectoriales que sugieren el formato, sin tipografía ni rellenos pesados. */
+function FormatVectors({ kind }: { kind: Visual['vector'] }) {
+  const stroke = 'rgba(255,255,255,0.55)';
+  const soft = 'rgba(255,255,255,0.22)';
+
+  if (kind === 'magazine') {
     return (
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -left-6 top-2 h-[140%] w-10 rotate-12 bg-black/25" />
-        <div className="absolute left-10 top-2 h-[140%] w-3 rotate-12 bg-white/30" />
-        <span className="absolute bottom-3 left-3 font-display text-4xl font-extrabold tracking-tighter text-white/90">
-          {mark}
-        </span>
-      </div>
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
+        {/* Página con módulos tipográficos */}
+        <rect x="14" y="12" width="132" height="88" rx="4" stroke={soft} strokeWidth="1.2" />
+        <line x1="52" y1="12" x2="52" y2="100" stroke={stroke} strokeWidth="1.2" />
+        <rect x="20" y="20" width="26" height="8" rx="1" stroke={stroke} strokeWidth="1" />
+        <rect x="20" y="34" width="26" height="26" rx="2" stroke={soft} strokeWidth="1" />
+        <rect x="20" y="66" width="26" height="4" rx="1" stroke={soft} strokeWidth="1" />
+        <rect x="20" y="74" width="26" height="4" rx="1" stroke={soft} strokeWidth="1" />
+        <rect x="20" y="82" width="18" height="4" rx="1" stroke={soft} strokeWidth="1" />
+        <rect x="60" y="20" width="78" height="10" rx="1.5" stroke={stroke} strokeWidth="1.2" />
+        <rect x="60" y="36" width="78" height="3" rx="1" stroke={soft} strokeWidth="1" />
+        <rect x="60" y="44" width="78" height="3" rx="1" stroke={soft} strokeWidth="1" />
+        <rect x="60" y="52" width="62" height="3" rx="1" stroke={soft} strokeWidth="1" />
+        <rect x="60" y="64" width="78" height="28" rx="2" stroke={stroke} strokeWidth="1.1" />
+      </svg>
     );
   }
-  if (kind === 'circle') {
+
+  if (kind === 'portfolio') {
     return (
-      <div className="absolute inset-0">
-        <div className="absolute -right-8 -top-10 h-36 w-36 rounded-full bg-white/25 blur-[1px]" />
-        <div className="absolute bottom-3 left-3 font-mono text-xs font-semibold tracking-[0.2em] text-white/90">
-          VOL · {mark}
-        </div>
-      </div>
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
+        {/* Stack de piezas / cases */}
+        <rect x="18" y="18" width="70" height="76" rx="5" stroke={stroke} strokeWidth="1.3" />
+        <rect x="28" y="28" width="88" height="68" rx="5" stroke={soft} strokeWidth="1.1" />
+        <rect x="40" y="22" width="96" height="72" rx="5" stroke={stroke} strokeWidth="1.4" />
+        <line x1="52" y1="72" x2="112" y2="72" stroke={soft} strokeWidth="1" />
+        <line x1="52" y1="80" x2="96" y2="80" stroke={soft} strokeWidth="1" />
+      </svg>
     );
   }
-  if (kind === 'bars') {
+
+  if (kind === 'cover') {
     return (
-      <div className="absolute inset-0 flex items-end gap-1.5 p-3">
-        {[40, 70, 55, 85, 48].map((h, i) => (
-          <div
-            key={i}
-            className="flex-1 rounded-sm bg-black/30"
-            style={{ height: `${h}%` }}
-          />
-        ))}
-        <span className="absolute right-3 top-3 font-display text-2xl font-bold text-black/50">
-          {mark}
-        </span>
-      </div>
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
+        {/* Portada: margen + círculo + baseline */}
+        <rect x="16" y="10" width="128" height="92" rx="3" stroke={soft} strokeWidth="1" />
+        <circle cx="108" cy="42" r="28" stroke={stroke} strokeWidth="1.4" />
+        <line x1="28" y1="78" x2="100" y2="78" stroke={stroke} strokeWidth="1.5" />
+        <line x1="28" y1="86" x2="72" y2="86" stroke={soft} strokeWidth="1.1" />
+        <line x1="22" y1="10" x2="22" y2="102" stroke={stroke} strokeWidth="2" />
+      </svg>
     );
   }
-  if (kind === 'type') {
+
+  if (kind === 'catalog') {
     return (
-      <div className="absolute inset-0 flex flex-col justify-end p-3">
-        <p className="font-display text-[28px] font-extrabold leading-[0.85] tracking-tighter text-white">
-          WORK
-          <br />
-          THAT
-          <br />
-          MOVES
-        </p>
-      </div>
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
+        {/* Lookbook: dos fichas producto */}
+        <rect x="16" y="14" width="58" height="84" rx="4" stroke={stroke} strokeWidth="1.3" />
+        <rect x="86" y="14" width="58" height="84" rx="4" stroke={stroke} strokeWidth="1.3" />
+        <rect x="24" y="22" width="42" height="42" rx="2" stroke={soft} strokeWidth="1" />
+        <rect x="94" y="22" width="42" height="42" rx="2" stroke={soft} strokeWidth="1" />
+        <line x1="24" y1="74" x2="58" y2="74" stroke={soft} strokeWidth="1" />
+        <line x1="24" y1="82" x2="48" y2="82" stroke={soft} strokeWidth="1" />
+        <line x1="94" y1="74" x2="128" y2="74" stroke={soft} strokeWidth="1" />
+        <line x1="94" y1="82" x2="118" y2="82" stroke={soft} strokeWidth="1" />
+      </svg>
     );
   }
-  if (kind === 'grid') {
+
+  if (kind === 'slide') {
     return (
-      <div className="absolute inset-0 grid grid-cols-2 gap-1.5 p-3">
-        <div className="rounded-md bg-black/25" />
-        <div className="rounded-md bg-white/25" />
-        <div className="col-span-2 rounded-md bg-black/20" />
-        <span className="absolute left-3 top-3 font-mono text-[10px] font-semibold tracking-widest text-black/60">
-          {mark}
-        </span>
-      </div>
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
+        {/* Widescreen + tipografía display en líneas */}
+        <rect x="12" y="22" width="136" height="68" rx="4" stroke={stroke} strokeWidth="1.3" />
+        <line x1="28" y1="42" x2="100" y2="42" stroke={stroke} strokeWidth="2" />
+        <line x1="28" y1="54" x2="86" y2="54" stroke={soft} strokeWidth="1.4" />
+        <circle cx="128" cy="56" r="10" stroke={soft} strokeWidth="1.1" />
+        <path d="M125 51 L134 56 L125 61 Z" stroke={stroke} strokeWidth="1.1" fill="none" />
+      </svg>
     );
   }
+
+  // manifesto — plano diagonal + bloques narrativos
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute left-0 right-0 top-1/2 h-8 -translate-y-1/2 bg-white/20" />
-      <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-black/35 to-transparent" />
-      <span className="absolute bottom-3 left-3 text-lg text-white">{mark}</span>
-    </div>
+    <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 112" fill="none" aria-hidden>
+      <rect x="14" y="12" width="132" height="88" rx="3" stroke={soft} strokeWidth="1" />
+      <line x1="14" y1="12" x2="100" y2="100" stroke={stroke} strokeWidth="1.2" />
+      <line x1="28" y1="28" x2="90" y2="28" stroke={stroke} strokeWidth="2.2" />
+      <line x1="28" y1="40" x2="78" y2="40" stroke={stroke} strokeWidth="2.2" />
+      <line x1="28" y1="52" x2="70" y2="52" stroke={stroke} strokeWidth="2.2" />
+      <rect x="28" y="72" width="36" height="10" rx="5" stroke={stroke} strokeWidth="1.2" />
+      <circle cx="122" cy="36" r="22" stroke={soft} strokeWidth="1.1" />
+    </svg>
+  );
+}
+
+function LivingGradient({ colors }: { colors: string[] }) {
+  const [a, b, c] = colors;
+  return (
+    <>
+      <motion.div
+        className="absolute -inset-[55%] opacity-90"
+        style={{
+          background: `conic-gradient(from 90deg at 45% 45%, ${a}, ${b}, ${c}, ${a})`,
+        }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 18, ease: 'linear', repeat: Infinity }}
+      />
+      <motion.div
+        className="absolute -left-1/3 -top-1/2 h-[150%] w-[90%] rounded-full opacity-75 blur-3xl mix-blend-screen"
+        style={{ background: b }}
+        animate={{ x: [0, 32, -16, 0], y: [0, -22, 14, 0], scale: [1, 1.08, 0.96, 1] }}
+        transition={{ duration: 8, ease: 'easeInOut', repeat: Infinity }}
+      />
+      <motion.div
+        className="absolute -bottom-1/2 -right-1/3 h-[140%] w-[85%] rounded-full opacity-65 blur-3xl mix-blend-screen"
+        style={{ background: c }}
+        animate={{ x: [0, -26, 18, 0], y: [0, 16, -24, 0], scale: [1, 0.94, 1.1, 1] }}
+        transition={{ duration: 9.5, ease: 'easeInOut', repeat: Infinity }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-black/25" />
+    </>
   );
 }
 
@@ -159,19 +201,22 @@ export function BlankTemplateCard({
       className={cn(
         'group relative overflow-hidden rounded-2xl border text-left transition',
         selected
-          ? 'border-neon/70 bg-ink-2 ring-1 ring-neon/40'
+          ? 'border-neon/70 bg-ink-2 ring-1 ring-neon/40 shadow-[0_16px_40px_rgba(79,128,255,0.22)]'
           : 'border-line bg-ink-2/60 hover:border-paper-muted/30',
       )}
     >
-      <div className="relative h-28 overflow-hidden bg-[#12171e]">
-        <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(79,128,255,0.25)_1px,transparent_1px),linear-gradient(90deg,rgba(79,128,255,0.25)_1px,transparent_1px)] [background-size:18px_18px]" />
+      <div className="relative h-32 overflow-hidden bg-[#12171e]">
+        <div className="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(79,128,255,0.28)_1px,transparent_1px),linear-gradient(90deg,rgba(79,128,255,0.28)_1px,transparent_1px)] [background-size:16px_16px]" />
+        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 128" fill="none" aria-hidden>
+          <rect x="28" y="24" width="104" height="80" rx="3" stroke="rgba(79,128,255,0.45)" strokeWidth="1.2" strokeDasharray="4 4" />
+        </svg>
         <div className="absolute inset-0 flex items-center justify-center">
           <Sparkles
             className={cn(
               'text-paper-muted transition group-hover:text-neon',
               selected && 'text-neon',
             )}
-            size={26}
+            size={22}
           />
         </div>
       </div>
@@ -194,7 +239,6 @@ export function TemplateCard({
   onSelect: () => void;
 }) {
   const visual = VISUALS[template.id] ?? FALLBACK;
-  const [a, b, c] = visual.mesh;
 
   return (
     <button
@@ -202,54 +246,25 @@ export function TemplateCard({
       onClick={onSelect}
       className={cn(
         'group relative overflow-hidden rounded-2xl border text-left transition duration-300',
-        selected
-          ? 'border-white/40 ring-2 ring-offset-0'
-          : 'border-line hover:border-white/25',
+        selected ? 'border-white/35' : 'border-line hover:border-white/20',
       )}
       style={
         selected
-          ? ({
-              ['--tw-ring-color' as string]: visual.flat,
-              boxShadow: `0 0 0 1px ${visual.flat}55, 0 18px 40px ${visual.glow}`,
-            } as React.CSSProperties)
+          ? {
+              boxShadow: `0 0 0 1px ${visual.flat}66, 0 18px 44px ${visual.glow}`,
+            }
           : undefined
       }
     >
-      <div className="relative h-28 overflow-hidden" style={{ background: visual.flat }}>
-        {/* Color plano + mesh animado al hover */}
-        <motion.div
-          className="absolute -inset-[40%] opacity-80 mix-blend-soft-light"
-          style={{
-            background: `conic-gradient(from 120deg at 40% 40%, ${a}, ${b}, ${c}, ${a})`,
-          }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 14, ease: 'linear', repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute -left-1/4 -top-1/3 h-[140%] w-[80%] rounded-full opacity-70 blur-2xl"
-          style={{ background: b }}
-          animate={{ x: [0, 28, -12, 0], y: [0, -18, 10, 0] }}
-          transition={{ duration: 7, ease: 'easeInOut', repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute -bottom-1/3 -right-1/4 h-[120%] w-[70%] rounded-full opacity-60 blur-2xl"
-          style={{ background: c }}
-          animate={{ x: [0, -22, 16, 0], y: [0, 14, -20, 0] }}
-          transition={{ duration: 8.5, ease: 'easeInOut', repeat: Infinity }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-white/10" />
-        <Motif kind={visual.motif} mark={visual.mark} />
-        <div
-          className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full ring-2 ring-black/20"
-          style={{ background: '#fff', boxShadow: `0 0 12px ${visual.glow}` }}
-          title={visual.flat}
-        />
+      <div className="relative h-32 overflow-hidden" style={{ background: visual.flat }}>
+        <LivingGradient colors={visual.mesh} />
+        <FormatVectors kind={visual.vector} />
       </div>
       <div className="relative bg-ink-2 p-4">
         <div className="mb-1.5 flex items-center gap-2">
           <span
             className="inline-block h-2 w-2 rounded-full"
-            style={{ background: visual.flat }}
+            style={{ background: visual.flat, boxShadow: `0 0 10px ${visual.glow}` }}
           />
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-paper-muted">
             {visual.label}
