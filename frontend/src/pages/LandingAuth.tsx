@@ -40,11 +40,11 @@ function FloatingStage() {
     >
       <div className="absolute -inset-8 rounded-[2rem] bg-gradient-to-br from-neon/30 via-violet/20 to-rosa/25 blur-3xl" />
       <motion.div
-        className="relative h-full overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0d1117] shadow-[0_40px_120px_rgba(0,0,0,0.55)]"
+        className="relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-[#0d1117] shadow-[0_40px_120px_rgba(0,0,0,0.55),inset_0_0_0_1px_rgba(255,255,255,0.1)] [isolation:isolate]"
         style={{ transform: 'translateZ(40px)' }}
       >
         <motion.div className="pointer-events-none absolute inset-0 z-10" style={{ background: glare }} />
-        <div className="flex items-center gap-2 border-b border-white/8 px-4 py-3">
+        <div className="relative z-[2] flex shrink-0 items-center gap-2 border-b border-white/8 px-4 py-3">
           <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
           <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
           <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
@@ -52,33 +52,35 @@ function FloatingStage() {
             editor · live
           </span>
         </div>
-        <div className="relative h-[calc(100%-48px)] overflow-hidden bg-[#0b0e11]">
+        <div className="relative z-[2] min-h-0 flex-1 overflow-hidden bg-[#0b0e11] pb-[34%]">
           <motion.div
             className="absolute -right-10 top-10 h-56 w-56 rounded-full bg-violet/50 blur-2xl"
             animate={{ y: [0, 24, 0], x: [0, -12, 0] }}
             transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
           />
           <motion.div
-            className="absolute -left-8 bottom-20 h-48 w-48 rounded-full bg-neon/40 blur-2xl"
+            className="absolute -left-8 bottom-8 h-48 w-48 rounded-full bg-neon/40 blur-2xl"
             animate={{ y: [0, -18, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <div className="absolute left-8 top-16 font-display text-5xl font-bold tracking-[-0.06em] text-paper sm:text-6xl">
+          <div className="absolute left-8 top-14 font-display text-5xl font-bold tracking-[-0.06em] text-paper sm:text-6xl">
             PLiEGO
           </div>
-          <div className="absolute left-8 top-36 max-w-[15rem] text-sm leading-relaxed text-paper/60">
+          <div className="absolute left-8 top-32 max-w-[15rem] text-sm leading-relaxed text-paper/60">
             Capas, tipografía y publicación en un canvas vivo.
           </div>
-          <motion.div
-            className="brand-flow-bar absolute inset-x-0 bottom-0 h-[36%] rounded-b-[1.75rem]"
-            initial={{ y: 40 }}
-            animate={{ y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8, ease }}
-          />
-          <div className="absolute bottom-6 left-8 z-[1] font-mono text-[11px] font-semibold tracking-[0.22em] text-ink">
-            Nº 01 · STUDIO
-          </div>
         </div>
+        {/* Absolute + slight overscan so radius anti-alias doesn't show parent #0d1117 */}
+        <motion.div
+          className="brand-flow-bar absolute inset-x-0 bottom-0 z-[2] flex h-[calc(34%+3px)] items-end px-8 pb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.25, duration: 0.7, ease }}
+        >
+          <span className="font-mono text-[11px] font-semibold tracking-[0.22em] text-ink">
+            Nº 01 · STUDIO
+          </span>
+        </motion.div>
       </motion.div>
     </motion.div>
   );
