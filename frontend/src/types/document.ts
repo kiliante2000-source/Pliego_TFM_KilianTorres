@@ -152,6 +152,9 @@ export type DocumentModel = {
     title: string;
     width: number;
     height: number;
+    /** Plantilla de origen, si aplica */
+    templateId?: string;
+    templateName?: string;
   };
 };
 

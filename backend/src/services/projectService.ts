@@ -92,6 +92,8 @@ export class ProjectService {
       orientation = template.orientation;
       document = template.build();
       document.meta.title = input.title;
+      document.meta.templateId = template.id;
+      document.meta.templateName = template.name;
     }
 
     const project = await prisma.project.create({

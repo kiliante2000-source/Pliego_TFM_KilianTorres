@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Copy, Archive, Trash2, Plus, ExternalLink, ArrowRight } from 'lucide-react';
 import { Button, Input } from '../components/ui/primitives';
 import { BlankTemplateCard, TemplateCard } from '../components/dashboard/TemplateCards';
+import { ProjectCover, projectKindLabel } from '../components/dashboard/ProjectCover';
 import { api } from '../services/api';
 import { useAuthStore } from '../stores/authStore';
 import type { Project, TemplateInfo } from '../types/document';
@@ -197,18 +198,24 @@ export function DashboardPage() {
                       className="group overflow-hidden rounded-3xl border border-line bg-ink-2/40 transition hover:border-neon/40 hover:shadow-[0_20px_60px_rgba(79,128,255,0.12)]"
                     >
                       <Link to={`/app/editor/${project.id}`} className="block no-underline">
-                        <div className="relative aspect-[4/3] overflow-hidden mesh-bg">
-                          <motion.div
-                            className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent"
-                            whileHover={{ opacity: 0.85 }}
-                          />
-                          <div className="absolute inset-0 flex flex-col justify-end p-4">
-                            <p className="font-display text-xl font-bold text-paper sm:text-2xl">
+                        <div className="relative aspect-[4/3] overflow-hidden bg-ink">
+                          <ProjectCover project={project} />
+                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-transparent" />
+                          <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-4">
+                            <p className="font-display text-xl font-bold leading-tight text-paper sm:text-2xl">
                               {project.title}
                             </p>
-                            <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-paper-muted">
-                              {project.width}×{project.height}
-                              {project.published ? ' · Publicado' : ''}
+                            <p className="mt-1.5 text-[11px] leading-snug text-paper-muted">
+                              <span className="text-paper/80">{projectKindLabel(project)}</span>
+                              <span className="mx-1.5 text-paper-muted/50">·</span>
+                              <span className="font-mono text-[10px] uppercase tracking-[0.12em]">
+                                {project.width}×{project.height}
+                              </span>
+                              {project.published ? (
+                                <span className="ml-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-neon">
+                                  · Publicado
+                                </span>
+                              ) : null}
                             </p>
                           </div>
                         </div>
