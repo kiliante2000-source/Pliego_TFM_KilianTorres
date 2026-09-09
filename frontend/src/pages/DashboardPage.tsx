@@ -13,6 +13,7 @@ const templateAccent: Record<string, string> = {
   revista: 'from-violet/40 via-ink-3 to-neon/30',
   catalogo: 'from-violet/35 via-rosa/25 to-lima/20',
   presentacion: 'from-neon/35 via-rosa/30 to-violet/25',
+  editorial: 'from-rosa/45 via-violet/40 to-neon/35',
 };
 
 const categoryLabel: Record<string, string> = {
@@ -20,6 +21,7 @@ const categoryLabel: Record<string, string> = {
   revista: 'Revista',
   catalogo: 'Catálogo',
   presentacion: 'Presentación',
+  editorial: 'Editorial digital',
 };
 
 export function DashboardPage() {

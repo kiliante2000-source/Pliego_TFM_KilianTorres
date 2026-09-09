@@ -168,3 +168,48 @@ body {
   border-color: rgba(79, 128, 255, 0.45);
   box-shadow: 0 24px 80px rgba(79, 128, 255, 0.12);
 }
+
+/* Published editorial motion (Readymag-inspired entrance) */
+.pliego-anim {
+  --pliego-dur: 700ms;
+  --pliego-delay: 0ms;
+  will-change: transform, opacity, filter;
+}
+.pliego-anim--fadeIn,
+.pliego-anim--fadeUp,
+.pliego-anim--fadeDown,
+.pliego-anim--scaleIn,
+.pliego-anim--slideLeft,
+.pliego-anim--slideRight,
+.pliego-anim--blurIn {
+  opacity: 0;
+  transition:
+    opacity var(--pliego-dur) cubic-bezier(0.16, 1, 0.3, 1) var(--pliego-delay),
+    transform var(--pliego-dur) cubic-bezier(0.16, 1, 0.3, 1) var(--pliego-delay),
+    filter var(--pliego-dur) cubic-bezier(0.16, 1, 0.3, 1) var(--pliego-delay);
+}
+.pliego-anim--fadeUp {
+  transform: translateY(36px);
+}
+.pliego-anim--fadeDown {
+  transform: translateY(-28px);
+}
+.pliego-anim--scaleIn {
+  transform: scale(0.92);
+}
+.pliego-anim--slideLeft {
+  transform: translateX(48px);
+}
+.pliego-anim--slideRight {
+  transform: translateX(-48px);
+}
+.pliego-anim--blurIn {
+  filter: blur(12px);
+  transform: translateY(16px);
+}
+.pliego-anim.is-in {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+

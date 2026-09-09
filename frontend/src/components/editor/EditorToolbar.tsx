@@ -9,10 +9,50 @@ import {
   Undo2,
   Redo2,
   Trash2,
+  MousePointerClick,
+  Video,
+  Blend,
+  Heading,
+  Quote,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignVerticalJustifyCenter,
+  AlignHorizontalJustifyCenter,
+  AlignStartVertical,
+  AlignEndVertical,
+  Lock,
+  Unlock,
 } from 'lucide-react';
 import { useEditorStore } from '../../stores/editorStore';
 import { api } from '../../services/api';
 import { cn } from '../../utils/cn';
+
+function ToolBtn({
+  title,
+  active,
+  onClick,
+  children,
+}: {
+  title: string;
+  active?: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      title={title}
+      onClick={onClick}
+      className={cn(
+        'grid h-10 w-10 place-items-center rounded-lg text-paper-muted transition duration-150 hover:bg-ink-3 hover:text-paper',
+        active && 'bg-accent-soft text-neon ring-1 ring-neon/35',
+      )}
+    >
+      {children}
+    </button>
+  );
+}
 
 export function EditorToolbar({ projectId }: { projectId: string }) {
   const tool = useEditorStore((s) => s.tool);
@@ -22,33 +62,51 @@ export function EditorToolbar({ projectId }: { projectId: string }) {
   const addText = useEditorStore((s) => s.addText);
   const addShape = useEditorStore((s) => s.addShape);
   const addImage = useEditorStore((s) => s.addImage);
+  const addButton = useEditorStore((s) => s.addButton);
+  const addVideo = useEditorStore((s) => s.addVideo);
   const undo = useEditorStore((s) => s.undo);
   const redo = useEditorStore((s) => s.redo);
   const deleteSelected = useEditorStore((s) => s.deleteSelected);
+  const alignSelected = useEditorStore((s) => s.alignSelected);
+  const toggleLockSelected = useEditorStore((s) => s.toggleLockSelected);
+  const selectedIds = useEditorStore((s) => s.selectedIds);
+  const documentModel = useEditorStore((s) => s.document);
+  const activePageId = useEditorStore((s) => s.activePageId);
 
-  const tools = [
-    { id: 'select' as const, icon: MousePointer2, label: 'Seleccionar', action: () => setTool('select') },
-    { id: 'text' as const, icon: Type, label: 'Texto', action: () => addText() },
-    { id: 'rect' as const, icon: Square, label: 'Rectángulo', action: () => addShape('rect') },
-    { id: 'ellipse' as const, icon: Circle, label: 'Elipse', action: () => addShape('ellipse') },
-  ];
+  const page = documentModel?.pages.find((p) => p.id === activePageId);
+  const locked = page?.elements.some((e) => selectedIds.includes(e.id) && e.locked);
 
   return (
-    <aside className="studio-rail flex w-14 flex-col items-center gap-1.5 border-r py-3">
-      {tools.map((t) => (
-        <button
-          key={t.id}
-          type="button"
-          title={t.label}
-          onClick={t.action}
-          className={cn(
-            'grid h-10 w-10 place-items-center rounded-lg text-paper-muted transition duration-150 hover:bg-ink-3 hover:text-paper',
-            tool === t.id && 'bg-accent-soft text-neon ring-1 ring-neon/35',
-          )}
-        >
-          <t.icon size={18} strokeWidth={1.75} />
-        </button>
-      ))}
+    <aside className="studio-rail flex w-14 flex-col items-center gap-1 overflow-y-auto py-3 scrollbar-thin">
+      <ToolBtn title="Seleccionar" active={tool === 'select'} onClick={() => setTool('select')}>
+        <MousePointer2 size={18} strokeWidth={1.75} />
+      </ToolBtn>
+
+      <div className="my-1 h-px w-7 bg-line" />
+      <ToolBtn title="Titular" onClick={() => addText('headline')}>
+        <Type size={18} strokeWidth={1.75} />
+      </ToolBtn>
+      <ToolBtn title="Display tipográfico" onClick={() => addText('display')}>
+        <Heading size={18} strokeWidth={1.75} />
+      </ToolBtn>
+      <ToolBtn title="Cita editorial" onClick={() => addText('quote')}>
+        <Quote size={18} strokeWidth={1.75} />
+      </ToolBtn>
+      <ToolBtn title="Cuerpo / caption" onClick={() => addText('body')}>
+        <AlignLeft size={16} strokeWidth={1.75} />
+      </ToolBtn>
+
+      <div className="my-1 h-px w-7 bg-line" />
+      <ToolBtn title="Rectángulo" onClick={() => addShape('rect')}>
+        <Square size={18} strokeWidth={1.75} />
+      </ToolBtn>
+      <ToolBtn title="Elipse" onClick={() => addShape('ellipse')}>
+        <Circle size={18} strokeWidth={1.75} />
+      </ToolBtn>
+      <ToolBtn title="Forma con gradiente" onClick={() => addShape('rect', true)}>
+        <Blend size={18} strokeWidth={1.75} />
+      </ToolBtn>
+
       <label
         title="Imagen"
         className="grid h-10 w-10 cursor-pointer place-items-center rounded-lg text-paper-muted transition hover:bg-ink-3 hover:text-paper"
@@ -70,31 +128,50 @@ export function EditorToolbar({ projectId }: { projectId: string }) {
           }}
         />
       </label>
-      <div className="my-2 h-px w-7 bg-line" />
-      <button
-        type="button"
-        title="Deshacer"
-        className="grid h-9 w-9 place-items-center rounded-lg text-paper-muted hover:bg-ink-3 hover:text-paper"
-        onClick={undo}
-      >
+      <ToolBtn title="Botón / CTA interactivo" onClick={() => addButton()}>
+        <MousePointerClick size={18} strokeWidth={1.75} />
+      </ToolBtn>
+      <ToolBtn title="Vídeo editorial" onClick={() => addVideo()}>
+        <Video size={18} strokeWidth={1.75} />
+      </ToolBtn>
+
+      <div className="my-1 h-px w-7 bg-line" />
+      <ToolBtn title="Alinear izquierda" onClick={() => alignSelected('left')}>
+        <AlignLeft size={15} />
+      </ToolBtn>
+      <ToolBtn title="Centrar horizontal" onClick={() => alignSelected('centerX')}>
+        <AlignCenter size={15} />
+      </ToolBtn>
+      <ToolBtn title="Alinear derecha" onClick={() => alignSelected('right')}>
+        <AlignRight size={15} />
+      </ToolBtn>
+      <ToolBtn title="Alinear arriba" onClick={() => alignSelected('top')}>
+        <AlignStartVertical size={15} />
+      </ToolBtn>
+      <ToolBtn title="Centrar vertical" onClick={() => alignSelected('centerY')}>
+        <AlignVerticalJustifyCenter size={15} />
+      </ToolBtn>
+      <ToolBtn title="Alinear abajo" onClick={() => alignSelected('bottom')}>
+        <AlignEndVertical size={15} />
+      </ToolBtn>
+      <ToolBtn title="Distribuir horizontal" onClick={() => alignSelected('distributeX')}>
+        <AlignHorizontalJustifyCenter size={15} />
+      </ToolBtn>
+
+      <div className="my-1 h-px w-7 bg-line" />
+      <ToolBtn title={locked ? 'Desbloquear' : 'Bloquear'} onClick={() => toggleLockSelected()}>
+        {locked ? <Unlock size={16} /> : <Lock size={16} />}
+      </ToolBtn>
+      <ToolBtn title="Deshacer" onClick={undo}>
         <Undo2 size={16} />
-      </button>
-      <button
-        type="button"
-        title="Rehacer"
-        className="grid h-9 w-9 place-items-center rounded-lg text-paper-muted hover:bg-ink-3 hover:text-paper"
-        onClick={redo}
-      >
+      </ToolBtn>
+      <ToolBtn title="Rehacer" onClick={redo}>
         <Redo2 size={16} />
-      </button>
-      <button
-        type="button"
-        title="Eliminar"
-        className="grid h-9 w-9 place-items-center rounded-lg text-paper-muted hover:bg-danger/15 hover:text-danger"
-        onClick={deleteSelected}
-      >
+      </ToolBtn>
+      <ToolBtn title="Eliminar" onClick={deleteSelected}>
         <Trash2 size={16} />
-      </button>
+      </ToolBtn>
+
       <div className="mt-auto flex flex-col items-center gap-1 pb-1">
         <button
           type="button"

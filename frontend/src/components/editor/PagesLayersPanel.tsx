@@ -1,6 +1,7 @@
 import { useEditorStore } from '../../stores/editorStore';
 import { cn } from '../../utils/cn';
 import { getActivePage, sortElements } from '../../utils/document';
+import { elementLabel } from '../../utils/elementStyle';
 
 export function PagesLayersPanel() {
   const documentModel = useEditorStore((s) => s.document);
@@ -116,7 +117,13 @@ export function PagesLayersPanel() {
                   )}
                   onClick={() => select([el.id])}
                 >
-                  {el.name || `${el.type} · ${el.id.slice(0, 6)}`}
+                  <span className="flex items-center justify-between gap-2">
+                    <span className="truncate">{elementLabel(el)}</span>
+                    <span className="shrink-0 font-mono text-[9px] uppercase opacity-50">
+                      {el.type}
+                      {el.animation?.preset && el.animation.preset !== 'none' ? ' · ✦' : ''}
+                    </span>
+                  </span>
                 </button>
               </li>
             ))}
