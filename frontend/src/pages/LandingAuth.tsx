@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
+  AnimatePresence,
   motion,
   useMotionTemplate,
   useMotionValue,
@@ -15,13 +16,21 @@ import { useAuthStore } from '../stores/authStore';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
+const DEMO_LINES = ['DISEÑA', 'COMPÓN', 'PUBLICA', 'SORPRENDE'] as const;
+
 function FloatingStage() {
   const ref = useRef<HTMLDivElement>(null);
+  const [line, setLine] = useState(0);
   const rx = useMotionValue(0);
   const ry = useMotionValue(0);
   const rotateX = useSpring(useTransform(ry, [-0.5, 0.5], [10, -10]), { stiffness: 120, damping: 16 });
   const rotateY = useSpring(useTransform(rx, [-0.5, 0.5], [-12, 12]), { stiffness: 120, damping: 16 });
   const glare = useMotionTemplate`radial-gradient(600px circle at ${useTransform(rx, [-0.5, 0.5], [10, 90])}% ${useTransform(ry, [-0.5, 0.5], [15, 85])}%, rgba(255,255,255,0.16), transparent 40%)`;
+
+  useEffect(() => {
+    const id = window.setInterval(() => setLine((i) => (i + 1) % DEMO_LINES.length), 2200);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
     <motion.div
@@ -38,48 +47,199 @@ function FloatingStage() {
       }}
       className="relative mx-auto aspect-[4/5] w-full max-w-md perspective-[1200px]"
     >
-      <div className="absolute -inset-8 rounded-[2rem] bg-gradient-to-br from-neon/30 via-violet/20 to-rosa/25 blur-3xl" />
+      <div className="absolute -inset-8 rounded-[2rem] bg-gradient-to-br from-neon/35 via-rosa/20 to-lima/20 blur-3xl" />
       <motion.div
         className="relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-[#0d1117] shadow-[0_40px_120px_rgba(0,0,0,0.55),inset_0_0_0_1px_rgba(255,255,255,0.1)] [isolation:isolate]"
         style={{ transform: 'translateZ(40px)' }}
       >
         <motion.div className="pointer-events-none absolute inset-0 z-10" style={{ background: glare }} />
+
         <div className="relative z-[2] flex shrink-0 items-center gap-2 border-b border-white/8 px-4 py-3">
-          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-          <span className="ml-2 font-mono text-[10px] uppercase tracking-[0.18em] text-paper/40">
-            editor · live
+          <span className="h-2.5 w-2.5 rounded-full bg-[#ff5c7a]/60" />
+          <span className="h-2.5 w-2.5 rounded-full bg-lima/70" />
+          <span className="h-2.5 w-2.5 rounded-full bg-neon/70" />
+          <span className="ml-2 font-mono text-[10px] uppercase tracking-[0.18em] text-paper/45">
+            pliego · canvas
+          </span>
+          <span className="ml-auto inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-lima">
+            <motion.span
+              className="h-1.5 w-1.5 rounded-full bg-lima"
+              animate={{ opacity: [1, 0.25, 1], scale: [1, 0.85, 1] }}
+              transition={{ duration: 1.4, repeat: Infinity }}
+            />
+            live
           </span>
         </div>
-        <div className="relative z-[2] min-h-0 flex-1 overflow-hidden bg-[#0b0e11] pb-[34%]">
+
+        <div className="relative z-[2] min-h-0 flex-1 overflow-hidden bg-[#090c10] pb-[32%]">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.35]"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle at 1px 1px, rgba(244,246,248,0.14) 1px, transparent 0)',
+              backgroundSize: '18px 18px',
+            }}
+          />
+
           <motion.div
-            className="absolute -right-10 top-10 h-56 w-56 rounded-full bg-violet/50 blur-2xl"
-            animate={{ y: [0, 24, 0], x: [0, -12, 0] }}
+            className="absolute -right-16 top-6 h-64 w-64 rounded-full bg-rosa/35 blur-3xl"
+            animate={{ y: [0, 28, 0], x: [0, -16, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute -left-14 top-40 h-56 w-56 rounded-full bg-neon/30 blur-3xl"
+            animate={{ y: [0, -22, 0] }}
             transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
           />
           <motion.div
-            className="absolute -left-8 bottom-8 h-48 w-48 rounded-full bg-neon/40 blur-2xl"
-            animate={{ y: [0, -18, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute bottom-16 right-6 h-40 w-40 rounded-full bg-lima/25 blur-3xl"
+            animate={{ scale: [1, 1.15, 1] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <div className="absolute left-8 top-14 font-display text-5xl font-bold tracking-[-0.06em] text-paper sm:text-6xl">
-            PLIEGO
+
+          <motion.svg
+            viewBox="0 0 200 200"
+            className="absolute -right-6 top-8 h-44 w-44 text-paper/25"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
+          >
+            <circle cx="100" cy="100" r="78" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="6 10" />
+            <circle cx="100" cy="100" r="54" fill="none" stroke="#FF4EDB" strokeWidth="1.5" opacity="0.55" />
+            <circle cx="100" cy="46" r="4" fill="#B2FF3A" />
+          </motion.svg>
+
+          <motion.div
+            className="absolute left-[-10%] top-[58%] h-px w-[120%] origin-left bg-gradient-to-r from-transparent via-paper/35 to-transparent"
+            style={{ rotate: -12 }}
+            animate={{ opacity: [0.35, 0.8, 0.35] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+
+          <motion.div
+            className="pointer-events-none absolute -left-2 top-2 select-none font-display text-[6.5rem] font-bold leading-none tracking-[-0.08em] text-transparent sm:text-[7.25rem]"
+            style={{ WebkitTextStroke: '1.5px rgba(244,246,248,0.14)' }}
+            animate={{ x: [0, -18, 0] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            VOL
+          </motion.div>
+
+          <motion.div
+            className="absolute right-5 top-5 rounded-full border border-paper/20 bg-ink/50 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/70 backdrop-blur-sm"
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 3.8, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            Nº 07
+          </motion.div>
+
+          <div className="absolute inset-x-5 top-[4.75rem]">
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-neon">Demo viva</p>
+
+            <div className="relative mt-2 min-h-[3.4rem] overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.h3
+                  key={DEMO_LINES[line]}
+                  initial={{ y: 36, opacity: 0, rotate: -2 }}
+                  animate={{ y: 0, opacity: 1, rotate: 0 }}
+                  exit={{ y: -28, opacity: 0, rotate: 2 }}
+                  transition={{ duration: 0.55, ease }}
+                  className="font-display text-[2.75rem] font-bold leading-[0.9] tracking-[-0.07em] text-paper sm:text-5xl"
+                >
+                  {DEMO_LINES[line]}
+                </motion.h3>
+              </AnimatePresence>
+            </div>
+
+            <motion.p
+              className="mt-1 font-display text-[2.6rem] font-bold leading-[0.9] tracking-[-0.07em] text-transparent sm:text-[2.85rem]"
+              style={{
+                backgroundImage: 'var(--brand-flow)',
+                backgroundSize: '400% 100%',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+              }}
+              animate={{ backgroundPosition: ['0% 50%', '66.6667% 50%'] }}
+              transition={{ duration: 16, repeat: Infinity, ease: 'linear' }}
+            >
+              SIN LÍMITES
+            </motion.p>
+
+            <p
+              className="mt-1 font-display text-[2.35rem] font-bold leading-[0.92] tracking-[-0.06em] text-transparent sm:text-[2.6rem]"
+              style={{ WebkitTextStroke: '1.5px rgba(244,246,248,0.55)' }}
+            >
+              EN EL BROWSER
+            </p>
+
+            <p className="mt-4 max-w-[15.5rem] text-[13px] leading-snug text-paper/65">
+              Tipografía, vectores y capas que se mueven como una pieza editorial — no como un panel gris.
+            </p>
           </div>
-          <div className="absolute left-8 top-32 max-w-[15rem] text-sm leading-relaxed text-paper/60">
-            Capas, tipografía y publicación en un canvas vivo.
-          </div>
+
+          <motion.div
+            className="absolute bottom-[38%] left-5 rounded-md border border-neon/80 bg-ink/40 px-2.5 py-1.5 backdrop-blur-md"
+            animate={{ y: [0, -10, 0], rotate: [-2, 1, -2] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <span className="absolute -left-1 -top-1 h-2 w-2 rounded-[1px] bg-neon" />
+            <span className="absolute -right-1 -top-1 h-2 w-2 rounded-[1px] bg-neon" />
+            <span className="absolute -bottom-1 -left-1 h-2 w-2 rounded-[1px] bg-neon" />
+            <span className="absolute -bottom-1 -right-1 h-2 w-2 rounded-[1px] bg-neon" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-neon">layer · type</span>
+          </motion.div>
+
+          <motion.div
+            className="absolute bottom-[42%] right-6 flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-md"
+            animate={{ y: [0, 12, 0], x: [0, -6, 0] }}
+            transition={{ duration: 6.2, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <span className="h-2 w-2 rounded-full bg-rosa" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-paper/75">vector</span>
+          </motion.div>
+
+          <motion.div
+            className="pointer-events-none absolute z-[3]"
+            animate={{ x: [48, 210, 150, 48], y: [120, 160, 250, 120] }}
+            transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
+              <path
+                d="M1 1l15 8.2-6.6 1.6L7.2 21 1 1z"
+                fill="#F4F6F8"
+                stroke="#0B0E11"
+                strokeWidth="1"
+              />
+            </svg>
+            <div className="ml-3 mt-1 whitespace-nowrap rounded bg-paper px-1.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-ink">
+              edit
+            </div>
+          </motion.div>
+
+          <div className="absolute left-3 top-[48%] h-3 w-3 border-l border-t border-paper/25" />
+          <div className="absolute bottom-[36%] right-3 h-3 w-3 border-b border-r border-paper/25" />
         </div>
-        {/* Absolute + slight overscan so radius anti-alias doesn't show parent #0d1117 */}
+
         <motion.div
-          className="brand-flow-bar absolute inset-x-0 bottom-0 z-[2] flex h-[calc(34%+3px)] items-end px-8 pb-6"
+          className="brand-flow-bar absolute inset-x-0 bottom-0 z-[2] flex h-[calc(32%+3px)] items-end justify-between px-7 pb-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.25, duration: 0.7, ease }}
+          transition={{ delay: 0.2, duration: 0.7, ease }}
         >
-          <span className="font-mono text-[11px] font-semibold tracking-[0.22em] text-ink">
-            Nº 01 · STUDIO
-          </span>
+          <div>
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/70">
+              Estudio en vivo
+            </p>
+            <p className="mt-1 font-display text-lg font-bold tracking-[-0.04em] text-ink">
+              Haz que se note.
+            </p>
+          </div>
+          <motion.span
+            className="font-mono text-[11px] font-semibold tracking-[0.18em] text-ink"
+            animate={{ opacity: [0.55, 1, 0.55] }}
+            transition={{ duration: 2.2, repeat: Infinity }}
+          >
+            ▶ PLAY
+          </motion.span>
         </motion.div>
       </motion.div>
     </motion.div>
