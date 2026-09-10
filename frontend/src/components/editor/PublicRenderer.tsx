@@ -173,12 +173,17 @@ function ElementView({ el }: { el: CanvasElement }) {
   }
 
   if (el.type === 'shape') {
+    const isLiveOrb =
+      el.shape === 'ellipse' && el.fillGradient?.type === 'radial';
     return wrap(
       <div
+        className={isLiveOrb ? 'pliego-orb-live' : undefined}
         style={{
           width: '100%',
           height: '100%',
-          background: gradientCss(el.fillGradient, el.fill),
+          background: isLiveOrb
+            ? undefined
+            : gradientCss(el.fillGradient, el.fill),
           borderRadius: el.shape === 'ellipse' ? '50%' : el.cornerRadius ?? 0,
           border: `${el.strokeWidth ?? 0}px solid ${el.stroke ?? 'transparent'}`,
         }}
@@ -207,12 +212,14 @@ export function PublicRenderer({ document }: { document: DocumentModel }) {
             boxShadow: '0 40px 100px rgba(0,0,0,0.45)',
           }}
         >
-          <div
-            className="absolute left-3 top-3 z-10 rounded-full bg-black/40 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-white/80 backdrop-blur"
-            style={{ transform: `scale(${1 / scale})`, transformOrigin: 'top left' }}
-          >
-            {String(index + 1).padStart(2, '0')} / {String(pages.length).padStart(2, '0')}
-          </div>
+          {pages.length > 1 ? (
+            <div
+              className="absolute left-3 top-3 z-10 rounded-full bg-black/40 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-white/80 backdrop-blur"
+              style={{ transform: `scale(${1 / scale})`, transformOrigin: 'top left' }}
+            >
+              {String(index + 1).padStart(2, '0')} / {String(pages.length).padStart(2, '0')}
+            </div>
+          ) : null}
           <div
             style={{
               width: document.meta.width,

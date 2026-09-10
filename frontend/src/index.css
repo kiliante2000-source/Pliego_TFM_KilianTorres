@@ -421,3 +421,33 @@ body {
   filter: none !important;
 }
 
+/* Live orb — radial brand wash that drifts without banding */
+.pliego-orb-live {
+  background:
+    radial-gradient(
+      circle at 35% 35%,
+      #ff4edb 0%,
+      #a855f7 32%,
+      #4f80ff 58%,
+      #0b0e11 78%
+    );
+  background-size: 140% 140%;
+  animation: pliego-orb-drift 14s ease-in-out infinite;
+  filter: saturate(1.05);
+}
+@keyframes pliego-orb-drift {
+  0%,
+  100% {
+    background-position: 30% 30%;
+  }
+  50% {
+    background-position: 65% 55%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pliego-orb-live {
+    animation: none;
+    background-position: 40% 40%;
+  }
+}
+
