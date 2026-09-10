@@ -29,12 +29,10 @@ export function AppShell() {
 
   return (
     <div className="flex min-h-svh bg-ink mesh-bg-soft">
-      <aside className="sticky top-0 hidden h-svh w-60 shrink-0 flex-col border-r border-line bg-ink/90 px-3 py-5 md:flex">
-        <div className="mb-8 px-2">
+      <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col border-r border-white/8 bg-ink/80 px-4 py-6 backdrop-blur-xl md:flex">
+        <div className="mb-10 px-2">
           <Logo to="/app" />
-          <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-paper-muted">
-            Studio
-          </p>
+          <p className="eyebrow mt-3 text-paper/40">Studio</p>
         </div>
 
         <nav className="flex flex-1 flex-col gap-1">
@@ -50,7 +48,7 @@ export function AppShell() {
                   'flex items-center gap-3 rounded-full px-3.5 py-2.5 text-sm font-medium no-underline transition',
                   isActive
                     ? 'nav-pill-active'
-                    : 'text-paper-muted hover:bg-ink-3 hover:text-paper',
+                    : 'text-paper-muted hover:bg-white/5 hover:text-paper',
                 )}
               >
                 <item.icon size={17} strokeWidth={1.75} />
@@ -60,11 +58,13 @@ export function AppShell() {
           })}
         </nav>
 
-        <div className="mt-auto space-y-3 border-t border-line px-2 pt-4">
+        <div className="mt-auto space-y-3 border-t border-white/8 px-2 pt-5">
           <div className="flex items-center gap-2.5">
             <PliegoMark size={32} />
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium text-paper">{user?.name}</p>
+              <p className="truncate font-display text-sm font-bold tracking-tight text-paper">
+                {user?.name}
+              </p>
               <p className="truncate font-mono text-[10px] text-paper-muted">{user?.email}</p>
             </div>
           </div>
@@ -83,7 +83,7 @@ export function AppShell() {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between border-b border-line px-4 py-3 md:hidden">
+        <header className="flex items-center justify-between border-b border-white/8 px-4 py-3 md:hidden">
           <Logo to="/app" />
           <Button
             variant="ghost"
@@ -96,7 +96,7 @@ export function AppShell() {
           </Button>
         </header>
 
-        <nav className="flex gap-1 overflow-x-auto border-b border-line px-3 py-2 md:hidden scrollbar-thin">
+        <nav className="flex gap-1 overflow-x-auto border-b border-white/8 px-3 py-2 md:hidden scrollbar-thin">
           {nav.map((item) => {
             const isActive =
               item.id === 'projects' ? !params.get('tab') : activeTab === item.id;

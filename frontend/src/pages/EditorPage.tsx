@@ -95,11 +95,17 @@ export function EditorPage() {
 
   if (error) {
     return (
-      <div className="grid min-h-svh place-items-center px-6">
+      <div className="grid min-h-svh place-items-center bg-ink mesh-bg-soft px-6">
         <div className="max-w-md text-center">
-          <p className="font-display text-2xl text-paper">No se pudo abrir</p>
-          <p className="mt-2 text-sm text-danger">{error}</p>
-          <Link to="/app" className="mt-5 inline-block text-sm font-semibold text-neon no-underline hover:underline">
+          <p className="eyebrow text-rosa">Error</p>
+          <p className="mt-4 font-display text-3xl font-extrabold tracking-tight text-paper">
+            No se pudo abrir
+          </p>
+          <p className="mt-3 font-serif text-base text-danger/90">{error}</p>
+          <Link
+            to="/app"
+            className="mt-8 inline-flex rounded-full bg-neon px-5 py-2.5 text-sm font-semibold text-white no-underline transition hover:bg-accent-2"
+          >
             Volver al estudio
           </Link>
         </div>
@@ -109,10 +115,11 @@ export function EditorPage() {
 
   if (!project || !documentModel || !projectId) {
     return (
-      <div className="grid min-h-svh place-items-center">
+      <div className="grid min-h-svh place-items-center bg-ink mesh-bg-soft">
         <div className="text-center">
-          <Loader2 className="mx-auto mb-3 animate-spin text-neon" size={22} />
-          <p className="text-sm text-paper-muted">Abriendo editor…</p>
+          <Loader2 className="mx-auto mb-4 animate-spin text-neon" size={22} />
+          <p className="eyebrow text-neon">Editor</p>
+          <p className="mt-3 font-display text-xl font-bold text-paper">Abriendo canvas…</p>
         </div>
       </div>
     );
@@ -120,18 +127,18 @@ export function EditorPage() {
 
   return (
     <div className="flex h-svh flex-col overflow-hidden bg-ink">
-      <header className="flex items-center justify-between gap-3 border-b border-line studio-rail px-3 py-2.5">
+      <header className="flex items-center justify-between gap-3 border-b border-white/8 bg-[#080b0f]/95 px-3 py-2.5 backdrop-blur-md">
         <div className="flex min-w-0 items-center gap-2.5">
           <Link
             to="/app"
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-paper-muted no-underline transition hover:bg-ink-3 hover:text-paper"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-paper-muted no-underline transition hover:bg-white/5 hover:text-paper"
             title="Volver al estudio"
           >
             <ArrowLeft size={18} />
           </Link>
           <div className="min-w-0">
             <Input
-              className="border-transparent bg-transparent px-1 py-0.5 font-display text-lg font-semibold tracking-tight focus:border-line focus:bg-ink/40"
+              className="border-transparent bg-transparent px-1 py-0.5 font-display text-lg font-extrabold tracking-[-0.04em] focus:border-white/15 focus:bg-ink/40"
               value={documentModel.meta.title}
               onChange={(e) => {
                 useEditorStore.getState().updateDocument((doc) => ({
@@ -141,7 +148,7 @@ export function EditorPage() {
                 void api.patch(`/api/projects/${projectId}`, { title: e.target.value });
               }}
             />
-            <div className="flex items-center gap-2 px-1 text-[11px] text-paper-muted">
+            <div className="flex items-center gap-2 px-1 font-mono text-[10px] uppercase tracking-[0.14em] text-paper-muted">
               {saveStatus === 'saving' ? (
                 <>
                   <Loader2 size={12} className="animate-spin text-neon" /> Guardando…
@@ -241,15 +248,20 @@ export function EditorPage() {
 
       {versionsOpen ? (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-2xl border border-line bg-ink-2 p-6 shadow-[0_40px_100px_rgba(0,0,0,0.55)]">
+          <div className="w-full max-w-lg rounded-sm border border-white/10 bg-ink-2 p-6 shadow-[0_40px_100px_rgba(0,0,0,0.55)]">
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <h3 className="font-display text-2xl text-paper">Versiones</h3>
-                <p className="mt-1 text-xs text-paper-muted">Snapshots manuales del documento.</p>
+                <p className="eyebrow text-neon">Historial</p>
+                <h3 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-paper">
+                  Versiones
+                </h3>
+                <p className="mt-1 font-serif text-sm text-paper/55">
+                  Snapshots manuales del documento.
+                </p>
               </div>
               <button
                 type="button"
-                className="rounded-lg px-3 py-1.5 text-sm text-paper-muted transition hover:bg-ink-3 hover:text-paper"
+                className="rounded-full px-3 py-1.5 text-sm text-paper-muted transition hover:bg-white/5 hover:text-paper"
                 onClick={() => setVersionsOpen(false)}
               >
                 Cerrar

@@ -212,10 +212,10 @@ export function BlankTemplateCard({
       type="button"
       onClick={onSelect}
       className={cn(
-        'group relative overflow-hidden rounded-2xl border text-left transition',
+        'group relative overflow-hidden rounded-sm border text-left transition',
         selected
           ? 'border-neon/70 bg-ink-2 ring-1 ring-neon/40 shadow-[0_16px_40px_rgba(79,128,255,0.22)]'
-          : 'border-line bg-ink-2/60 hover:border-paper-muted/30',
+          : 'border-white/10 bg-ink-2/60 hover:border-white/25',
       )}
     >
       <div className="relative h-32 overflow-hidden bg-[#12171e]">
@@ -235,7 +235,7 @@ export function BlankTemplateCard({
       </div>
       <div className="p-4">
         <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-paper-muted">Canvas</p>
-        <p className="mt-1 text-sm font-semibold text-paper">En blanco</p>
+        <p className="mt-1 font-display text-sm font-bold tracking-tight text-paper">En blanco</p>
         <p className="mt-1 font-mono text-[10px] text-paper-muted">1080 × 1350</p>
       </div>
     </button>
@@ -258,8 +258,8 @@ export function TemplateCard({
       type="button"
       onClick={onSelect}
       className={cn(
-        'group relative overflow-hidden rounded-2xl border text-left transition duration-300',
-        selected ? 'border-white/35' : 'border-line hover:border-white/20',
+        'group relative overflow-hidden rounded-sm border text-left transition duration-300',
+        selected ? 'border-white/35' : 'border-white/10 hover:border-white/20',
       )}
       style={
         selected
@@ -283,8 +283,8 @@ export function TemplateCard({
             {visual.label}
           </p>
         </div>
-        <p className="text-sm font-semibold text-paper">{template.name}</p>
-        <p className="mt-1 line-clamp-2 text-xs text-paper-muted">{template.description}</p>
+        <p className="font-display text-sm font-bold tracking-tight text-paper">{template.name}</p>
+        <p className="mt-1 line-clamp-2 font-serif text-xs text-paper/55">{template.description}</p>
       </div>
     </button>
   );

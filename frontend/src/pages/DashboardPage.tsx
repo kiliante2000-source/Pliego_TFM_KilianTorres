@@ -69,17 +69,18 @@ export function DashboardPage() {
   };
 
   return (
-    <main className="relative mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
-      <div className="pointer-events-none absolute -left-20 top-0 h-64 w-64 rounded-full bg-neon/10 blur-3xl" />
-      <div className="pointer-events-none absolute -right-16 top-40 h-72 w-72 rounded-full bg-rosa/10 blur-3xl" />
+    <main className="relative mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-12">
+      <div className="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full bg-neon/15 blur-3xl" />
+      <div className="pointer-events-none absolute -right-16 top-40 h-80 w-80 rounded-full bg-rosa/12 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-20 left-1/3 h-64 w-64 rounded-full bg-violet/10 blur-3xl" />
 
       <motion.section
         initial={{ opacity: 0, y: 14, filter: 'blur(6px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-        className="relative mb-10"
+        className="relative mb-12"
       >
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-neon">
+        <p className="eyebrow text-neon">
           {tab === 'templates'
             ? 'Plantillas'
             : tab === 'assets'
@@ -90,7 +91,7 @@ export function DashboardPage() {
                   ? 'Ajustes'
                   : 'Proyectos'}
         </p>
-        <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-paper sm:text-6xl">
+        <h1 className="mt-3 font-display text-5xl font-extrabold tracking-[-0.055em] text-paper sm:text-7xl">
           {tab === 'projects' || tab === 'templates'
             ? `Hola, ${user?.name?.split(' ')[0] || 'creador'}`
             : tab === 'assets'
@@ -99,7 +100,7 @@ export function DashboardPage() {
                 ? 'Versiones'
                 : 'Ajustes'}
         </h1>
-        <p className="mt-3 max-w-xl text-sm leading-relaxed text-paper-muted sm:text-base">
+        <p className="mt-4 max-w-xl font-serif text-lg leading-relaxed text-paper/65 sm:text-xl">
           {tab === 'projects' || tab === 'templates'
             ? 'Diseña, edita y publica piezas editoriales con la energía de un estudio creativo.'
             : tab === 'assets'
@@ -108,18 +109,20 @@ export function DashboardPage() {
                 ? 'Las versiones viven en cada documento. Ábrelo para crear o restaurar snapshots.'
                 : 'Preferencias de cuenta y estudio.'}
         </p>
+        <div className="editorial-rule mt-8 max-w-md" />
       </motion.section>
 
       {(tab === 'projects' || tab === 'templates') && (
         <>
-          <section className="mb-12">
-            <div className="mb-5 flex items-end justify-between gap-4">
-              <div>
-                <h2 className="font-display text-2xl font-bold text-paper">Nuevo proyecto</h2>
-                <p className="mt-1 font-mono text-[11px] text-paper-muted">
-                  Plantilla · nombre · canvas
-                </p>
-              </div>
+          <section className="mb-14">
+            <div className="mb-6">
+              <p className="eyebrow text-paper/40">Componer</p>
+              <h2 className="mt-2 font-display text-3xl font-extrabold tracking-[-0.04em] text-paper">
+                Nuevo proyecto
+              </h2>
+              <p className="mt-2 font-serif text-base text-paper/55">
+                Elige plantilla, nombra la pieza y abre el canvas.
+              </p>
             </div>
 
             <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
@@ -166,9 +169,12 @@ export function DashboardPage() {
 
           {tab === 'projects' && (
             <section>
-              <div className="mb-5">
-                <h2 className="font-display text-2xl font-bold text-paper">Tus proyectos</h2>
-                <p className="mt-1 font-mono text-[11px] text-paper-muted">
+              <div className="mb-6">
+                <p className="eyebrow text-paper/40">Archivo</p>
+                <h2 className="mt-2 font-display text-3xl font-extrabold tracking-[-0.04em] text-paper">
+                  Tus proyectos
+                </h2>
+                <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-paper-muted">
                   {loading ? 'Cargando…' : `${projects.length} activos`}
                 </p>
               </div>
@@ -176,13 +182,16 @@ export function DashboardPage() {
               {loading ? (
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {[0, 1, 2].map((i) => (
-                    <div key={i} className="h-56 animate-pulse rounded-2xl border border-line bg-ink-2/60" />
+                    <div key={i} className="h-56 animate-pulse rounded-sm border border-white/10 bg-ink-2/60" />
                   ))}
                 </div>
               ) : projects.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-line px-6 py-16 text-center">
-                  <p className="font-display text-xl font-bold text-paper">Aún no hay piezas</p>
-                  <p className="mx-auto mt-2 max-w-sm text-sm text-paper-muted">
+                <div className="border-t border-white/15 px-2 py-16 text-center sm:px-6">
+                  <p className="eyebrow text-rosa">Vacío</p>
+                  <p className="mt-4 font-display text-3xl font-extrabold tracking-tight text-paper">
+                    Aún no hay piezas
+                  </p>
+                  <p className="mx-auto mt-3 max-w-sm font-serif text-lg text-paper/55">
                     Empieza con una plantilla o un lienzo en blanco.
                   </p>
                 </div>
@@ -195,7 +204,7 @@ export function DashboardPage() {
                       animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                       transition={{ delay: index * 0.05, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                       whileHover={{ y: -6 }}
-                      className="group overflow-hidden rounded-3xl border border-line bg-ink-2/40 transition hover:border-neon/40 hover:shadow-[0_20px_60px_rgba(79,128,255,0.12)]"
+                      className="group overflow-hidden rounded-sm border border-white/10 bg-ink-2/50 transition hover:border-white/25 hover:shadow-[0_24px_70px_rgba(79,128,255,0.14)]"
                     >
                       <Link to={`/app/editor/${project.id}`} className="block no-underline">
                         <div className="relative aspect-[4/3] overflow-hidden bg-ink">
@@ -289,20 +298,25 @@ export function DashboardPage() {
         />
       )}
       {tab === 'settings' && (
-        <div className="glass max-w-lg rounded-2xl p-6">
-          <h2 className="font-display text-xl font-bold text-paper">Cuenta</h2>
-          <dl className="mt-4 space-y-3 font-mono text-xs">
-            <div>
-              <dt className="text-paper-muted">Nombre</dt>
-              <dd className="mt-1 text-sm text-paper">{user?.name}</dd>
+        <div className="max-w-lg border-t border-white/15 pt-8">
+          <p className="eyebrow text-neon">Cuenta</p>
+          <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-paper">
+            Tu estudio
+          </h2>
+          <p className="mt-2 font-serif text-base text-paper/55">Preferencias de identidad y acceso.</p>
+          <div className="editorial-rule mt-6 mb-8 w-24" />
+          <dl className="space-y-5">
+            <div className="border-b border-white/8 pb-4">
+              <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper-muted">Nombre</dt>
+              <dd className="mt-1.5 font-display text-lg font-bold text-paper">{user?.name}</dd>
+            </div>
+            <div className="border-b border-white/8 pb-4">
+              <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper-muted">Email</dt>
+              <dd className="mt-1.5 text-sm text-paper">{user?.email}</dd>
             </div>
             <div>
-              <dt className="text-paper-muted">Email</dt>
-              <dd className="mt-1 text-sm text-paper">{user?.email}</dd>
-            </div>
-            <div>
-              <dt className="text-paper-muted">Rol</dt>
-              <dd className="mt-1 text-sm text-paper">{user?.role}</dd>
+              <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper-muted">Rol</dt>
+              <dd className="mt-1.5 font-mono text-xs uppercase tracking-[0.14em] text-neon">{user?.role}</dd>
             </div>
           </dl>
         </div>
@@ -321,12 +335,11 @@ function EmptyPanel({
   cta?: string;
 }) {
   return (
-    <div className="glass max-w-xl rounded-2xl p-8">
-      <h2 className="font-display text-2xl font-bold text-paper">{title}</h2>
-      <p className="mt-3 text-sm leading-relaxed text-paper-muted">{body}</p>
-      {cta ? (
-        <ButtonLinkLike to={cta} />
-      ) : null}
+    <div className="max-w-xl border-t border-white/15 pt-8">
+      <p className="eyebrow text-rosa">Nota</p>
+      <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-paper">{title}</h2>
+      <p className="mt-3 font-serif text-lg leading-relaxed text-paper/60">{body}</p>
+      {cta ? <ButtonLinkLike to={cta} /> : null}
     </div>
   );
 }

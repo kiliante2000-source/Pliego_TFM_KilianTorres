@@ -65,7 +65,7 @@ function ToolBtn({
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-1.5 px-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.16em] text-paper-muted/70">
+    <p className="eyebrow mb-1.5 px-0.5 text-[9px] tracking-[0.16em] text-paper-muted/70">
       {children}
     </p>
   );

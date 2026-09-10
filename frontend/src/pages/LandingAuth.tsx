@@ -171,7 +171,7 @@ export function LandingPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease }}
-            className="font-mono text-[11px] uppercase tracking-[0.28em] text-neon"
+            className="eyebrow text-neon"
           >
             Editorial studio · browser native
           </motion.p>
@@ -190,7 +190,7 @@ export function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease }}
-            className="mt-7 max-w-lg text-xl leading-snug text-paper/80 sm:text-2xl"
+            className="mt-7 max-w-lg font-serif text-2xl leading-snug text-paper/75 sm:text-3xl"
           >
             Diseña revistas, portadas y sistemas visuales con la fluidez de un estudio creativo.
           </motion.p>
@@ -246,18 +246,22 @@ export function LandingPage() {
 
       <section id="studio" className="relative z-10 mx-auto max-w-7xl px-5 py-24 sm:px-8">
         <Reveal>
-          <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-rosa">Por qué PLIEGO</p>
-          <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
+          <p className="eyebrow text-rosa">Por qué PLIEGO</p>
+          <h2 className="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.05em] sm:text-6xl">
             Una herramienta útil que se siente como una pieza de diseño.
           </h2>
+          <p className="mt-5 max-w-xl font-serif text-xl text-paper/65">
+            La misma disciplina visual de la demo, aplicada a tu flujo diario.
+          </p>
+          <div className="editorial-rule mt-8 max-w-xs" />
         </Reveal>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-3">
+        <div className="mt-16 grid gap-10 md:grid-cols-3 md:gap-8">
           {[
             {
               k: '01',
               t: 'Canvas vivo',
-              d: 'Arrastra, tipografía, formas e imágenes con undo/redo y capas. El editor responde como un estudio.',
+              d: 'Arrastra tipografía, formas e imágenes con undo/redo y capas. El editor responde como un estudio.',
             },
             {
               k: '02',
@@ -267,40 +271,38 @@ export function LandingPage() {
             {
               k: '03',
               t: 'Identidad fuerte',
-              d: 'Neon mesh, tipografía geométrica y microinteracciones que mantienen la esencia creativa.',
+              d: 'Mesh de marca, tipografía display y microinteracciones que mantienen la esencia de campaña.',
             },
           ].map((card, i) => (
             <Reveal key={card.k} delay={i * 0.08}>
-              <motion.article
-                whileHover={{ y: -8, scale: 1.01 }}
-                transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                className="group relative h-full overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm"
-              >
-                <div className="absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 mesh-bg-soft" />
-                <div className="relative">
-                  <p className="font-mono text-[11px] text-neon">{card.k}</p>
-                  <h3 className="mt-4 font-display text-2xl font-bold">{card.t}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-paper/65">{card.d}</p>
-                </div>
-              </motion.article>
+              <article className="group relative border-t border-white/15 pt-6">
+                <div className="pointer-events-none absolute left-0 top-0 h-px w-0 bg-gradient-to-r from-neon via-rosa to-transparent transition-all duration-500 group-hover:w-full" />
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-neon/80">{card.k}</p>
+                <h3 className="mt-4 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
+                  {card.t}
+                </h3>
+                <p className="mt-3 font-serif text-base leading-relaxed text-paper/60">{card.d}</p>
+              </article>
             </Reveal>
           ))}
         </div>
       </section>
 
       <section className="relative z-10 overflow-hidden border-t border-white/10 py-24">
-        <div className="pointer-events-none absolute inset-0 mesh-bg opacity-40" />
+        <div className="pointer-events-none absolute inset-0 mesh-bg opacity-45" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(204,255,0,0.06),transparent_50%)]" />
         <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
           <Reveal>
-            <h2 className="max-w-4xl font-display text-5xl font-bold tracking-tight sm:text-7xl">
+            <p className="eyebrow text-lima">Siguiente paso</p>
+            <h2 className="mt-4 max-w-4xl font-display text-5xl font-extrabold tracking-[-0.055em] sm:text-7xl">
               Crea. Publica.
               <span className="wordmark-cutout"> Revoluciona.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-xl text-base text-paper/65">
-              Inspirado en la energía de estudios editoriales digitales: tipografía enorme, movimiento
-              intencional e interfaces que invitan a explorar.
+            <p className="mt-6 max-w-xl font-serif text-xl leading-snug text-paper/65">
+              Tipografía enorme, movimiento intencional e interfaces que invitan a explorar —
+              con cara de campaña, no de panel.
             </p>
           </Reveal>
           <Reveal delay={0.18}>
@@ -315,12 +317,10 @@ export function LandingPage() {
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-white/10 px-5 py-8 sm:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <footer className="relative z-10 border-t border-white/10 px-5 py-10 sm:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <PliegoWordmark className="text-lg" variant="gradient" />
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-paper/40">
-            Diseño editorial · Tecnología · Sin límites
-          </p>
+          <p className="eyebrow text-paper/35">Diseño editorial · Tecnología · Sin límites</p>
         </div>
       </footer>
     </div>
@@ -354,30 +354,34 @@ function AuthShell({
         <div className="relative flex h-full flex-col justify-between p-10">
           <Logo />
           <div>
-            <PliegoWordmark variant="gradient" className="text-6xl xl:text-8xl" />
-            <p className="mt-6 max-w-sm text-base leading-relaxed text-paper/75">
+            <p className="eyebrow text-lima">Studio · Create · Publish</p>
+            <PliegoWordmark variant="gradient" className="mt-6 text-6xl xl:text-8xl" />
+            <p className="mt-6 max-w-sm font-serif text-xl leading-relaxed text-paper/75">
               Ideas que se transforman en proyectos editoriales interactivos.
             </p>
           </div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/55">
-            Studio · Create · Publish
-          </p>
+          <div className="editorial-rule w-40" />
         </div>
       </aside>
 
-      <div className="relative grid place-items-center bg-ink px-5 py-12">
+      <div className="relative grid place-items-center bg-ink mesh-bg-soft px-5 py-12">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(5,6,8,0.35),transparent_55%)]" />
         <motion.div
           initial={{ opacity: 0, y: 16, filter: 'blur(6px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 0.55, ease }}
-          className="w-full max-w-md"
+          className="relative w-full max-w-md"
         >
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <PliegoMark size={32} />
             <PliegoWordmark />
           </div>
-          <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
-          <p className="mt-2 text-sm leading-relaxed text-paper-muted">{subtitle}</p>
+          <p className="eyebrow text-neon">Acceso</p>
+          <h1 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.05em] sm:text-5xl">
+            {title}
+          </h1>
+          <p className="mt-3 font-serif text-lg leading-relaxed text-paper/65">{subtitle}</p>
+          <div className="editorial-rule mt-6 mb-2 w-20" />
           <div className="mt-8">{children}</div>
         </motion.div>
       </div>
