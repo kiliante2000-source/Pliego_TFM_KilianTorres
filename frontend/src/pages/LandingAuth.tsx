@@ -206,7 +206,7 @@ export function LandingPage() {
               </ButtonLink>
             </Magnetic>
             <Magnetic>
-              <ButtonLink to="/p/portada-demo-pliego" variant="soft" className="px-6 py-3">
+              <ButtonLink to="/demo" variant="soft" className="px-6 py-3">
                 <Play size={15} /> Ver demo viva
               </ButtonLink>
             </Magnetic>

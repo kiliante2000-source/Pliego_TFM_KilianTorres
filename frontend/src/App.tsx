@@ -6,6 +6,7 @@ import { LandingPage, LoginPage, RegisterPage } from './pages/LandingAuth';
 import { DashboardPage } from './pages/DashboardPage';
 import { EditorPage } from './pages/EditorPage';
 import { PublicProjectPage } from './pages/PublicProjectPage';
+import { LiveDemoPage } from './pages/LiveDemoPage';
 import { AppShell } from './components/AppShell';
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/demo" element={<LiveDemoPage />} />
         <Route path="/p/:slug" element={<PublicProjectPage />} />
         <Route element={<ProtectedRoute />}>
           <Route element={<AppShell />}>
