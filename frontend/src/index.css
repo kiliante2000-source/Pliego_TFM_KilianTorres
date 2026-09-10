@@ -133,59 +133,155 @@ body {
 }
 
 /*
- * Degradado corporativo suave (neon → rosa → violet → lima → naranja).
- * Puentes intermedios + longitud de onda larga (viewport ve un lavado,
- * no franjas) + patrón ×2 para bucle sin salto.
+ * Cadena cromática circular PLIEGO (recorrido por matiz, sin costura):
+ * neon → violet → rosa → naranja → lima → neon
+ * Interpolación densa en HSL + periodo ×2 (0–50% / 50–100%).
  */
 :root {
-  /* Un periodo = 0–50% (acaba en neon); copia = 50–100% → bucle perfecto */
   --brand-flow: linear-gradient(
     90deg,
-    #4f80ff 0%,
-    #8b6ef5 5%,
-    #ff4edb 11%,
-    #d850f2 16%,
-    #a855f7 22%,
-    #8b8ad4 28%,
-    #7ec9a0 33%,
-    #b2ff3a 38%,
-    #e0d04a 42%,
-    #ff7a45 45%,
-    #ff8a78 47%,
-    #c070e0 49%,
-    #4f80ff 50%,
-    #8b6ef5 55%,
-    #ff4edb 61%,
-    #d850f2 66%,
-    #a855f7 72%,
-    #8b8ad4 78%,
-    #7ec9a0 83%,
-    #b2ff3a 88%,
-    #e0d04a 92%,
-    #ff7a45 95%,
-    #ff8a78 97%,
-    #c070e0 99%,
-    #4f80ff 100%
+    #4f80ff 0.000%,
+    #4f74ff 0.833%,
+    #4f69ff 1.667%,
+    #4f5dff 2.500%,
+    #4e51ff 3.333%,
+    #574eff 4.167%,
+    #634eff 5.000%,
+    #6e4eff 5.833%,
+    #7a4eff 6.667%,
+    #864ffd 7.500%,
+    #9251fb 8.333%,
+    #9d53f9 9.167%,
+    #a855f7 10.000%,
+    #b253f9 10.833%,
+    #bc51fb 11.667%,
+    #c64ffd 12.500%,
+    #d14dff 13.333%,
+    #dc4dff 14.167%,
+    #e64eff 15.000%,
+    #f04eff 15.833%,
+    #fa4eff 16.667%,
+    #ff4efa 17.500%,
+    #ff4eef 18.333%,
+    #ff4ee5 19.167%,
+    #ff4edb 20.000%,
+    #ff4dcb 20.833%,
+    #ff4dbb 21.667%,
+    #ff4caa 22.500%,
+    #ff4b99 23.333%,
+    #ff4a89 24.167%,
+    #ff4978 25.000%,
+    #ff4967 25.833%,
+    #ff4856 26.667%,
+    #ff4a47 27.500%,
+    #ff5a46 28.333%,
+    #ff6a46 29.167%,
+    #ff7a45 30.000%,
+    #ff8b44 30.833%,
+    #ff9b43 31.667%,
+    #ffac42 32.500%,
+    #ffbd41 33.333%,
+    #ffcf40 34.167%,
+    #ffe040 35.000%,
+    #fff23f 35.833%,
+    #fbff3e 36.667%,
+    #e9ff3d 37.500%,
+    #d7ff3c 38.333%,
+    #c4ff3b 39.167%,
+    #b2ff3a 40.000%,
+    #8dff3c 40.833%,
+    #68ff3e 41.667%,
+    #44ff3f 42.500%,
+    #41ff61 43.333%,
+    #43ff87 44.167%,
+    #44ffac 45.000%,
+    #46ffd1 45.833%,
+    #48fff5 46.667%,
+    #4ae6ff 47.500%,
+    #4cc3ff 48.333%,
+    #4da1ff 49.167%,
+    #4f80ff 50.000%,
+    #4f74ff 50.833%,
+    #4f69ff 51.667%,
+    #4f5dff 52.500%,
+    #4e51ff 53.333%,
+    #574eff 54.167%,
+    #634eff 55.000%,
+    #6e4eff 55.833%,
+    #7a4eff 56.667%,
+    #864ffd 57.500%,
+    #9251fb 58.333%,
+    #9d53f9 59.167%,
+    #a855f7 60.000%,
+    #b253f9 60.833%,
+    #bc51fb 61.667%,
+    #c64ffd 62.500%,
+    #d14dff 63.333%,
+    #dc4dff 64.167%,
+    #e64eff 65.000%,
+    #f04eff 65.833%,
+    #fa4eff 66.667%,
+    #ff4efa 67.500%,
+    #ff4eef 68.333%,
+    #ff4ee5 69.167%,
+    #ff4edb 70.000%,
+    #ff4dcb 70.833%,
+    #ff4dbb 71.667%,
+    #ff4caa 72.500%,
+    #ff4b99 73.333%,
+    #ff4a89 74.167%,
+    #ff4978 75.000%,
+    #ff4967 75.833%,
+    #ff4856 76.667%,
+    #ff4a47 77.500%,
+    #ff5a46 78.333%,
+    #ff6a46 79.167%,
+    #ff7a45 80.000%,
+    #ff8b44 80.833%,
+    #ff9b43 81.667%,
+    #ffac42 82.500%,
+    #ffbd41 83.333%,
+    #ffcf40 84.167%,
+    #ffe040 85.000%,
+    #fff23f 85.833%,
+    #fbff3e 86.667%,
+    #e9ff3d 87.500%,
+    #d7ff3c 88.333%,
+    #c4ff3b 89.167%,
+    #b2ff3a 90.000%,
+    #8dff3c 90.833%,
+    #68ff3e 91.667%,
+    #44ff3f 92.500%,
+    #41ff61 93.333%,
+    #43ff87 94.167%,
+    #44ffac 95.000%,
+    #46ffd1 95.833%,
+    #48fff5 96.667%,
+    #4ae6ff 97.500%,
+    #4cc3ff 98.333%,
+    #4da1ff 99.167%,
+    #4f80ff 100.000%
   );
   --brand-flow-static: linear-gradient(
     100deg,
     #4f80ff 0%,
-    #ff4edb 26%,
-    #a855f7 48%,
-    #b2ff3a 72%,
-    #ff7a45 100%
+    #a855f7 22%,
+    #ff4edb 44%,
+    #ff7a45 66%,
+    #b2ff3a 88%,
+    #4f80ff 100%
   );
 }
 
 .wordmark-cutout {
   background-image: var(--brand-flow);
-  /* 400%: el viewport solo muestra ~½ periodo → lavado suave, no bandas */
+  /* 400%: viewport ≈ ½ periodo → lavado continuo */
   background-size: 400% 100%;
   background-position: 0% 50%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: wordmark-flow 14s linear infinite;
+  animation: wordmark-flow 16s linear infinite;
 }
 
 @keyframes wordmark-flow {
@@ -193,7 +289,7 @@ body {
     background-position: 0% 50%;
   }
   to {
-    /* size 400% → 66.666% ≡ desplazar exactamente un periodo (2× el ancho) */
+    /* size 400% → 66.6667% = exactamente un periodo */
     background-position: 66.6667% 50%;
   }
 }
@@ -207,7 +303,7 @@ body {
   }
 }
 
-/* Barra / superficies: misma onda larga + slide por transform */
+/* Barra: misma cadena circular; slide −50% = un periodo sin salto */
 .brand-flow-bar {
   overflow: hidden;
   isolation: isolate;
@@ -222,10 +318,9 @@ body {
   left: 0;
   top: 0;
   bottom: -3px;
-  /* 400% del contenedor = 2 periodos; -50% = un periodo exacto */
   width: 400%;
   background-image: var(--brand-flow);
-  animation: brand-flow-slide 14s linear infinite;
+  animation: brand-flow-slide 16s linear infinite;
   will-change: transform;
 }
 
