@@ -17,30 +17,20 @@ export function BrandName({ className }: { className?: string }) {
   );
 }
 
-/** Brand mark — same Syne P as PLIEGO, centered in the chroma plate. */
+/** Brand mark — same asset as favicon / PWA icons (`/brand/pliego-mark.svg`). */
 export function PliegoMark({ className, size = 28 }: { className?: string; size?: number }) {
   return (
-    <span
-      aria-hidden
-      className={cn(
-        'notranslate inline-flex shrink-0 select-none items-center justify-center overflow-hidden rounded-[22%]',
-        'font-display font-extrabold uppercase leading-none text-[#050608]',
-        className,
-      )}
+    <img
+      src="/brand/pliego-mark.svg"
+      alt=""
+      width={size}
+      height={size}
+      draggable={false}
+      className={cn('notranslate inline-block shrink-0 select-none', className)}
       lang="es"
       translate="no"
-      style={{
-        width: size,
-        height: size,
-        fontSize: size * 0.72,
-        letterSpacing: '-0.055em',
-        lineHeight: 1,
-        background:
-          'linear-gradient(135deg, #4F80FF 0%, #7B5CFF 20%, #A855F7 38%, #FF4EDB 52%, #FF7A45 68%, #D4FF3A 84%, #B2FF3A 100%)',
-      }}
-    >
-      P
-    </span>
+      style={{ width: size, height: size }}
+    />
   );
 }
 

@@ -277,34 +277,34 @@ function GestureFilm() {
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 70% 55% at 18% 20%, rgba(255,78,219,0.22), transparent 55%), radial-gradient(ellipse 55% 50% at 82% 28%, rgba(79,128,255,0.2), transparent 55%), radial-gradient(ellipse 50% 45% at 55% 88%, rgba(168,85,247,0.16), transparent 50%)',
+              'radial-gradient(ellipse 70% 55% at 18% 20%, rgba(255,78,219,0.55), transparent 55%), radial-gradient(ellipse 55% 50% at 82% 28%, rgba(79,128,255,0.5), transparent 55%), radial-gradient(ellipse 50% 45% at 55% 88%, rgba(168,85,247,0.42), transparent 50%)',
           }}
         />
         <motion.div
           className="absolute -left-[10%] top-[8%] h-[55vmin] w-[55vmin] rounded-full blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(255,78,219,0.45), transparent 68%)' }}
+          style={{ background: 'radial-gradient(circle, rgba(255,78,219,0.75), transparent 68%)' }}
           animate={{ x: [0, 40, 0], y: [0, 28, 0], scale: [1, 1.12, 1] }}
           transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
           className="absolute -right-[8%] top-[18%] h-[60vmin] w-[60vmin] rounded-full blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(79,128,255,0.4), transparent 68%)' }}
+          style={{ background: 'radial-gradient(circle, rgba(79,128,255,0.7), transparent 68%)' }}
           animate={{ x: [0, -36, 0], y: [0, 22, 0], scale: [1, 1.1, 1] }}
           transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
           className="absolute bottom-[-10%] left-[35%] h-[50vmin] w-[50vmin] rounded-full blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(178,255,58,0.18), transparent 70%)' }}
-          animate={{ scale: [1, 1.2, 1], opacity: [0.45, 0.85, 0.45] }}
+          style={{ background: 'radial-gradient(circle, rgba(178,255,58,0.4), transparent 70%)' }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.55, 1, 0.55] }}
           transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
           className="absolute right-[6%] top-0 h-full w-[44%]"
           style={{
             background:
-              'linear-gradient(105deg, transparent 0%, rgba(168,85,247,0.08) 35%, rgba(79,128,255,0.14) 55%, rgba(255,78,219,0.1) 75%, transparent 100%)',
+              'linear-gradient(105deg, transparent 0%, rgba(168,85,247,0.22) 35%, rgba(79,128,255,0.32) 55%, rgba(255,78,219,0.28) 75%, transparent 100%)',
           }}
-          animate={{ opacity: [0.35, 0.75, 0.35] }}
+          animate={{ opacity: [0.45, 0.95, 0.45] }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
       </div>
@@ -402,19 +402,13 @@ function GestureFilm() {
                   {step === 0 && (
                     <div className="flex h-full items-center justify-center">
                       <motion.span
-                        className="notranslate text-6xl font-extrabold tracking-[-0.06em]"
+                        className="notranslate wordmark-cutout text-6xl font-extrabold tracking-[-0.06em]"
                         lang="es"
                         translate="no"
-                        style={{
-                          ...display,
-                          backgroundImage: 'var(--brand-flow)',
-                          backgroundSize: '400% 100%',
-                          WebkitBackgroundClip: 'text',
-                          backgroundClip: 'text',
-                          WebkitTextFillColor: 'transparent',
-                        }}
-                        animate={{ backgroundPosition: ['0% 50%', '66% 50%'], opacity: [0.35, 1, 1] }}
-                        transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+                        style={display}
+                        initial={{ opacity: 0, scale: 0.94 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5, ease }}
                       >
                         PLIEGO
                       </motion.span>
@@ -423,7 +417,7 @@ function GestureFilm() {
                   {step === 1 && (
                     <>
                       <motion.div
-                        className="absolute right-[12%] top-[18%] h-48 w-48 rounded-full bg-gradient-to-br from-rosa to-neon shadow-[0_0_60px_rgba(255,78,219,0.45)]"
+                        className="absolute right-[12%] top-[18%] h-48 w-48 rounded-full bg-gradient-to-br from-rosa to-neon shadow-[0_0_80px_rgba(255,78,219,0.75)]"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ type: 'spring', stiffness: 160, damping: 14 }}
@@ -533,15 +527,37 @@ export function LiveDemoPage() {
         style={{ scaleX: progress }}
       />
 
-      {/* INTRO OVERLAY */}
+      {/* INTRO OVERLAY — same chroma punch as the landing, not washed pastels */}
       <AnimatePresence>
         {intro < 3 ? (
           <motion.div
             key="intro"
-            className="fixed inset-0 z-[70] flex items-center justify-center bg-[#050608]"
+            className="fixed inset-0 z-[70] flex items-center justify-center overflow-hidden bg-[#050608]"
             exit={{ opacity: 0 }}
             transition={{ duration: 1, ease }}
           >
+            <div className="pointer-events-none absolute inset-0" aria-hidden>
+              <div
+                className="absolute -left-[20%] top-[-10%] h-[70vmin] w-[70vmin] rounded-full opacity-90 blur-3xl"
+                style={{
+                  background:
+                    'radial-gradient(circle, rgba(79,128,255,0.72) 0%, rgba(168,85,247,0.35) 42%, transparent 70%)',
+                }}
+              />
+              <div
+                className="absolute -right-[18%] bottom-[-8%] h-[65vmin] w-[65vmin] rounded-full opacity-90 blur-3xl"
+                style={{
+                  background:
+                    'radial-gradient(circle, rgba(255,78,219,0.7) 0%, rgba(255,122,69,0.4) 40%, transparent 70%)',
+                }}
+              />
+              <div
+                className="absolute left-[35%] top-[40%] h-[40vmin] w-[40vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-80 blur-3xl"
+                style={{
+                  background: 'radial-gradient(circle, rgba(178,255,58,0.35) 0%, transparent 68%)',
+                }}
+              />
+            </div>
             <AnimatePresence mode="wait">
               {intro === 0 && (
                 <motion.p
@@ -550,7 +566,7 @@ export function LiveDemoPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.7, ease }}
-                  className="px-6 text-center text-3xl italic text-paper/85 sm:text-5xl"
+                  className="relative z-10 px-6 text-center text-3xl italic text-paper sm:text-5xl"
                   style={serif}
                 >
                   Diseñar en el browser
@@ -563,7 +579,7 @@ export function LiveDemoPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.7, ease }}
-                  className="px-6 text-center text-4xl font-extrabold tracking-[-0.04em] text-paper sm:text-6xl"
+                  className="relative z-10 px-6 text-center text-4xl font-extrabold tracking-[-0.04em] text-paper sm:text-6xl"
                   style={display}
                 >
                   nunca se sintió así.
@@ -576,10 +592,10 @@ export function LiveDemoPage() {
                   animate={{ opacity: 1, letterSpacing: '-0.06em' }}
                   exit={{ opacity: 0, scale: 1.04 }}
                   transition={{ duration: 0.85, ease }}
-                  className="text-center"
+                  className="relative z-10 text-center"
                 >
                   <p
-                    className="notranslate bg-gradient-to-r from-neon via-rosa to-lima bg-clip-text text-6xl font-extrabold text-transparent sm:text-8xl"
+                    className="notranslate wordmark-cutout px-4 text-6xl font-extrabold sm:text-8xl"
                     lang="es"
                     translate="no"
                     style={display}
@@ -613,16 +629,16 @@ export function LiveDemoPage() {
       {/* BILLBOARD HERO */}
       <section className="relative z-10 flex min-h-[calc(100svh-80px)] flex-col justify-end overflow-hidden px-5 pb-16 pt-10 sm:px-8">
         <motion.div
-          className="pointer-events-none absolute -right-24 top-10 h-[70vmin] w-[70vmin] rounded-full opacity-70"
+          className="pointer-events-none absolute -right-24 top-10 h-[70vmin] w-[70vmin] rounded-full opacity-95"
           style={{
             background:
-              'radial-gradient(circle at 40% 40%, #FF4EDB 0%, #A855F7 35%, #4F80FF 60%, transparent 72%)',
+              'radial-gradient(circle at 40% 40%, #FF4EDB 0%, #FF4EDB 18%, #A855F7 42%, #4F80FF 68%, transparent 78%)',
           }}
           animate={{ scale: [1, 1.12, 1], x: [0, -30, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="pointer-events-none absolute -left-16 bottom-20 h-[40vmin] w-[40vmin] rounded-full bg-lima/20 blur-3xl"
+          className="pointer-events-none absolute -left-16 bottom-20 h-[40vmin] w-[40vmin] rounded-full bg-lima/45 blur-3xl"
           animate={{ y: [0, -40, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
@@ -765,7 +781,7 @@ export function LiveDemoPage() {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 60% 50% at 50% 40%, rgba(255,78,219,0.25), transparent 60%)',
+              'radial-gradient(ellipse 60% 50% at 50% 40%, rgba(255,78,219,0.55), transparent 60%)',
           }}
           animate={{ opacity: [0.5, 0.9, 0.5] }}
           transition={{ duration: 5, repeat: Infinity }}
