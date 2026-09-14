@@ -395,6 +395,19 @@ body {
   animation: hero-signal-blink 2.4s ease-in-out infinite;
 }
 
+.tag-signal-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 999px;
+  background: #4f80ff;
+  box-shadow: 0 0 8px rgba(79, 128, 255, 0.65);
+  animation: hero-signal-blink 2.4s ease-in-out infinite;
+}
+
+.tag-signal-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
 @keyframes hero-signal-blink {
   0%,
   100% {
@@ -529,7 +542,8 @@ body {
   .landing-orb-d,
   .mesh-bg-shift,
   .signal-frame::before,
-  .hero-signal-dot {
+  .hero-signal-dot,
+  .tag-signal-dot {
     animation: none !important;
   }
 

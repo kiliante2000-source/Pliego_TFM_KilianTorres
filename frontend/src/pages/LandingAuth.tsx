@@ -188,9 +188,13 @@ export function LandingPage() {
               transition={{ delay: 0.55 }}
               className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/45 sm:mt-10"
             >
-              {['Canvas vivo', 'Publish al instante', 'Identidad de campaña'].map((tag) => (
+              {['Canvas vivo', 'Publish al instante', 'Identidad de campaña'].map((tag, i) => (
                 <span key={tag} className="inline-flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-neon shadow-[0_0_8px_rgba(79,128,255,0.65)]" />
+                  <span
+                    className="tag-signal-dot"
+                    style={{ animationDelay: `${i * 0.45}s` }}
+                    aria-hidden
+                  />
                   {tag}
                 </span>
               ))}
