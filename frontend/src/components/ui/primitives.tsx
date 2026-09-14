@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 
-/** Brand mark — same Syne P as the PLIEGO wordmark, filling the chroma plate. */
+/** Brand mark — same Syne P as PLIEGO, centered in the chroma plate. */
 export function PliegoMark({ className, size = 28 }: { className?: string; size?: number }) {
   return (
     <span
@@ -16,8 +16,7 @@ export function PliegoMark({ className, size = 28 }: { className?: string; size?
         height: size,
         fontSize: size * 0.72,
         letterSpacing: '-0.055em',
-        // Optical centering — fuller than before, without crowding the plate
-        paddingBottom: size * 0.045,
+        lineHeight: 1,
         background:
           'linear-gradient(135deg, #4F80FF 0%, #7B5CFF 20%, #A855F7 38%, #FF4EDB 52%, #FF7A45 68%, #D4FF3A 84%, #B2FF3A 100%)',
       }}

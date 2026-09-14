@@ -14,11 +14,13 @@
     </style>
   </defs>
   <rect width="64" height="64" rx="14" fill="url(#wash)"/>
+  <!-- Dead-center of the 64×64 plate -->
   <text
     x="32"
-    y="34.5"
+    y="32"
     text-anchor="middle"
     dominant-baseline="central"
+    alignment-baseline="middle"
     fill="#050608"
     font-family="Syne, Space Grotesk, Arial Black, sans-serif"
     font-size="44"
