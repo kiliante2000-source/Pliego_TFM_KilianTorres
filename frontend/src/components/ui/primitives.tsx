@@ -2,7 +2,7 @@ import { useId } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 
-/** Brand mark — modern geometric P on corporate chroma wash. */
+/** Brand mark — condensed modern P on a vivid corporate chroma wash. */
 export function PliegoMark({ className, size = 28 }: { className?: string; size?: number }) {
   const uid = useId().replace(/:/g, '');
   const washId = `pliego-wash-${uid}`;
@@ -18,33 +18,24 @@ export function PliegoMark({ className, size = 28 }: { className?: string; size?
       aria-hidden
     >
       <defs>
-        <linearGradient id={washId} x1="4" y1="2" x2="60" y2="62" gradientUnits="userSpaceOnUse">
+        {/* Even brand bands so neon / violet / rosa / naranja / lima all read */}
+        <linearGradient id={washId} x1="2" y1="6" x2="62" y2="58" gradientUnits="userSpaceOnUse">
           <stop stopColor="#4F80FF" />
-          <stop offset="0.28" stopColor="#A855F7" />
-          <stop offset="0.55" stopColor="#FF4EDB" />
-          <stop offset="0.78" stopColor="#FF7A45" />
+          <stop offset="0.2" stopColor="#7B5CFF" />
+          <stop offset="0.38" stopColor="#A855F7" />
+          <stop offset="0.52" stopColor="#FF4EDB" />
+          <stop offset="0.68" stopColor="#FF7A45" />
+          <stop offset="0.84" stopColor="#D4FF3A" />
           <stop offset="1" stopColor="#B2FF3A" />
         </linearGradient>
       </defs>
 
-      {/* Chroma plate */}
       <rect width="64" height="64" rx="15" fill={`url(#${washId})`} />
 
-      {/* Soft inner depth so the black P sits with more punch */}
-      <rect
-        x="3"
-        y="3"
-        width="58"
-        height="58"
-        rx="13"
-        fill="#050608"
-        fillOpacity="0.12"
-      />
-
-      {/* Modern geometric P — wide stem, tight bowl, Syne-adjacent display cut */}
+      {/* Condensed display P — Syne-like: narrow body, heavy stem, compact bowl */}
       <path
         fill="#050608"
-        d="M17 11h18.2c9.35 0 15.55 5.15 15.55 13.35 0 8.35-6.35 13.55-15.75 13.55H25.4V53H17V11zm8.4 7.1v12.7h8.85c4.85 0 7.95-2.75 7.95-6.4 0-3.55-3.05-6.3-7.85-6.3H25.4z"
+        d="M20 9.5h13.6c7.05 0 11.9 4.35 11.9 11.55 0 7.3-4.95 11.85-12.15 11.85H28.2V54.5H20V9.5zm8.2 6.85v9.7h5c3.55 0 5.75-2 5.75-4.9 0-2.85-2.15-4.8-5.7-4.8h-5.05z"
       />
     </svg>
   );
