@@ -1,28 +1,28 @@
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 
-/** Brand mark — same Syne P as the PLIEGO wordmark, on the corporate chroma wash. */
+/** Brand mark — same Syne P as the PLIEGO wordmark, filling the chroma plate. */
 export function PliegoMark({ className, size = 28 }: { className?: string; size?: number }) {
   return (
     <span
       aria-hidden
       className={cn(
-        'inline-flex shrink-0 select-none items-center justify-center rounded-[22%]',
+        'inline-flex shrink-0 select-none items-center justify-center overflow-hidden rounded-[22%]',
         'font-display font-extrabold uppercase leading-none text-[#050608]',
         className,
       )}
       style={{
         width: size,
         height: size,
-        fontSize: size * 0.62,
-        letterSpacing: '-0.055em',
-        // Optical vertical centering for Syne’s display metrics
-        paddingBottom: size * 0.06,
+        fontSize: size * 0.88,
+        letterSpacing: '-0.06em',
+        // Keep Syne optically centered while filling the plate
+        paddingBottom: size * 0.02,
         background:
           'linear-gradient(135deg, #4F80FF 0%, #7B5CFF 20%, #A855F7 38%, #FF4EDB 52%, #FF7A45 68%, #D4FF3A 84%, #B2FF3A 100%)',
       }}
     >
-      P
+      <span style={{ display: 'block', transform: 'scale(1.12)', transformOrigin: 'center' }}>P</span>
     </span>
   );
 }
