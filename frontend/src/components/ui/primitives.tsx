@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useId } from 'react';
 import { cn } from '../../utils/cn';
 
 export function PliegoMark({ className, size = 28 }: { className?: string; size?: number }) {
@@ -50,6 +51,43 @@ export function PliegoWordmark({
     >
       PLIEGO
     </span>
+  );
+}
+
+/** Hero wordmark as SVG so the final O cannot be clipped by overflow / background-clip. */
+export function PliegoHeroWordmark({ className }: { className?: string }) {
+  const raw = useId().replace(/:/g, '');
+  const gradId = `pliego-hero-${raw}`;
+
+  return (
+    <svg
+      viewBox="0 0 760 160"
+      className={cn('block h-auto w-full max-w-[40rem] overflow-visible', className)}
+      role="img"
+      aria-label="PLIEGO"
+    >
+      <defs>
+        <linearGradient id={gradId} x1="0%" y1="50%" x2="100%" y2="50%">
+          <stop offset="0%" stopColor="#4f80ff" />
+          <stop offset="25%" stopColor="#a855f7" />
+          <stop offset="50%" stopColor="#ff4edb" />
+          <stop offset="75%" stopColor="#ff7a45" />
+          <stop offset="100%" stopColor="#b2ff3a" />
+        </linearGradient>
+      </defs>
+      <text
+        x="12"
+        y="122"
+        fill={`url(#${gradId})`}
+        fontFamily="Syne, 'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
+        fontSize="128"
+        fontWeight="800"
+        letterSpacing="-0.04em"
+        style={{ textTransform: 'uppercase' }}
+      >
+        PLIEGO
+      </text>
+    </svg>
   );
 }
 

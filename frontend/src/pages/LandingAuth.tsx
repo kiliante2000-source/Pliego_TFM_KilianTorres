@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDownRight, ArrowRight, Play } from 'lucide-react';
-import { Logo, Button, ButtonLink, Input, PliegoWordmark, PliegoMark } from '../components/ui/primitives';
+import { Logo, Button, ButtonLink, Input, PliegoWordmark, PliegoMark, PliegoHeroWordmark } from '../components/ui/primitives';
 import { CursorGlow, Magnetic, Marquee, Reveal } from '../components/creative/Motion';
 import { useAuthStore } from '../stores/authStore';
 
@@ -11,7 +11,6 @@ const ease = [0.16, 1, 0.3, 1] as const;
 export function LandingPage() {
   const user = useAuthStore((s) => s.user);
   const { scrollYProgress } = useScroll();
-  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.92]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.18], [1, 0.35]);
 
   return (
@@ -48,10 +47,10 @@ export function LandingPage() {
       </header>
 
       <motion.section
-        style={{ scale: heroScale, opacity: heroOpacity }}
+        style={{ opacity: heroOpacity }}
         className="relative z-10 mx-auto flex min-h-[calc(100svh-88px)] w-full max-w-7xl flex-col justify-center px-5 pb-20 pt-6 sm:px-8"
       >
-        <div className="@container max-w-4xl">
+        <div className="max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -67,14 +66,7 @@ export function LandingPage() {
             transition={{ duration: 0.8, delay: 0.05, ease }}
             className="mt-7"
           >
-            {/*
-              Size from container so “PLIEGO” fits inside the padded column.
-              Extra pr keeps Syne’s O inside the clip box of overflow-x-hidden ancestors.
-            */}
-            <PliegoWordmark
-              variant="gradient"
-              className="inline-block text-[clamp(2.75rem,min(11.5vw,16cqi),7.25rem)] leading-[0.92] tracking-[-0.035em]"
-            />
+            <PliegoHeroWordmark />
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
