@@ -334,38 +334,91 @@ body {
 
 /* Barra: misma cadena circular; slide −50% = un periodo sin salto */
 
-/* Brand CTAs — corporate chroma instead of flat neon blue */
+/* Brand CTAs — flat corporate color that cycles (no gradient fill) */
 .btn-brand-flow {
-  background-image: var(--brand-flow);
-  background-size: 300% 100%;
-  background-position: 0% 50%;
-  animation: wordmark-flow 16s linear infinite;
-  color: #050608;
+  background-image: none;
+  background-color: #4f80ff;
+  color: #fff;
+  animation: btn-brand-shift 12s ease-in-out infinite;
+  box-shadow: 0 10px 32px rgba(79, 128, 255, 0.28);
 }
 
 .btn-brand-soft {
-  background:
-    linear-gradient(rgba(11, 14, 17, 0.92), rgba(11, 14, 17, 0.92)) padding-box,
-    var(--brand-flow-static) border-box;
-  border: 1px solid transparent;
-  background-size: 100% 100%, 220% 100%;
-  background-position: 0 0, 0% 50%;
-  transition:
-    background-position 0.55s ease,
-    box-shadow 0.35s ease,
-    filter 0.35s ease;
+  background: rgba(11, 14, 17, 0.88);
+  border: 1px solid #4f80ff;
+  color: #f4f6f8;
+  animation: btn-brand-border-shift 12s ease-in-out infinite;
+  box-shadow: none;
+  transition: filter 0.35s ease;
 }
 
 .btn-brand-soft:hover {
-  background-position: 0 0, 80% 50%;
-  filter: brightness(1.08);
+  filter: brightness(1.1);
+}
+
+@keyframes btn-brand-shift {
+  0%,
+  100% {
+    background-color: #4f80ff;
+    color: #fff;
+    box-shadow: 0 10px 32px rgba(79, 128, 255, 0.28);
+  }
+  20% {
+    background-color: #a855f7;
+    color: #fff;
+    box-shadow: 0 10px 32px rgba(168, 85, 247, 0.28);
+  }
+  40% {
+    background-color: #ff4edb;
+    color: #050608;
+    box-shadow: 0 10px 32px rgba(255, 78, 219, 0.28);
+  }
+  60% {
+    background-color: #ff7a45;
+    color: #050608;
+    box-shadow: 0 10px 32px rgba(255, 122, 69, 0.28);
+  }
+  80% {
+    background-color: #b2ff3a;
+    color: #050608;
+    box-shadow: 0 10px 32px rgba(178, 255, 58, 0.28);
+  }
+}
+
+@keyframes btn-brand-border-shift {
+  0%,
+  100% {
+    border-color: #4f80ff;
+    color: #f4f6f8;
+  }
+  20% {
+    border-color: #a855f7;
+    color: #e9d5ff;
+  }
+  40% {
+    border-color: #ff4edb;
+    color: #ffd6f5;
+  }
+  60% {
+    border-color: #ff7a45;
+    color: #ffe0d1;
+  }
+  80% {
+    border-color: #b2ff3a;
+    color: #eaffc2;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .btn-brand-flow {
     animation: none;
-    background-image: var(--brand-flow-static);
-    background-size: 100% 100%;
+    background-color: #4f80ff;
+    color: #fff;
+  }
+
+  .btn-brand-soft {
+    animation: none;
+    border-color: #a855f7;
   }
 }
 

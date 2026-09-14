@@ -72,10 +72,9 @@ export function Logo({
 
 const buttonVariants = {
   primary:
-    'btn-brand-flow text-ink shadow-[0_10px_32px_rgba(79,128,255,0.22)] hover:brightness-[1.06] hover:shadow-[0_14px_40px_rgba(255,78,219,0.25)]',
+    'btn-brand-flow shadow-[0_10px_32px_rgba(79,128,255,0.22)] hover:brightness-[1.06]',
   ghost: 'bg-transparent text-paper-muted hover:bg-ink-3 hover:text-paper',
-  soft:
-    'btn-brand-soft text-paper hover:shadow-[0_0_0_1px_rgba(255,78,219,0.28)]',
+  soft: 'btn-brand-soft',
   danger: 'bg-danger/15 text-danger hover:bg-danger/25',
   lima: 'bg-lima text-ink shadow-[0_8px_24px_rgba(178,255,58,0.22)] hover:brightness-95',
 } as const;
