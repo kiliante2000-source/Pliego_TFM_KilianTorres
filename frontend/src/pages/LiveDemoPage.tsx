@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AnimatePresence,
   motion,
   useScroll,
   useSpring,
-  useTransform,
 } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Logo, ButtonLink } from '../components/ui/primitives';
@@ -24,35 +23,57 @@ const HOOKS = [
 const CHAPTERS = [
   {
     id: '01',
-    product: 'REVISTA',
-    line: 'Una portada que para el scroll.',
-    detail: 'Display brutal, orbe de marca, tipografía que manda.',
-    gradient: 'from-[#1a1030] via-[#4F80FF] to-[#FF4EDB]',
+    product: 'MANIFIESTO',
+    short: 'Manifiesto digital',
+    line: 'Un relato en tres actos.',
+    detail: 'Portada, ensayo y cierre con motion: la pieza se siente campaña, no documento.',
+    gradient: 'from-[#1a0a18] via-[#FF4EDB] to-[#A855F7]',
     accent: '#FF4EDB',
   },
   {
     id: '02',
-    product: 'LOOKBOOK',
-    line: 'Moda con ritmo de página.',
-    detail: 'Doble spread, caption corto, blanco que respira.',
-    gradient: 'from-[#1a0a14] via-[#FF4EDB] to-[#FF7A45]',
-    accent: '#FF7A45',
+    product: 'PORTFOLIO',
+    short: 'Portfolio',
+    line: 'Tu trabajo, con ritmo de portada.',
+    detail: 'Hero tipográfico, case study y scroll que vende el proceso sin explicarlo de más.',
+    gradient: 'from-[#0a1228] via-[#4F80FF] to-[#A855F7]',
+    accent: '#4F80FF',
   },
   {
     id: '03',
-    product: 'DECK',
-    line: 'Una idea. Una diapositiva. Un golpe.',
-    detail: 'Widescreen, motion al entrar, CTA que no pide perdón.',
+    product: 'PORTADA',
+    short: 'Portada',
+    line: 'Una imagen que para el feed.',
+    detail: 'Display brutal, orbe de marca y tipografía que manda en el primer golpe de vista.',
+    gradient: 'from-[#1a1030] via-[#A855F7] to-[#FF4EDB]',
+    accent: '#A855F7',
+  },
+  {
+    id: '04',
+    product: 'REVISTA',
+    short: 'Páginas de revista',
+    line: 'Maquetación que se lee como papel.',
+    detail: 'Columnas, bloque visual y motion al scroll: página viva, no PDF plano.',
     gradient: 'from-[#0a1a10] via-[#B2FF3A] to-[#4F80FF]',
     accent: '#B2FF3A',
   },
   {
-    id: '04',
-    product: 'CARTEL',
-    line: 'Calle y browser, mismo impacto.',
-    detail: 'Una palabra. Un vector. Silencio alrededor.',
-    gradient: 'from-[#120818] via-[#A855F7] to-[#4F80FF]',
-    accent: '#A855F7',
+    id: '05',
+    product: 'LOOKBOOK',
+    short: 'Catálogo / lookbook',
+    line: 'Producto con aire editorial.',
+    detail: 'Doble spread, caption corto y CTA que vende sin parecer e-commerce genérico.',
+    gradient: 'from-[#1a0a14] via-[#FF4EDB] to-[#FF7A45]',
+    accent: '#FF7A45',
+  },
+  {
+    id: '06',
+    product: 'PRESENTACIÓN',
+    short: 'Presentación',
+    line: 'Una idea. Una diapositiva. Un golpe.',
+    detail: 'Widescreen, entrada con motion y un cierre que pide acción.',
+    gradient: 'from-[#121826] via-[#4F80FF] to-[#B2FF3A]',
+    accent: '#4F80FF',
   },
 ] as const;
 
@@ -68,14 +89,22 @@ function useCycle(n: number, ms: number) {
 /** Compact product gallery: one viewport, all formats switchable */
 function ChapterGallery() {
   const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
   const chapter = CHAPTERS[active];
 
   useEffect(() => {
+    if (paused) return;
     const id = window.setInterval(() => {
       setActive((v) => (v + 1) % CHAPTERS.length);
     }, 5200);
     return () => window.clearInterval(id);
-  }, []);
+  }, [paused, active]);
+
+  const select = (i: number) => {
+    setActive(i);
+    setPaused(true);
+    window.setTimeout(() => setPaused(false), 8000);
+  };
 
   return (
     <section id="obra" className="relative z-10 overflow-hidden border-y border-white/10">
@@ -101,7 +130,7 @@ function ChapterGallery() {
               className="mt-2 text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold tracking-[-0.045em] text-white"
               style={display}
             >
-              Cuatro piezas. Un mismo golpe.
+              Seis formatos. Un mismo golpe.
             </h2>
           </div>
         </div>
@@ -114,15 +143,15 @@ function ChapterGallery() {
               <button
                 key={ch.id}
                 type="button"
-                onClick={() => setActive(i)}
-                className="rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] transition"
+                onClick={() => select(i)}
+                className="rounded-full px-3.5 py-2 font-mono text-[10px] uppercase tracking-[0.16em] transition sm:text-[11px] sm:tracking-[0.18em]"
                 style={{
                   background: on ? ch.accent : 'rgba(0,0,0,0.35)',
                   color: on ? '#050608' : 'rgba(255,255,255,0.75)',
                   boxShadow: on ? `0 0 0 1px ${ch.accent}` : '0 0 0 1px rgba(255,255,255,0.15)',
                 }}
               >
-                {ch.product}
+                {ch.short}
               </button>
             );
           })}
@@ -199,12 +228,12 @@ function ChapterGallery() {
         </div>
 
         {/* Mini strip of all formats */}
-        <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
           {CHAPTERS.map((ch, i) => (
             <button
               key={ch.id}
               type="button"
-              onClick={() => setActive(i)}
+              onClick={() => select(i)}
               className="group relative overflow-hidden rounded-sm text-left ring-1 ring-white/15 transition hover:ring-white/35"
               style={{
                 background: `linear-gradient(135deg, ${ch.accent}33, rgba(0,0,0,0.55))`,
@@ -547,18 +576,19 @@ export function LiveDemoPage() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2.7, duration: 0.8, ease }}
-            className="mt-4 max-w-5xl text-[clamp(3.2rem,12vw,8rem)] font-extrabold leading-[0.86] tracking-[-0.07em]"
+            className="mt-4 max-w-5xl overflow-visible pb-2 text-[clamp(3.2rem,12vw,8rem)] font-extrabold leading-[0.98] tracking-[-0.07em]"
             style={display}
           >
             Haz algo
             <br />
             <motion.span
-              className="text-transparent"
+              className="inline-block overflow-visible pb-[0.08em] text-transparent"
               style={{
                 backgroundImage: 'var(--brand-flow)',
                 backgroundSize: '400% 100%',
                 WebkitBackgroundClip: 'text',
                 backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
               }}
               animate={{ backgroundPosition: ['0% 50%', '66.6667% 50%'] }}
               transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
@@ -600,33 +630,36 @@ export function LiveDemoPage() {
       </section>
 
       {/* STATEMENT STRIP */}
-      <section className="relative z-10 overflow-hidden border-y border-white/10 bg-black py-6">
-        <motion.div
-          className="flex w-max gap-16 whitespace-nowrap"
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
-        >
-          {[0, 1].map((c) => (
-            <div key={c} className="flex items-center gap-16 px-8">
-              {[
-                'PORTADAS QUE PARAN',
-                'DECKS QUE CIERRAN',
-                'CARTELES QUE GRITAN',
-                'LOOKBOOKS QUE VENDEN',
-                'PÁGINAS QUE LATEN',
-              ].map((w) => (
-                <span
-                  key={`${c}-${w}`}
-                  className="text-4xl font-extrabold tracking-[-0.05em] text-paper/25 sm:text-6xl"
-                  style={display}
-                >
-                  {w}
-                  <span className="mx-6 text-rosa">✦</span>
-                </span>
-              ))}
-            </div>
-          ))}
-        </motion.div>
+      <section className="relative z-10 border-y border-white/10 bg-black py-8 sm:py-10">
+        <div className="overflow-x-hidden">
+          <motion.div
+            className="flex w-max gap-16 whitespace-nowrap will-change-transform"
+            animate={{ x: ['0%', '-50%'] }}
+            transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
+          >
+            {[0, 1].map((c) => (
+              <div key={c} className="flex items-center gap-16 px-8">
+                {[
+                  'MANIFIESTO DIGITAL',
+                  'PORTFOLIO QUE VENDE',
+                  'PORTADAS QUE PARAN',
+                  'PÁGINAS DE REVISTA',
+                  'CATÁLOGO / LOOKBOOK',
+                  'PRESENTACIÓN QUE CIERRA',
+                ].map((w) => (
+                  <span
+                    key={`${c}-${w}`}
+                    className="inline-block py-1 text-4xl font-extrabold leading-none tracking-[-0.04em] text-paper/30 sm:text-6xl"
+                    style={display}
+                  >
+                    {w}
+                    <span className="mx-6 text-rosa">✦</span>
+                  </span>
+                ))}
+              </div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       {/* MANIFESTO */}
@@ -693,7 +726,7 @@ export function LiveDemoPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.85, ease }}
-          className="relative mt-5 max-w-4xl text-[clamp(3rem,10vw,7rem)] font-extrabold leading-[0.88] tracking-[-0.07em]"
+          className="relative mt-5 max-w-4xl overflow-visible pb-2 text-[clamp(3rem,10vw,7rem)] font-extrabold leading-[0.98] tracking-[-0.07em]"
           style={display}
         >
           Tu próximo
