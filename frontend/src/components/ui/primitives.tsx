@@ -2,7 +2,7 @@ import { useId } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 
-/** Brand mark — condensed modern P on a vivid corporate chroma wash. */
+/** Brand mark — vertically flattened modern P on a vivid corporate chroma wash. */
 export function PliegoMark({ className, size = 28 }: { className?: string; size?: number }) {
   const uid = useId().replace(/:/g, '');
   const washId = `pliego-wash-${uid}`;
@@ -32,10 +32,10 @@ export function PliegoMark({ className, size = 28 }: { className?: string; size?
 
       <rect width="64" height="64" rx="15" fill={`url(#${washId})`} />
 
-      {/* Condensed display P — Syne-like: narrow body, heavy stem, compact bowl */}
+      {/* Flattened display P — wide body, vertically compressed like Syne display */}
       <path
         fill="#050608"
-        d="M20 9.5h13.6c7.05 0 11.9 4.35 11.9 11.55 0 7.3-4.95 11.85-12.15 11.85H28.2V54.5H20V9.5zm8.2 6.85v9.7h5c3.55 0 5.75-2 5.75-4.9 0-2.85-2.15-4.8-5.7-4.8h-5.05z"
+        d="M14.5 15.5h22.8c10.4 0 17.4 4.55 17.4 12.15 0 7.7-7.1 12.35-17.6 12.35H24.8V48.5H14.5V15.5zm10.3 6.4v11.3h11.2c5.35 0 8.85-2.45 8.85-5.7 0-3.15-3.4-5.6-8.7-5.6H24.8z"
       />
     </svg>
   );
