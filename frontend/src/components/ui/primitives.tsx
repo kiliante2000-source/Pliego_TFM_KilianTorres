@@ -2,11 +2,10 @@ import { useId } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 
-/** Editorial fold mark — a pliego (signature sheet), not a letterform. */
+/** Brand mark — modern geometric P on corporate chroma wash. */
 export function PliegoMark({ className, size = 28 }: { className?: string; size?: number }) {
   const uid = useId().replace(/:/g, '');
-  const foldGrad = `pliego-fold-${uid}`;
-  const edgeGrad = `pliego-edge-${uid}`;
+  const washId = `pliego-wash-${uid}`;
 
   return (
     <svg
@@ -18,56 +17,34 @@ export function PliegoMark({ className, size = 28 }: { className?: string; size?
       className={className}
       aria-hidden
     >
-      {/* Ink plate — slightly sharper radius than a default app tile */}
-      <rect width="64" height="64" rx="15" fill="#07090d" />
-
       <defs>
-        <linearGradient id={foldGrad} x1="34" y1="8" x2="58" y2="56" gradientUnits="userSpaceOnUse">
+        <linearGradient id={washId} x1="4" y1="2" x2="60" y2="62" gradientUnits="userSpaceOnUse">
           <stop stopColor="#4F80FF" />
-          <stop offset="0.32" stopColor="#A855F7" />
-          <stop offset="0.62" stopColor="#FF4EDB" />
-          <stop offset="1" stopColor="#FF7A45" />
-        </linearGradient>
-        <linearGradient id={edgeGrad} x1="12" y1="12" x2="40" y2="52" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#f4f6f8" />
-          <stop offset="1" stopColor="#c8d0da" />
+          <stop offset="0.28" stopColor="#A855F7" />
+          <stop offset="0.55" stopColor="#FF4EDB" />
+          <stop offset="0.78" stopColor="#FF7A45" />
+          <stop offset="1" stopColor="#B2FF3A" />
         </linearGradient>
       </defs>
 
-      {/* Back sheet — kicked stack under the signature */}
-      <path
-        d="M26 9h24.5a3.8 3.8 0 0 1 3.8 3.8v35.4a3.8 3.8 0 0 1-3.8 3.8H26V9z"
-        fill="#141a26"
-        transform="rotate(7 38.25 30.5)"
+      {/* Chroma plate */}
+      <rect width="64" height="64" rx="15" fill={`url(#${washId})`} />
+
+      {/* Soft inner depth so the black P sits with more punch */}
+      <rect
+        x="3"
+        y="3"
+        width="58"
+        height="58"
+        rx="13"
+        fill="#050608"
+        fillOpacity="0.12"
       />
 
-      {/* Second under-sheet for depth */}
+      {/* Modern geometric P — wide stem, tight bowl, Syne-adjacent display cut */}
       <path
-        d="M22 11h24a3.2 3.2 0 0 1 3.2 3.2v33.6a3.2 3.2 0 0 1-3.2 3.2H22V11z"
-        fill="#1b2333"
-        transform="rotate(3.2 34 29.5)"
-      />
-
-      {/* Main paper face */}
-      <path d="M11 12h28.5a2.5 2.5 0 0 1 2.5 2.5v35a2.5 2.5 0 0 1-2.5 2.5H11V12z" fill={`url(#${edgeGrad})`} />
-
-      {/* Diagonal fold plane — the pliego turn (chroma only here) */}
-      <path d="M39.5 12 55 18.8v28.9L39.5 52V12z" fill={`url(#${foldGrad})`} />
-
-      {/* Fold highlight */}
-      <path d="M39.5 12 55 18.8l-1.4.7L39.5 15.2V12z" fill="#fff" fillOpacity="0.32" />
-
-      {/* Crease */}
-      <path d="M38.6 12.4h1.9V51.6h-1.9z" fill="#07090d" fillOpacity="0.22" />
-      <path d="M39.15 12.4h0.8V51.6h-0.8z" fill="#b2ff3a" fillOpacity="0.55" />
-
-      {/* Registration / crop mark — print-studio cue */}
-      <path
-        d="M15.5 18h5.5M18.25 15.25v5.5"
-        stroke="#07090d"
-        strokeOpacity="0.35"
-        strokeWidth="1.5"
-        strokeLinecap="square"
+        fill="#050608"
+        d="M17 11h18.2c9.35 0 15.55 5.15 15.55 13.35 0 8.35-6.35 13.55-15.75 13.55H25.4V53H17V11zm8.4 7.1v12.7h8.85c4.85 0 7.95-2.75 7.95-6.4 0-3.55-3.05-6.3-7.85-6.3H25.4z"
       />
     </svg>
   );
