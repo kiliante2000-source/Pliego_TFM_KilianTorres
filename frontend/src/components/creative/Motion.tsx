@@ -113,11 +113,11 @@ export function Marquee({
 
   return (
     <div
-      className="relative overflow-hidden py-5 transition-[background-color,border-color] duration-700"
+      className="relative overflow-hidden py-6 transition-[background-color,border-color] duration-700 sm:py-7"
       style={{
         backgroundColor: color,
-        borderTop: chrome === 'full' ? `2px solid rgba(5,6,8,0.35)` : 'none',
-        borderBottom: `2px solid rgba(5,6,8,0.35)`,
+        borderTop: chrome === 'full' ? `3px solid rgba(5,6,8,0.4)` : 'none',
+        borderBottom: `3px solid rgba(5,6,8,0.4)`,
       }}
     >
       <motion.div
@@ -128,7 +128,7 @@ export function Marquee({
         {row.map((item, i) => (
           <span
             key={`${item}-${i}`}
-            className="font-display text-4xl font-extrabold uppercase tracking-[-0.05em] transition-colors duration-700 sm:text-6xl"
+            className="font-display text-5xl font-extrabold uppercase tracking-[-0.05em] transition-colors duration-700 sm:text-6xl md:text-7xl"
             style={{ color: inkOnFill ? '#050608' : '#f4f6f8' }}
           >
             {item}

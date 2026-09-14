@@ -96,133 +96,132 @@ export function LandingPage() {
         }}
       />
 
-      <header className="relative z-30 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
-        <Logo />
-        <nav className="flex items-center gap-2">
-          {user ? (
-            <Magnetic>
-              <ButtonLink to="/app">
-                Abrir estudio <ArrowRight size={16} />
-              </ButtonLink>
-            </Magnetic>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-paper/70 no-underline transition hover:bg-white/5 hover:text-paper"
-              >
-                Entrar
-              </Link>
+      {/* First screen: brand + CTAs + motion bands always in view */}
+      <div className="relative z-10 flex min-h-svh flex-col">
+        <header className="relative z-30 mx-auto flex w-full max-w-7xl shrink-0 items-center justify-between px-5 py-4 sm:px-8 sm:py-5">
+          <Logo />
+          <nav className="flex items-center gap-2">
+            {user ? (
               <Magnetic>
-                <ButtonLink to="/register">
-                  Crear cuenta <ArrowRight size={16} />
+                <ButtonLink to="/app">
+                  Abrir estudio <ArrowRight size={16} />
                 </ButtonLink>
               </Magnetic>
-            </>
-          )}
-        </nav>
-      </header>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-paper/70 no-underline transition hover:bg-white/5 hover:text-paper"
+                >
+                  Entrar
+                </Link>
+                <Magnetic>
+                  <ButtonLink to="/register">
+                    Crear cuenta <ArrowRight size={16} />
+                  </ButtonLink>
+                </Magnetic>
+              </>
+            )}
+          </nav>
+        </header>
 
-      <motion.section
-        style={{ opacity: heroOpacity, y: heroY }}
-        className="relative z-10 mx-auto flex min-h-[calc(100svh-88px)] w-full max-w-7xl flex-col justify-center px-5 pb-20 pt-6 sm:px-8"
-      >
-        <div className="max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease }}
-            className="flex flex-wrap items-center gap-3"
-          >
-            <PliegoMark size={44} className="shrink-0" />
-            <p className="eyebrow text-neon">Editorial studio · browser native</p>
-            <span className="hero-signal ml-0 sm:ml-2">
-              <span className="hero-signal-dot" aria-hidden />
-              Sistema en vivo
-            </span>
-            <span className="hidden h-px min-w-16 flex-1 bg-gradient-to-r from-neon/45 via-rosa/25 to-transparent sm:block" />
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.05, ease }}
-            className="mt-7"
-          >
-            <PliegoHeroWordmark />
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15, ease }}
-            className="mt-7 max-w-xl font-serif text-xl leading-snug text-paper/75 sm:text-2xl"
-          >
-            Diseña revistas, portadas y sistemas visuales con la fluidez de un estudio creativo.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.25, ease }}
-            className="mt-10 flex flex-wrap items-center gap-3"
-          >
-            <Magnetic strength={0.35}>
-              <ButtonLink to={user ? '/app' : '/register'} className="min-w-48 px-6 py-3 text-base">
-                Empezar a diseñar <ArrowRight size={18} />
-              </ButtonLink>
-            </Magnetic>
-            <Magnetic>
-              <ButtonLink to="/demo" variant="soft" className="px-6 py-3">
-                <Play size={15} /> Ver demo viva
-              </ButtonLink>
-            </Magnetic>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.55 }}
-            className="mt-14 flex flex-wrap gap-x-6 gap-y-2 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/45"
-          >
-            {['Canvas vivo', 'Publish al instante', 'Identidad de campaña'].map((tag) => (
-              <span key={tag} className="inline-flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-neon shadow-[0_0_8px_rgba(79,128,255,0.65)]" />
-                {tag}
+        <motion.section
+          style={{ opacity: heroOpacity, y: heroY }}
+          className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-5 py-6 sm:px-8 sm:py-8"
+        >
+          <div className="max-w-4xl">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease }}
+              className="flex flex-wrap items-center gap-3"
+            >
+              <PliegoMark size={44} className="shrink-0" />
+              <p className="eyebrow text-neon">Editorial studio · browser native</p>
+              <span className="hero-signal ml-0 sm:ml-2">
+                <span className="hero-signal-dot" aria-hidden />
+                Sistema en vivo
               </span>
-            ))}
-          </motion.div>
+              <span className="hidden h-px min-w-16 flex-1 bg-gradient-to-r from-neon/45 via-rosa/25 to-transparent sm:block" />
+            </motion.div>
 
-          <motion.a
-            href="#studio"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-            className="mt-10 inline-flex items-center gap-2 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-paper no-underline transition hover:text-neon"
-          >
-            Explorar el sistema <ArrowDownRight size={15} />
-          </motion.a>
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.05, ease }}
+              className="mt-5 sm:mt-7"
+            >
+              <PliegoHeroWordmark />
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.15, ease }}
+              className="mt-5 max-w-xl font-serif text-xl leading-snug text-paper/75 sm:mt-6 sm:text-2xl"
+            >
+              Diseña revistas, portadas y sistemas visuales con la fluidez de un estudio creativo.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.25, ease }}
+              className="mt-8 flex flex-wrap items-center gap-3"
+            >
+              <Magnetic strength={0.35}>
+                <ButtonLink to={user ? '/app' : '/register'} className="min-w-48 px-6 py-3 text-base">
+                  Empezar a diseñar <ArrowRight size={18} />
+                </ButtonLink>
+              </Magnetic>
+              <Magnetic>
+                <ButtonLink to="/demo" variant="soft" className="px-6 py-3">
+                  <Play size={15} /> Ver demo viva
+                </ButtonLink>
+              </Magnetic>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.55 }}
+              className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/45 sm:mt-10"
+            >
+              {['Canvas vivo', 'Publish al instante', 'Identidad de campaña'].map((tag) => (
+                <span key={tag} className="inline-flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-neon shadow-[0_0_8px_rgba(79,128,255,0.65)]" />
+                  {tag}
+                </span>
+              ))}
+              <a
+                href="#studio"
+                className="inline-flex items-center gap-2 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-paper no-underline transition hover:text-neon"
+              >
+                Explorar el sistema <ArrowDownRight size={15} />
+              </a>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        {/* Motion bands sit on the first screen — visible without scrolling */}
+        <div className="relative z-20 shrink-0">
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-px bg-gradient-to-r from-transparent via-neon/55 to-transparent" />
+          <Marquee
+            items={['Tipografía', 'Capas', 'Versiones', 'PDF', 'Publicación', 'Plantillas', 'Canvas']}
+            speed={28}
+            colorOffset={0}
+            phaseDelay={0}
+          />
+          <Marquee
+            items={['Readymag energy', 'Studio flow', 'Neon mesh', 'Design systems', 'Editorial UI']}
+            speed={40}
+            reverse
+            colorOffset={2}
+            phaseDelay={1600}
+            chrome="bottom"
+          />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-px bg-gradient-to-r from-transparent via-rosa/55 to-transparent" />
         </div>
-      </motion.section>
-
-      {/* Chromatic band — intentional color energy lives here */}
-      <div className="relative z-10">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon/55 to-transparent" />
-        <Marquee
-          items={['Tipografía', 'Capas', 'Versiones', 'PDF', 'Publicación', 'Plantillas', 'Canvas']}
-          speed={28}
-          colorOffset={0}
-          phaseDelay={0}
-        />
-        <Marquee
-          items={['Readymag energy', 'Studio flow', 'Neon mesh', 'Design systems', 'Editorial UI']}
-          speed={40}
-          reverse
-          colorOffset={2}
-          phaseDelay={1600}
-          chrome="bottom"
-        />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-rosa/55 to-transparent" />
       </div>
 
       <section id="studio" className="relative z-10 mx-auto max-w-7xl px-5 py-24 sm:px-8">
