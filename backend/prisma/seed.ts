@@ -19,9 +19,12 @@ async function main() {
     },
   });
 
-  const template = templates[0];
+  const template =
+    templates.find((t) => t.id === 'portada-editorial') ?? templates[0];
   const brandedDoc = template.build();
   brandedDoc.meta.title = 'Portada demo';
+  brandedDoc.meta.templateId = template.id;
+  brandedDoc.meta.templateName = template.name;
 
   await prisma.project.upsert({
     where: { slug: 'portada-demo-pliego' },

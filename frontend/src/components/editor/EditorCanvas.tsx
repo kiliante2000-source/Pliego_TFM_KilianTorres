@@ -1,9 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Stage, Layer, Rect, Text, Image as KonvaImage, Transformer, Ellipse } from 'react-konva';
+import {
+  Stage,
+  Layer,
+  Rect,
+  Text,
+  Image as KonvaImage,
+  Transformer,
+  Ellipse,
+  Group,
+} from 'react-konva';
 import type Konva from 'konva';
 import { useEditorStore } from '../../stores/editorStore';
 import { getActivePage, sortElements } from '../../utils/document';
-import type { CanvasElement } from '../../types/document';
+import type { CanvasElement, ShapeElement } from '../../types/document';
+import { konvaShadow } from '../../utils/elementStyle';
 
 function useHtmlImage(src?: string) {
   const [image, setImage] = useState<HTMLImageElement | null>(null);
@@ -18,6 +28,34 @@ function useHtmlImage(src?: string) {
     img.src = src;
   }, [src]);
   return image;
+}
+
+function shapeFillProps(el: ShapeElement) {
+  if (el.fillGradient?.stops?.length) {
+    const stops = el.fillGradient.stops.flatMap((s) => [s.offset, s.color]);
+    if (el.fillGradient.type === 'radial') {
+      return {
+        fillRadialGradientStartPoint: { x: el.width / 2, y: el.height / 2 },
+        fillRadialGradientEndPoint: { x: el.width / 2, y: el.height / 2 },
+        fillRadialGradientStartRadius: 0,
+        fillRadialGradientEndRadius: Math.max(el.width, el.height) / 2,
+        fillRadialGradientColorStops: stops,
+      };
+    }
+    const angle = ((el.fillGradient.angle ?? 135) * Math.PI) / 180;
+    return {
+      fillLinearGradientStartPoint: {
+        x: el.width / 2 - (Math.cos(angle) * el.width) / 2,
+        y: el.height / 2 - (Math.sin(angle) * el.height) / 2,
+      },
+      fillLinearGradientEndPoint: {
+        x: el.width / 2 + (Math.cos(angle) * el.width) / 2,
+        y: el.height / 2 + (Math.sin(angle) * el.height) / 2,
+      },
+      fillLinearGradientColorStops: stops,
+    };
+  }
+  return { fill: el.fill };
 }
 
 export function EditorCanvas() {
@@ -54,7 +92,7 @@ export function EditorCanvas() {
     const stage = stageRef.current;
     if (!tr || !stage) return;
     const nodes = selectedIds
-      .map((id) => stage.findOne(`#${id}`))
+      .map((id) => stage.findOne(`#${CSS.escape(id)}`))
       .filter(Boolean) as Konva.Node[];
     tr.nodes(nodes);
     tr.getLayer()?.batchDraw();
@@ -163,6 +201,7 @@ function CanvasNode({
   onDragStart: () => void;
 }) {
   const image = useHtmlImage(el.type === 'image' ? el.src : undefined);
+  const shadow = konvaShadow(el.effects);
   const common = {
     id: el.id,
     name: el.id,
@@ -175,6 +214,7 @@ function CanvasNode({
     scaleY: el.scaleY,
     opacity: el.opacity,
     draggable: !el.locked,
+    ...shadow,
     onClick: (e: Konva.KonvaEventObject<MouseEvent>) => onSelect(el.id, e.evt.shiftKey),
     onTap: () => onSelect(el.id, false),
     onDragStart: () => onDragStart(),
@@ -206,12 +246,117 @@ function CanvasNode({
         text={el.text}
         fontSize={el.style.fontSize}
         fontFamily={el.style.fontFamily}
-        fontStyle={String(el.style.fontWeight)}
+        fontStyle={`${el.style.italic ? 'italic ' : ''}${el.style.fontWeight}`}
+        textDecoration={el.style.underline ? 'underline' : undefined}
         fill={el.style.color}
-        align={el.style.align}
+        align={el.style.align === 'justify' ? 'left' : el.style.align}
         lineHeight={el.style.lineHeight ?? 1.2}
         letterSpacing={el.style.letterSpacing ?? 0}
+        wrap="word"
       />
+    );
+  }
+
+  if (el.type === 'button') {
+    return (
+      <Group
+        id={el.id}
+        name={el.id}
+        x={el.x}
+        y={el.y}
+        rotation={el.rotation}
+        opacity={el.opacity}
+        draggable={!el.locked}
+        {...shadow}
+        onClick={(e) => onSelect(el.id, e.evt.shiftKey)}
+        onTap={() => onSelect(el.id, false)}
+        onDragStart={() => onDragStart()}
+        onDragEnd={(e) => onChange(el.id, { x: e.target.x(), y: e.target.y() })}
+        onTransformEnd={(e) => {
+          const node = e.target;
+          const scaleX = node.scaleX();
+          const scaleY = node.scaleY();
+          node.scaleX(1);
+          node.scaleY(1);
+          onChange(el.id, {
+            x: node.x(),
+            y: node.y(),
+            rotation: node.rotation(),
+            width: Math.max(40, el.width * Math.abs(scaleX)),
+            height: Math.max(28, el.height * Math.abs(scaleY)),
+          });
+        }}
+      >
+        <Rect
+          width={el.width}
+          height={el.height}
+          fill={el.fill}
+          cornerRadius={el.cornerRadius ?? 999}
+          stroke={el.stroke}
+          strokeWidth={el.strokeWidth ?? 0}
+        />
+        <Text
+          width={el.width}
+          height={el.height}
+          text={el.label}
+          align="center"
+          verticalAlign="middle"
+          fontSize={el.fontSize ?? 16}
+          fontFamily={el.fontFamily ?? 'Space Grotesk'}
+          fontStyle={String(el.fontWeight ?? 600)}
+          fill={el.textColor}
+        />
+      </Group>
+    );
+  }
+
+  if (el.type === 'video') {
+    return (
+      <Group
+        id={el.id}
+        name={el.id}
+        x={el.x}
+        y={el.y}
+        rotation={el.rotation}
+        opacity={el.opacity}
+        draggable={!el.locked}
+        {...shadow}
+        onClick={(e) => onSelect(el.id, e.evt.shiftKey)}
+        onTap={() => onSelect(el.id, false)}
+        onDragStart={() => onDragStart()}
+        onDragEnd={(e) => onChange(el.id, { x: e.target.x(), y: e.target.y() })}
+        onTransformEnd={(e) => {
+          const node = e.target;
+          const scaleX = node.scaleX();
+          const scaleY = node.scaleY();
+          node.scaleX(1);
+          node.scaleY(1);
+          onChange(el.id, {
+            x: node.x(),
+            y: node.y(),
+            rotation: node.rotation(),
+            width: Math.max(80, el.width * Math.abs(scaleX)),
+            height: Math.max(60, el.height * Math.abs(scaleY)),
+          });
+        }}
+      >
+        <Rect
+          width={el.width}
+          height={el.height}
+          fill="#111318"
+          cornerRadius={el.cornerRadius ?? 12}
+        />
+        <Text
+          width={el.width}
+          height={el.height}
+          text="▶  VÍDEO"
+          align="center"
+          verticalAlign="middle"
+          fontSize={18}
+          fontFamily="JetBrains Mono"
+          fill="#F4F6F8"
+        />
+      </Group>
     );
   }
 
@@ -226,10 +371,11 @@ function CanvasNode({
         radiusY={el.height / 2}
         rotation={el.rotation}
         opacity={el.opacity}
-        fill={el.fill}
+        {...shapeFillProps(el)}
         stroke={el.stroke}
         strokeWidth={el.strokeWidth ?? 0}
         draggable={!el.locked}
+        {...shadow}
         onClick={(e) => onSelect(el.id, e.evt.shiftKey)}
         onTap={() => onSelect(el.id, false)}
         onDragStart={() => onDragStart()}
@@ -263,7 +409,7 @@ function CanvasNode({
     return (
       <Rect
         {...common}
-        fill={el.fill}
+        {...shapeFillProps(el)}
         stroke={el.stroke}
         strokeWidth={el.strokeWidth ?? 0}
         cornerRadius={el.cornerRadius ?? 0}
@@ -271,5 +417,11 @@ function CanvasNode({
     );
   }
 
-  return <KonvaImage {...common} image={image ?? undefined} />;
+  return (
+    <KonvaImage
+      {...common}
+      image={image ?? undefined}
+      cornerRadius={el.type === 'image' ? el.cornerRadius ?? 0 : 0}
+    />
+  );
 }

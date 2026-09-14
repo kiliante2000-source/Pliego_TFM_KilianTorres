@@ -1,30 +1,36 @@
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 
+/**
+ * Brand lockup helpers.
+ * `translate="no"` + `.notranslate` keep PLIEGO from becoming “Fold” / “Sheet”
+ * under Chrome / Google Translate (pliego ≈ fold in Spanish print jargon).
+ */
+export const BRAND_NAME = 'PLIEGO' as const;
+
+/** Inline brand name — never translated. */
+export function BrandName({ className }: { className?: string }) {
+  return (
+    <span className={cn('notranslate', className)} lang="es" translate="no">
+      {BRAND_NAME}
+    </span>
+  );
+}
+
+/** Brand mark — same asset as favicon / PWA icons (`/brand/pliego-mark.svg`). */
 export function PliegoMark({ className, size = 28 }: { className?: string; size?: number }) {
   return (
-    <svg
+    <img
+      src="/brand/pliego-mark.svg"
+      alt=""
       width={size}
       height={size}
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden
-    >
-      <rect width="64" height="64" rx="14" fill="#0B0E11" />
-      <defs>
-        <linearGradient id="pliegoP" x1="12" y1="8" x2="52" y2="56" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#4F80FF" />
-          <stop offset="0.45" stopColor="#A855F7" />
-          <stop offset="1" stopColor="#FF4EDB" />
-        </linearGradient>
-      </defs>
-      <path
-        fill="url(#pliegoP)"
-        d="M18 14h16.5c7.4 0 12.5 4.2 12.5 11.2 0 7.1-5.1 11.3-12.5 11.3H26.2V50H18V14zm8.2 15.2h7.8c3.2 0 5.2-1.7 5.2-4 0-2.4-2-4-5.2-4h-7.8v8z"
-      />
-    </svg>
+      draggable={false}
+      className={cn('notranslate inline-block shrink-0 select-none', className)}
+      lang="es"
+      translate="no"
+      style={{ width: size, height: size }}
+    />
   );
 }
 
@@ -38,49 +44,79 @@ export function PliegoWordmark({
   return (
     <span
       className={cn(
-        'font-display inline-block text-[1.35rem] font-bold uppercase tracking-[-0.06em]',
-        variant === 'gradient' && 'wordmark-cutout',
+        'notranslate font-display inline-block overflow-visible text-[1.35rem] font-bold uppercase tracking-[-0.04em]',
+        /* Syne’s O paints past the advance width — pad the clip box for background-clip */
+        variant === 'gradient' && 'wordmark-cutout pb-[0.1em] pr-[0.22em]',
         variant === 'solid' && 'text-paper',
         variant === 'mono' && 'text-ink',
         className,
       )}
+      lang="es"
+      translate="no"
     >
-      PLiEGO
+      {BRAND_NAME}
     </span>
   );
 }
+
+/** Hero wordmark — large, color-shifting brand flow, padded so the O never clips. */
+export function PliegoHeroWordmark({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        'notranslate font-display wordmark-cutout inline-block max-w-full overflow-visible font-extrabold uppercase',
+        'pb-[0.08em] pr-[0.28em] text-[clamp(3.8rem,14vw,9.25rem)] leading-[0.88] tracking-[-0.045em]',
+        className,
+      )}
+      lang="es"
+      translate="no"
+    >
+      {BRAND_NAME}
+    </span>
+  );
+}
+
 
 export function Logo({
   className,
   withMark = true,
   to = '/',
+  markSize = 28,
+  wordmarkClassName,
 }: {
   className?: string;
   withMark?: boolean;
   to?: string;
+  markSize?: number;
+  wordmarkClassName?: string;
 }) {
   return (
-    <Link to={to} className={cn('group inline-flex items-center gap-2.5 no-underline', className)}>
-      {withMark ? <PliegoMark size={28} /> : null}
-      <PliegoWordmark className="transition group-hover:opacity-90" />
+    <Link
+      to={to}
+      aria-label={BRAND_NAME}
+      className={cn('group notranslate inline-flex items-center gap-2.5 no-underline', className)}
+      translate="no"
+    >
+      {withMark ? <PliegoMark size={markSize} /> : null}
+      <PliegoWordmark className={cn('transition group-hover:opacity-90', wordmarkClassName)} />
     </Link>
   );
 }
 
 const buttonVariants = {
   primary:
-    'bg-neon text-white shadow-[0_0_0_1px_rgba(79,128,255,0.35)] hover:bg-accent-2 hover:shadow-[0_10px_30px_rgba(79,128,255,0.28)]',
+    'btn-brand-flow hover:brightness-[1.04]',
   ghost: 'bg-transparent text-paper-muted hover:bg-ink-3 hover:text-paper',
-  soft: 'bg-ink-3 text-paper ring-1 ring-line-soft hover:bg-ink-4',
+  soft: 'btn-brand-soft',
   danger: 'bg-danger/15 text-danger hover:bg-danger/25',
-  lima: 'bg-lima text-ink hover:brightness-95',
+  lima: 'bg-lima/90 text-ink hover:brightness-95',
 } as const;
 
 type ButtonVariant = keyof typeof buttonVariants;
 
 function buttonClassName(variant: ButtonVariant, className?: string) {
   return cn(
-    'inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold no-underline transition duration-200 disabled:cursor-not-allowed disabled:opacity-50',
+    'inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold no-underline transition duration-200 disabled:cursor-not-allowed disabled:opacity-50',
     buttonVariants[variant],
     className,
   );

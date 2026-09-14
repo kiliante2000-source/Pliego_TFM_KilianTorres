@@ -1,287 +1,297 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  motion,
-  useMotionTemplate,
-  useMotionValue,
-  useScroll,
-  useSpring,
-  useTransform,
-} from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDownRight, ArrowRight, Play } from 'lucide-react';
-import { Logo, Button, ButtonLink, Input, PliegoWordmark, PliegoMark } from '../components/ui/primitives';
+import { Logo, Button, ButtonLink, Input, PliegoWordmark, PliegoMark, PliegoHeroWordmark, BrandName } from '../components/ui/primitives';
 import { CursorGlow, Magnetic, Marquee, Reveal } from '../components/creative/Motion';
 import { useAuthStore } from '../stores/authStore';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-function FloatingStage() {
-  const ref = useRef<HTMLDivElement>(null);
-  const rx = useMotionValue(0);
-  const ry = useMotionValue(0);
-  const rotateX = useSpring(useTransform(ry, [-0.5, 0.5], [10, -10]), { stiffness: 120, damping: 16 });
-  const rotateY = useSpring(useTransform(rx, [-0.5, 0.5], [-12, 12]), { stiffness: 120, damping: 16 });
-  const glare = useMotionTemplate`radial-gradient(600px circle at ${useTransform(rx, [-0.5, 0.5], [10, 90])}% ${useTransform(ry, [-0.5, 0.5], [15, 85])}%, rgba(255,255,255,0.16), transparent 40%)`;
+const FEATURES = [
+  {
+    k: '01',
+    t: 'Canvas vivo',
+    d: 'Arrastra tipografía, formas e imágenes con undo/redo y capas. El editor responde como un estudio.',
+    accent: '#4f80ff',
+  },
+  {
+    k: '02',
+    t: 'Flujo completo',
+    d: 'Autoguardado, versiones, exportación PDF y publicación pública sin salir del navegador.',
+    accent: '#ff4edb',
+  },
+  {
+    k: '03',
+    t: 'Identidad fuerte',
+    d: 'Mesh de marca, tipografía display y microinteracciones que mantienen la esencia de campaña.',
+    accent: '#b2ff3a',
+  },
+] as const;
+
+function FeatureCard({
+  k,
+  t,
+  d,
+  accent,
+}: {
+  k: string;
+  t: string;
+  d: string;
+  accent: string;
+}) {
+  const onMove = (e: ReactPointerEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--my', `${e.clientY - rect.top}px`);
+  };
 
   return (
-    <motion.div
-      ref={ref}
-      style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-      onPointerMove={(e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        rx.set((e.clientX - rect.left) / rect.width - 0.5);
-        ry.set((e.clientY - rect.top) / rect.height - 0.5);
-      }}
-      onPointerLeave={() => {
-        rx.set(0);
-        ry.set(0);
-      }}
-      className="relative mx-auto aspect-[4/5] w-full max-w-md perspective-[1200px]"
+    <article
+      className="feature-card flex h-full min-h-[16.5rem] w-full flex-col rounded-2xl p-6 sm:min-h-[18rem] sm:p-7"
+      style={{ '--feature-accent': accent } as React.CSSProperties}
+      onPointerMove={onMove}
     >
-      <div className="absolute -inset-8 rounded-[2rem] bg-gradient-to-br from-neon/30 via-violet/20 to-rosa/25 blur-3xl" />
-      <motion.div
-        className="relative h-full overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0d1117] shadow-[0_40px_120px_rgba(0,0,0,0.55)]"
-        style={{ transform: 'translateZ(40px)' }}
-      >
-        <motion.div className="pointer-events-none absolute inset-0 z-10" style={{ background: glare }} />
-        <div className="flex items-center gap-2 border-b border-white/8 px-4 py-3">
-          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-          <span className="ml-2 font-mono text-[10px] uppercase tracking-[0.18em] text-paper/40">
-            editor · live
-          </span>
-        </div>
-        <div className="relative h-[calc(100%-48px)] overflow-hidden bg-[#0b0e11]">
-          <motion.div
-            className="absolute -right-10 top-10 h-56 w-56 rounded-full bg-violet/50 blur-2xl"
-            animate={{ y: [0, 24, 0], x: [0, -12, 0] }}
-            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            className="absolute -left-8 bottom-20 h-48 w-48 rounded-full bg-neon/40 blur-2xl"
-            animate={{ y: [0, -18, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <div className="absolute left-8 top-16 font-display text-5xl font-bold tracking-[-0.06em] text-paper sm:text-6xl">
-            PLiEGO
-          </div>
-          <div className="absolute left-8 top-36 max-w-[15rem] text-sm leading-relaxed text-paper/60">
-            Capas, tipografía y publicación en un canvas vivo.
-          </div>
-          <motion.div
-            className="absolute inset-x-0 bottom-0 h-[34%] bg-gradient-to-r from-neon via-violet to-rosa"
-            initial={{ y: 40 }}
-            animate={{ y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8, ease }}
-          />
-          <div className="absolute bottom-8 left-8 font-mono text-[11px] font-semibold tracking-[0.22em] text-ink">
-            Nº 01 · STUDIO
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
+      <div className="feature-card-sheen" aria-hidden />
+      <div
+        className="absolute inset-x-0 top-0 h-1.5 origin-left"
+        style={{
+          background: `linear-gradient(90deg, ${accent}, transparent 88%)`,
+          boxShadow: `0 0 22px ${accent}66`,
+        }}
+      />
+      <p className="relative font-mono text-[11px] uppercase tracking-[0.22em]" style={{ color: accent }}>
+        {k}
+      </p>
+      <h3 className="relative mt-4 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">{t}</h3>
+      <p className="relative mt-3 flex-1 font-serif text-base leading-relaxed text-paper/60">{d}</p>
+    </article>
   );
 }
 
 export function LandingPage() {
   const user = useAuthStore((s) => s.user);
   const { scrollYProgress } = useScroll();
-  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.92]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.18], [1, 0.35]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.18], [1, 0.42]);
+  const heroY = useTransform(scrollYProgress, [0, 0.22], [0, 48]);
 
   return (
     <div className="relative min-h-svh overflow-x-hidden bg-ink text-paper">
       <CursorGlow />
-      <div className="pointer-events-none fixed inset-0 mesh-bg opacity-90" />
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,transparent,rgba(11,14,17,0.55)_70%)]" />
 
-      <header className="relative z-30 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
-        <Logo />
-        <nav className="flex items-center gap-2">
-          {user ? (
-            <Magnetic>
-              <ButtonLink to="/app">
-                Abrir estudio <ArrowRight size={16} />
-              </ButtonLink>
-            </Magnetic>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-paper/70 no-underline transition hover:bg-white/5 hover:text-paper"
-              >
-                Entrar
-              </Link>
+      {/* Atmosphere stack — depth with soft, readable motion */}
+      <div className="pointer-events-none fixed inset-0 mesh-bg mesh-bg-shift opacity-90" />
+      <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden>
+        <div className="landing-orb landing-orb-a" />
+        <div className="landing-orb landing-orb-b" />
+        <div className="landing-orb landing-orb-c" />
+        <div className="landing-orb landing-orb-d" />
+      </div>
+      <div className="pointer-events-none fixed inset-0 landing-grid opacity-60" aria-hidden />
+      <div className="pointer-events-none fixed inset-0 landing-grain opacity-90" aria-hidden />
+      <div
+        className="pointer-events-none fixed inset-0"
+        style={{
+          background:
+            'radial-gradient(ellipse 80% 60% at 50% -8%, transparent 28%, rgba(5,6,8,0.42) 82%), linear-gradient(180deg, transparent 48%, rgba(5,6,8,0.58) 100%)',
+        }}
+      />
+
+      {/* First screen: brand + CTAs + motion bands always in view */}
+      <div className="relative z-10 flex min-h-svh flex-col">
+        <header className="relative z-30 mx-auto flex w-full max-w-7xl shrink-0 items-center justify-between px-5 py-4 sm:px-8 sm:py-5">
+          <Logo />
+          <nav className="flex items-center gap-2">
+            {user ? (
               <Magnetic>
-                <ButtonLink to="/register">
-                  Crear cuenta <ArrowRight size={16} />
+                <ButtonLink to="/app">
+                  Abrir estudio <ArrowRight size={16} />
                 </ButtonLink>
               </Magnetic>
-            </>
-          )}
-        </nav>
-      </header>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-paper/70 no-underline transition hover:bg-white/5 hover:text-paper"
+                >
+                  Entrar
+                </Link>
+                <Magnetic>
+                  <ButtonLink to="/register">
+                    Crear cuenta <ArrowRight size={16} />
+                  </ButtonLink>
+                </Magnetic>
+              </>
+            )}
+          </nav>
+        </header>
 
-      <motion.section
-        style={{ scale: heroScale, opacity: heroOpacity }}
-        className="relative z-10 mx-auto grid min-h-[calc(100svh-88px)] w-full max-w-7xl items-center gap-12 px-5 pb-16 pt-6 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]"
-      >
-        <div>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease }}
-            className="font-mono text-[11px] uppercase tracking-[0.28em] text-neon"
-          >
-            Editorial studio · browser native
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.05, ease }}
-            className="mt-5"
-          >
-            <PliegoWordmark
-              variant="gradient"
-              className="block text-[clamp(4rem,16vw,9.5rem)] leading-[0.82]"
-            />
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15, ease }}
-            className="mt-7 max-w-lg text-xl leading-snug text-paper/80 sm:text-2xl"
-          >
-            Diseña revistas, portadas y sistemas visuales con la fluidez de un estudio creativo.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.25, ease }}
-            className="mt-10 flex flex-wrap items-center gap-3"
-          >
-            <Magnetic strength={0.35}>
-              <ButtonLink to={user ? '/app' : '/register'} className="min-w-48 px-6 py-3 text-base">
-                Empezar a diseñar <ArrowRight size={18} />
-              </ButtonLink>
-            </Magnetic>
-            <Magnetic>
-              <ButtonLink to="/p/portada-demo-pliego" variant="soft" className="px-6 py-3">
-                <Play size={15} /> Ver demo viva
-              </ButtonLink>
-            </Magnetic>
-          </motion.div>
-          <motion.a
-            href="#studio"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="mt-14 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-paper/45 no-underline hover:text-paper"
-          >
-            Explorar el sistema <ArrowDownRight size={14} />
-          </motion.a>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.94, y: 24 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.15, ease }}
-          className="relative"
+        <motion.section
+          style={{ opacity: heroOpacity, y: heroY }}
+          className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-5 py-6 sm:px-8 sm:py-8"
         >
-          <FloatingStage />
-        </motion.div>
-      </motion.section>
+          <div className="max-w-4xl">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease }}
+              className="flex flex-wrap items-center gap-3"
+            >
+              <PliegoMark size={44} className="shrink-0" />
+              <p className="eyebrow text-neon">Editorial studio · browser native</p>
+              <span className="hero-signal ml-0 sm:ml-2">
+                <span className="hero-signal-dot" aria-hidden />
+                Sistema en vivo
+              </span>
+              <span className="hidden h-px min-w-16 flex-1 bg-gradient-to-r from-neon/45 via-rosa/25 to-transparent sm:block" />
+            </motion.div>
 
-      <div className="relative z-10">
-        <Marquee
-          items={['Tipografía', 'Capas', 'Versiones', 'PDF', 'Publicación', 'Plantillas', 'Canvas']}
-          speed={28}
-        />
-        <Marquee
-          items={['Readymag energy', 'Studio flow', 'Neon mesh', 'Design systems', 'Editorial UI']}
-          speed={40}
-          reverse
-        />
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.05, ease }}
+              className="mt-5 sm:mt-7"
+            >
+              <PliegoHeroWordmark />
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.15, ease }}
+              className="mt-5 max-w-xl font-serif text-xl leading-snug text-paper/75 sm:mt-6 sm:text-2xl"
+            >
+              Diseña revistas, portadas y sistemas visuales con la fluidez de un estudio creativo.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.25, ease }}
+              className="mt-8 flex flex-wrap items-center gap-3"
+            >
+              <Magnetic strength={0.35}>
+                <ButtonLink to={user ? '/app' : '/register'} className="min-w-48 px-6 py-3 text-base">
+                  Empezar a diseñar <ArrowRight size={18} />
+                </ButtonLink>
+              </Magnetic>
+              <Magnetic>
+                <ButtonLink to="/demo" variant="soft" className="px-6 py-3">
+                  <Play size={15} /> Ver demo viva
+                </ButtonLink>
+              </Magnetic>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.55 }}
+              className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/45 sm:mt-10"
+            >
+              {['Canvas vivo', 'Publish al instante', 'Identidad de campaña'].map((tag, i) => (
+                <span key={tag} className="inline-flex items-center gap-2">
+                  <span
+                    className="tag-signal-dot"
+                    style={{ animationDelay: `${i * 0.45}s` }}
+                    aria-hidden
+                  />
+                  {tag}
+                </span>
+              ))}
+              <a
+                href="#studio"
+                className="inline-flex items-center gap-2 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-paper no-underline transition hover:text-neon"
+              >
+                Explorar el sistema <ArrowDownRight size={15} />
+              </a>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        {/* Motion bands — soft brand washes, always in first viewport */}
+        <div className="marquee-stack relative z-20 shrink-0">
+          <Marquee
+            items={['Tipografía', 'Capas', 'Versiones', 'PDF', 'Publicación', 'Plantillas', 'Canvas']}
+            speed={48}
+            colorOffset={0}
+            phaseDelay={0}
+          />
+          <Marquee
+            items={['Readymag energy', 'Studio flow', 'Neon mesh', 'Design systems', 'Editorial UI']}
+            speed={56}
+            reverse
+            colorOffset={2}
+            phaseDelay={2100}
+            chrome="bottom"
+          />
+        </div>
       </div>
 
-      <section id="studio" className="relative z-10 mx-auto max-w-7xl px-5 py-24 sm:px-8">
+      <section id="studio" className="relative z-10 mx-auto max-w-7xl px-5 pb-14 pt-24 sm:px-8 sm:pb-16">
         <Reveal>
-          <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-rosa">Por qué PLIEGO</p>
-          <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
-            Una herramienta útil que se siente como una pieza de diseño.
-          </h2>
+          <div className="flex items-end justify-between gap-6">
+            <div>
+              <p className="section-index">01 — Sistema</p>
+              <p className="eyebrow mt-3 text-rosa">
+                Por qué <BrandName />
+              </p>
+              <h2 className="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.05em] sm:text-6xl">
+                Una herramienta útil que se siente como una{' '}
+                <span className="wordmark-cutout">pieza de diseño</span>.
+              </h2>
+              <p className="mt-5 max-w-xl font-serif text-xl text-paper/65">
+                La misma disciplina visual de la demo, aplicada a tu flujo diario.
+              </p>
+            </div>
+          </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-3">
-          {[
-            {
-              k: '01',
-              t: 'Canvas vivo',
-              d: 'Arrastra, tipografía, formas e imágenes con undo/redo y capas. El editor responde como un estudio.',
-            },
-            {
-              k: '02',
-              t: 'Flujo completo',
-              d: 'Autoguardado, versiones, exportación PDF y publicación pública sin salir del navegador.',
-            },
-            {
-              k: '03',
-              t: 'Identidad fuerte',
-              d: 'Neon mesh, tipografía geométrica y microinteracciones que mantienen la esencia creativa.',
-            },
-          ].map((card, i) => (
-            <Reveal key={card.k} delay={i * 0.08}>
-              <motion.article
-                whileHover={{ y: -8, scale: 1.01 }}
-                transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                className="group relative h-full overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm"
-              >
-                <div className="absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 mesh-bg-soft" />
-                <div className="relative">
-                  <p className="font-mono text-[11px] text-neon">{card.k}</p>
-                  <h3 className="mt-4 font-display text-2xl font-bold">{card.t}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-paper/65">{card.d}</p>
-                </div>
-              </motion.article>
+        <div className="mt-14 grid grid-cols-1 items-stretch gap-5 md:grid-cols-3 md:gap-6">
+          {FEATURES.map((card, i) => (
+            <Reveal key={card.k} delay={i * 0.08} className="h-full min-w-0 w-full">
+              <FeatureCard {...card} />
             </Reveal>
           ))}
         </div>
       </section>
 
-      <section className="relative z-10 overflow-hidden border-t border-white/10 py-24">
-        <div className="pointer-events-none absolute inset-0 mesh-bg opacity-40" />
-        <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
+      <section className="relative z-10 overflow-hidden px-5 pb-16 pt-9 sm:px-8 sm:pb-20 sm:pt-10">
+        <div className="pointer-events-none absolute inset-0 cta-wash" />
+        <div className="relative mx-auto max-w-7xl">
           <Reveal>
-            <h2 className="max-w-4xl font-display text-5xl font-bold tracking-tight sm:text-7xl">
-              Crea. Publica.
-              <span className="wordmark-cutout"> Revoluciona.</span>
-            </h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="mt-6 max-w-xl text-base text-paper/65">
-              Inspirado en la energía de estudios editoriales digitales: tipografía enorme, movimiento
-              intencional e interfaces que invitan a explorar.
-            </p>
-          </Reveal>
-          <Reveal delay={0.18}>
-            <div className="mt-10">
-              <Magnetic strength={0.4}>
-                <ButtonLink to={user ? '/app' : '/register'} className="px-8 py-3.5 text-base">
-                  Entrar al canvas <ArrowRight size={18} />
-                </ButtonLink>
-              </Magnetic>
+            <div className="signal-frame rounded-3xl px-6 py-10 sm:px-12 sm:py-14">
+              <p className="section-index">02 — Acción</p>
+              <p className="eyebrow mt-3 text-lima">Siguiente paso</p>
+              <h2 className="mt-4 max-w-4xl font-display text-5xl font-extrabold tracking-[-0.055em] sm:text-7xl">
+                Crea. Publica.
+                <span className="wordmark-cutout"> Revoluciona.</span>
+              </h2>
+              <p className="mt-6 max-w-xl font-serif text-xl leading-snug text-paper/65">
+                Tipografía enorme, movimiento intencional e interfaces que invitan a explorar —
+                con cara de campaña, no de panel.
+              </p>
+              <div className="mt-10 flex flex-wrap items-center gap-4">
+                <Magnetic strength={0.4}>
+                  <ButtonLink to={user ? '/app' : '/register'} className="px-8 py-3.5 text-base">
+                    Entrar al canvas <ArrowRight size={18} />
+                  </ButtonLink>
+                </Magnetic>
+                <Magnetic>
+                  <ButtonLink to="/demo" variant="soft" className="px-8 py-3.5 text-base">
+                    <Play size={15} /> Ver demo viva
+                  </ButtonLink>
+                </Magnetic>
+              </div>
             </div>
           </Reveal>
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-white/10 px-5 py-8 sm:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <footer className="relative z-10 px-5 py-10 sm:px-8">
+        <div className="mx-auto h-1 max-w-7xl rounded-full bg-gradient-to-r from-neon via-rosa to-lima opacity-70" />
+        <div className="mx-auto mt-8 flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <PliegoWordmark className="text-lg" variant="gradient" />
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-paper/40">
-            Diseño editorial · Tecnología · Sin límites
-          </p>
+          <p className="eyebrow text-paper/35">Diseño editorial · Tecnología · Sin límites</p>
         </div>
       </footer>
     </div>
@@ -303,42 +313,46 @@ function AuthShell({
       <aside className="relative hidden overflow-hidden mesh-bg lg:block">
         <div className="absolute inset-0 bg-ink/25" />
         <motion.div
-          className="absolute -left-20 top-24 h-72 w-72 rounded-full bg-neon/30 blur-3xl"
+          className="absolute -left-20 top-24 h-72 w-72 rounded-full bg-neon/12 blur-3xl"
           animate={{ x: [0, 40, 0], y: [0, 20, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute bottom-10 right-0 h-80 w-80 rounded-full bg-rosa/25 blur-3xl"
+          className="absolute bottom-10 right-0 h-80 w-80 rounded-full bg-rosa/10 blur-3xl"
           animate={{ x: [0, -30, 0] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
         />
-        <div className="relative flex h-full flex-col justify-between p-10">
-          <Logo />
+        <div className="relative flex h-full flex-col justify-between px-16 pb-12 pt-16 xl:px-[4.5rem] xl:pt-[4.5rem]">
+          <Logo markSize={40} className="gap-4" wordmarkClassName="text-[1.85rem] tracking-[-0.05em]" />
           <div>
-            <PliegoWordmark variant="gradient" className="text-6xl xl:text-8xl" />
-            <p className="mt-6 max-w-sm text-base leading-relaxed text-paper/75">
+            <p className="eyebrow text-lima">Studio · Create · Publish</p>
+            <PliegoWordmark variant="gradient" className="mt-6 text-6xl xl:text-8xl" />
+            <p className="mt-6 max-w-sm font-serif text-xl leading-relaxed text-paper/75">
               Ideas que se transforman en proyectos editoriales interactivos.
             </p>
           </div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/55">
-            Studio · Create · Publish
-          </p>
+          <div className="editorial-rule w-40" />
         </div>
       </aside>
 
-      <div className="relative grid place-items-center bg-ink px-5 py-12">
+      <div className="relative grid place-items-center bg-ink mesh-bg-soft px-5 py-12">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(5,6,8,0.35),transparent_55%)]" />
         <motion.div
           initial={{ opacity: 0, y: 16, filter: 'blur(6px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 0.55, ease }}
-          className="w-full max-w-md"
+          className="relative w-full max-w-md"
         >
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <PliegoMark size={32} />
             <PliegoWordmark />
           </div>
-          <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
-          <p className="mt-2 text-sm leading-relaxed text-paper-muted">{subtitle}</p>
+          <p className="eyebrow text-neon">Acceso</p>
+          <h1 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.05em] sm:text-5xl">
+            {title}
+          </h1>
+          <p className="mt-3 font-serif text-lg leading-relaxed text-paper/65">{subtitle}</p>
+          <div className="editorial-rule mt-6 mb-2 w-20" />
           <div className="mt-8">{children}</div>
         </motion.div>
       </div>
@@ -389,7 +403,7 @@ export function LoginPage() {
         </Magnetic>
       </form>
       <p className="mt-7 text-sm text-paper-muted">
-        ¿Nuevo en PLIEGO?{' '}
+        ¿Nuevo en <BrandName />?{' '}
         <Link to="/register" className="font-semibold text-neon no-underline hover:underline">
           Crear cuenta
         </Link>

@@ -8,10 +8,17 @@ export function createEmptyDocument(
   title: string,
   width: number,
   height: number,
+  extras?: { templateId?: string; templateName?: string },
 ): DocumentModel {
   return {
     version: 1,
-    meta: { title, width, height },
+    meta: {
+      title,
+      width,
+      height,
+      ...(extras?.templateId ? { templateId: extras.templateId } : {}),
+      ...(extras?.templateName ? { templateName: extras.templateName } : {}),
+    },
     pages: [
       {
         id: createId(),

@@ -18,26 +18,62 @@ function escapeHtml(value: string) {
     .replaceAll('"', '&quot;');
 }
 
+function gradientCss(
+  g: { type: 'linear' | 'radial'; angle?: number; stops: { offset: number; color: string }[] } | undefined,
+  fallback: string,
+) {
+  if (!g?.stops?.length) return fallback;
+  const stops = g.stops
+    .map((s) => `${s.color} ${Math.round(s.offset * 100)}%`)
+    .join(', ');
+  if (g.type === 'radial') return `radial-gradient(circle at 50% 40%, ${stops})`;
+  return `linear-gradient(${g.angle ?? 135}deg, ${stops})`;
+}
+
+function effectsInline(el: CanvasElement) {
+  const e = el.effects;
+  if (!e) return '';
+  const parts: string[] = [];
+  if (e.blur) parts.push(`filter:blur(${e.blur}px);`);
+  if (e.shadowBlur || e.shadowOffsetX || e.shadowOffsetY) {
+    parts.push(
+      `box-shadow:${e.shadowOffsetX ?? 0}px ${e.shadowOffsetY ?? 12}px ${e.shadowBlur ?? 32}px ${e.shadowColor ?? 'rgba(0,0,0,0.35)'};`,
+    );
+  }
+  if (e.blendMode && e.blendMode !== 'normal') parts.push(`mix-blend-mode:${e.blendMode};`);
+  return parts.join('');
+}
+
 function elementHtml(el: CanvasElement): string {
   const base = `
     left:${el.x}px;top:${el.y}px;width:${el.width}px;height:${el.height}px;
     transform:rotate(${el.rotation}deg) scale(${el.scaleX}, ${el.scaleY});
     opacity:${el.opacity};position:absolute;transform-origin:center center;
+    ${effectsInline(el)}
   `;
 
   if (el.type === 'text') {
-    return `<div style="${base}font-size:${el.style.fontSize}px;font-family:${el.style.fontFamily},serif;font-weight:${el.style.fontWeight};color:${el.style.color};text-align:${el.style.align};line-height:${el.style.lineHeight ?? 1.3};letter-spacing:${el.style.letterSpacing ?? 0}px;white-space:pre-wrap;">${escapeHtml(el.text)}</div>`;
+    return `<div style="${base}font-size:${el.style.fontSize}px;font-family:${el.style.fontFamily},sans-serif;font-weight:${el.style.fontWeight};font-style:${el.style.italic ? 'italic' : 'normal'};text-decoration:${el.style.underline ? 'underline' : 'none'};color:${el.style.color};text-align:${el.style.align};line-height:${el.style.lineHeight ?? 1.3};letter-spacing:${el.style.letterSpacing ?? 0}px;text-transform:${el.style.textTransform ?? 'none'};white-space:pre-wrap;">${escapeHtml(el.text)}</div>`;
   }
 
   if (el.type === 'image') {
-    return `<img src="${escapeHtml(el.src)}" alt="" style="${base}object-fit:${el.fit ?? 'cover'};" />`;
+    return `<img src="${escapeHtml(el.src)}" alt="" style="${base}object-fit:${el.fit ?? 'cover'};border-radius:${el.cornerRadius ?? 0}px;" />`;
+  }
+
+  if (el.type === 'button') {
+    return `<div style="${base}display:grid;place-items:center;background:${el.fill};color:${el.textColor};border-radius:${el.cornerRadius ?? 999}px;font-family:${el.fontFamily ?? 'Space Grotesk'},sans-serif;font-size:${el.fontSize ?? 16}px;font-weight:${el.fontWeight ?? 600};">${escapeHtml(el.label)}</div>`;
+  }
+
+  if (el.type === 'video') {
+    return `<div style="${base}display:grid;place-items:center;background:#111;border-radius:${el.cornerRadius ?? 12}px;color:#fff;font-family:JetBrains Mono,monospace;font-size:14px;">VIDEO</div>`;
   }
 
   if (el.type === 'shape') {
+    const bg = gradientCss(el.fillGradient, el.fill);
     if (el.shape === 'ellipse') {
-      return `<div style="${base}background:${el.fill};border-radius:50%;border:${el.strokeWidth ?? 0}px solid ${el.stroke ?? 'transparent'};"></div>`;
+      return `<div style="${base}background:${bg};border-radius:50%;border:${el.strokeWidth ?? 0}px solid ${el.stroke ?? 'transparent'};"></div>`;
     }
-    return `<div style="${base}background:${el.fill};border-radius:${el.cornerRadius ?? 0}px;border:${el.strokeWidth ?? 0}px solid ${el.stroke ?? 'transparent'};"></div>`;
+    return `<div style="${base}background:${bg};border-radius:${el.cornerRadius ?? 0}px;border:${el.strokeWidth ?? 0}px solid ${el.stroke ?? 'transparent'};"></div>`;
   }
 
   return '';
@@ -63,7 +99,7 @@ function renderDocumentHtml(doc: DocumentModel): string {
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #fff; }
