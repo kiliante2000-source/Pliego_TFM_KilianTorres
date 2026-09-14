@@ -51,7 +51,7 @@ export function LandingPage() {
         style={{ scale: heroScale, opacity: heroOpacity }}
         className="relative z-10 mx-auto flex min-h-[calc(100svh-88px)] w-full max-w-7xl flex-col justify-center px-5 pb-20 pt-6 sm:px-8"
       >
-        <div className="@container max-w-4xl overflow-visible">
+        <div className="@container max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -65,11 +65,15 @@ export function LandingPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.05, ease }}
-            className="mt-7 max-w-full overflow-visible"
+            className="mt-7"
           >
+            {/*
+              Size from container so “PLIEGO” fits inside the padded column.
+              Extra pr keeps Syne’s O inside the clip box of overflow-x-hidden ancestors.
+            */}
             <PliegoWordmark
               variant="gradient"
-              className="block max-w-full text-[clamp(3.25rem,min(14vw,22cqi),8.75rem)] leading-[0.9] tracking-[-0.04em]"
+              className="inline-block text-[clamp(2.75rem,min(11.5vw,16cqi),7.25rem)] leading-[0.92] tracking-[-0.035em]"
             />
           </motion.h1>
           <motion.p

@@ -299,6 +299,10 @@ body {
 
 .wordmark-cutout {
   overflow: visible;
+  /* Keep glyph ink inside the clipped background box */
+  padding-right: 0.22em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
   background-image: var(--brand-flow);
   /* 400%: viewport ≈ ½ periodo → lavado continuo */
   background-size: 400% 100%;

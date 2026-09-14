@@ -40,9 +40,9 @@ export function PliegoWordmark({
   return (
     <span
       className={cn(
-        'font-display inline-block max-w-full overflow-visible text-[1.35rem] font-bold uppercase tracking-[-0.04em]',
-        /* Pad glyph ink so the final O never clips under overflow-x-hidden */
-        variant === 'gradient' && 'wordmark-cutout pb-[0.08em] pr-[0.12em]',
+        'font-display inline-block overflow-visible text-[1.35rem] font-bold uppercase tracking-[-0.04em]',
+        /* Syne’s O paints past the advance width — pad the clip box for background-clip */
+        variant === 'gradient' && 'wordmark-cutout pb-[0.1em] pr-[0.22em]',
         variant === 'solid' && 'text-paper',
         variant === 'mono' && 'text-ink',
         className,
