@@ -2,42 +2,28 @@ import { useId } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 
-/** Brand mark — vertically flattened modern P on a vivid corporate chroma wash. */
+/** Brand mark — same Syne P as the PLIEGO wordmark, on the corporate chroma wash. */
 export function PliegoMark({ className, size = 28 }: { className?: string; size?: number }) {
-  const uid = useId().replace(/:/g, '');
-  const washId = `pliego-wash-${uid}`;
-
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
+    <span
       aria-hidden
+      className={cn(
+        'inline-flex shrink-0 select-none items-center justify-center rounded-[22%]',
+        'font-display font-extrabold uppercase leading-none text-[#050608]',
+        className,
+      )}
+      style={{
+        width: size,
+        height: size,
+        fontSize: size * 0.58,
+        letterSpacing: '-0.06em',
+        paddingBottom: size * 0.04,
+        background:
+          'linear-gradient(135deg, #4F80FF 0%, #7B5CFF 20%, #A855F7 38%, #FF4EDB 52%, #FF7A45 68%, #D4FF3A 84%, #B2FF3A 100%)',
+      }}
     >
-      <defs>
-        {/* Even brand bands so neon / violet / rosa / naranja / lima all read */}
-        <linearGradient id={washId} x1="2" y1="6" x2="62" y2="58" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#4F80FF" />
-          <stop offset="0.2" stopColor="#7B5CFF" />
-          <stop offset="0.38" stopColor="#A855F7" />
-          <stop offset="0.52" stopColor="#FF4EDB" />
-          <stop offset="0.68" stopColor="#FF7A45" />
-          <stop offset="0.84" stopColor="#D4FF3A" />
-          <stop offset="1" stopColor="#B2FF3A" />
-        </linearGradient>
-      </defs>
-
-      <rect width="64" height="64" rx="15" fill={`url(#${washId})`} />
-
-      {/* Flattened display P — wide body, vertically compressed like Syne display */}
-      <path
-        fill="#050608"
-        d="M14.5 15.5h22.8c10.4 0 17.4 4.55 17.4 12.15 0 7.7-7.1 12.35-17.6 12.35H24.8V48.5H14.5V15.5zm10.3 6.4v11.3h11.2c5.35 0 8.85-2.45 8.85-5.7 0-3.15-3.4-5.6-8.7-5.6H24.8z"
-      />
-    </svg>
+      P
+    </span>
   );
 }
 
