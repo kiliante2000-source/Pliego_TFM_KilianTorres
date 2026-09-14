@@ -696,7 +696,7 @@ export function LiveDemoPage() {
         </div>
       </section>
 
-      {/* STATEMENT STRIP — same soft marquee system as the landing */}
+      {/* STATEMENT STRIP — single motion band on the live demo */}
       <section className="marquee-stack relative z-10">
         <Marquee
           items={[
@@ -709,19 +709,6 @@ export function LiveDemoPage() {
           ]}
           speed={48}
           tone={2}
-        />
-        <Marquee
-          items={[
-            'Studio flow',
-            'Neon mesh',
-            'Editorial UI',
-            'Design systems',
-            'Live canvas',
-          ]}
-          speed={56}
-          reverse
-          tone={0}
-          chrome="bottom"
         />
       </section>
 
