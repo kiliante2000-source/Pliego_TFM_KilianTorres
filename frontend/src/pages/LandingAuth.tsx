@@ -79,20 +79,21 @@ export function LandingPage() {
     <div className="relative min-h-svh overflow-x-hidden bg-ink text-paper">
       <CursorGlow />
 
-      {/* Atmosphere stack — depth, not flat ink */}
-      <div className="pointer-events-none fixed inset-0 mesh-bg mesh-bg-shift" />
+      {/* Atmosphere stack — depth with soft, readable motion */}
+      <div className="pointer-events-none fixed inset-0 mesh-bg mesh-bg-shift opacity-90" />
       <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden>
         <div className="landing-orb landing-orb-a" />
         <div className="landing-orb landing-orb-b" />
         <div className="landing-orb landing-orb-c" />
+        <div className="landing-orb landing-orb-d" />
       </div>
-      <div className="pointer-events-none fixed inset-0 landing-grid opacity-70" aria-hidden />
-      <div className="pointer-events-none fixed inset-0 landing-grain" aria-hidden />
+      <div className="pointer-events-none fixed inset-0 landing-grid opacity-60" aria-hidden />
+      <div className="pointer-events-none fixed inset-0 landing-grain opacity-90" aria-hidden />
       <div
         className="pointer-events-none fixed inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 75% 55% at 50% -5%, transparent 20%, rgba(5,6,8,0.55) 78%), linear-gradient(180deg, transparent 40%, rgba(5,6,8,0.72) 100%)',
+            'radial-gradient(ellipse 80% 60% at 50% -8%, transparent 28%, rgba(5,6,8,0.42) 82%), linear-gradient(180deg, transparent 48%, rgba(5,6,8,0.58) 100%)',
         }}
       />
 
@@ -222,7 +223,7 @@ export function LandingPage() {
         </div>
       </div>
 
-      <section id="studio" className="relative z-10 mx-auto max-w-7xl px-5 pb-4 pt-24 sm:px-8 sm:pb-6">
+      <section id="studio" className="relative z-10 mx-auto max-w-7xl px-5 pb-16 pt-24 sm:px-8 sm:pb-20">
         <Reveal>
           <div className="flex items-end justify-between gap-6">
             <div>
@@ -248,7 +249,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="relative z-10 overflow-hidden px-5 pb-16 pt-0 sm:px-8 sm:pb-20 sm:pt-2">
+      <section className="relative z-10 overflow-hidden px-5 pb-16 pt-10 sm:px-8 sm:pb-20 sm:pt-12">
         <div className="pointer-events-none absolute inset-0 cta-wash" />
         <div className="relative mx-auto max-w-7xl">
           <Reveal>
