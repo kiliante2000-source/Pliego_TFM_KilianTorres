@@ -65,97 +65,169 @@ function useCycle(n: number, ms: number) {
   return i;
 }
 
-/** Full-bleed chapter: product as campaign frame */
-function Chapter({
-  chapter,
-  index,
-}: {
-  chapter: (typeof CHAPTERS)[number];
-  index: number;
-}) {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [80, -80]);
-  const orbX = useTransform(scrollYProgress, [0, 1], [40, -60]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0.4]);
+/** Compact product gallery: one viewport, all formats switchable */
+function ChapterGallery() {
+  const [active, setActive] = useState(0);
+  const chapter = CHAPTERS[active];
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setActive((v) => (v + 1) % CHAPTERS.length);
+    }, 5200);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
-    <section
-      ref={ref}
-      className="relative flex min-h-svh items-center overflow-hidden border-b border-white/5"
-    >
-      <div className={`absolute inset-0 bg-gradient-to-br ${chapter.gradient} opacity-90`} />
+    <section id="obra" className="relative z-10 overflow-hidden border-y border-white/10">
+      <div className={`absolute inset-0 bg-gradient-to-br ${chapter.gradient} opacity-95 transition-colors duration-700`} />
       <motion.div
-        className="absolute -right-[15%] top-[10%] h-[70vmin] w-[70vmin] rounded-full"
+        key={chapter.accent}
+        className="absolute -right-[12%] top-[-10%] h-[55vmin] w-[55vmin] rounded-full"
         style={{
-          x: orbX,
           background: `radial-gradient(circle at 35% 30%, ${chapter.accent} 0%, transparent 62%)`,
-          opacity: 0.85,
         }}
-      />
-      <motion.div
-        className="absolute -left-20 bottom-0 h-[40vmin] w-[40vmin] rounded-full bg-black/30 blur-3xl"
-        style={{ y }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 0.85, scale: 1 }}
+        transition={{ duration: 0.7, ease }}
       />
 
-      {/* Vector frame marks */}
-      <div className="pointer-events-none absolute left-6 top-6 h-10 w-10 border-l-2 border-t-2 border-white/40" />
-      <div className="pointer-events-none absolute bottom-6 right-6 h-10 w-10 border-b-2 border-r-2 border-white/40" />
-
-      <motion.div style={{ opacity }} className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 px-6 py-24 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-        <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/70">
-            Cap. {chapter.id} · {chapter.product}
-          </p>
-          <h2
-            className="mt-5 text-[clamp(2.8rem,8vw,5.5rem)] font-extrabold leading-[0.9] tracking-[-0.06em] text-white"
-            style={display}
-          >
-            {chapter.line}
-          </h2>
-          <p className="mt-6 max-w-md text-lg text-white/75" style={serif}>
-            {chapter.detail}
-          </p>
+      <div className="relative z-10 mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-16">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/70">
+              Formatos · Cap. {chapter.id}
+            </p>
+            <h2
+              className="mt-2 text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold tracking-[-0.045em] text-white"
+              style={display}
+            >
+              Cuatro piezas. Un mismo golpe.
+            </h2>
+          </div>
         </div>
 
-        {/* Fake printed piece */}
-        <motion.div
-          style={{ y }}
-          className="relative mx-auto aspect-[3/4] w-full max-w-md overflow-hidden rounded-sm bg-black/40 shadow-[0_40px_100px_rgba(0,0,0,0.45)] ring-1 ring-white/20 backdrop-blur-sm"
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-white/5" />
-          <motion.div
-            className="absolute right-[-20%] top-[-10%] h-[70%] w-[70%] rounded-full opacity-90"
-            style={{
-              background: `radial-gradient(circle, ${chapter.accent}, transparent 68%)`,
-            }}
-            animate={{ scale: [1, 1.08, 1], rotate: [0, 8, 0] }}
-            transition={{ duration: 8 + index, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <div className="absolute left-6 top-6 font-mono text-[10px] uppercase tracking-[0.22em] text-white/60">
-            PLIEGO · {chapter.id}
-          </div>
-          <div className="absolute inset-x-6 bottom-8">
-            <p className="text-5xl font-extrabold tracking-[-0.05em] text-white" style={display}>
-              {chapter.product}
-            </p>
-            <p className="mt-2 text-xl italic text-white/80" style={serif}>
-              Hecho para detenerse.
-            </p>
-          </div>
-          <motion.div
-            className="absolute left-6 top-1/2 h-px w-20 origin-left bg-white/70"
-            animate={{ scaleX: [0.4, 1, 0.4] }}
-            transition={{ duration: 3.5, repeat: Infinity, delay: index * 0.2 }}
-          />
-        </motion.div>
-      </motion.div>
+        {/* Format switcher */}
+        <div className="mt-8 flex flex-wrap gap-2">
+          {CHAPTERS.map((ch, i) => {
+            const on = i === active;
+            return (
+              <button
+                key={ch.id}
+                type="button"
+                onClick={() => setActive(i)}
+                className="rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] transition"
+                style={{
+                  background: on ? ch.accent : 'rgba(0,0,0,0.35)',
+                  color: on ? '#050608' : 'rgba(255,255,255,0.75)',
+                  boxShadow: on ? `0 0 0 1px ${ch.accent}` : '0 0 0 1px rgba(255,255,255,0.15)',
+                }}
+              >
+                {ch.product}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-8 grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={chapter.id + '-copy'}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.4, ease }}
+            >
+              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-white/65">
+                Cap. {chapter.id} · {chapter.product}
+              </p>
+              <h3
+                className="mt-3 text-[clamp(2rem,5.5vw,3.6rem)] font-extrabold leading-[0.95] tracking-[-0.05em] text-white"
+                style={display}
+              >
+                {chapter.line}
+              </h3>
+              <p className="mt-4 max-w-md text-lg text-white/75 sm:text-xl" style={serif}>
+                {chapter.detail}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={chapter.id + '-stage'}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.02 }}
+              transition={{ duration: 0.4, ease }}
+              className="relative mx-auto aspect-[4/3] w-full max-w-lg overflow-hidden rounded-sm bg-black/40 shadow-[0_30px_80px_rgba(0,0,0,0.4)] ring-1 ring-white/20"
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-white/5" />
+              <motion.div
+                className="absolute right-[-18%] top-[-12%] h-[75%] w-[75%] rounded-full opacity-90"
+                style={{
+                  background: `radial-gradient(circle, ${chapter.accent}, transparent 68%)`,
+                }}
+                animate={{ scale: [1, 1.06, 1], rotate: [0, 6, 0] }}
+                transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              <div className="absolute left-5 top-5 font-mono text-[10px] uppercase tracking-[0.22em] text-white/60">
+                PLIEGO · {chapter.id}
+              </div>
+              <div className="absolute inset-x-5 bottom-6">
+                <p className="text-4xl font-extrabold tracking-[-0.05em] text-white sm:text-5xl" style={display}>
+                  {chapter.product}
+                </p>
+                <p className="mt-1 text-lg italic text-white/80" style={serif}>
+                  Hecho para detenerse.
+                </p>
+              </div>
+              <div
+                className="absolute bottom-0 left-0 h-1 w-full origin-left"
+                style={{ background: chapter.accent }}
+              >
+                <motion.div
+                  key={chapter.id + '-bar'}
+                  className="h-full bg-white/40"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 5.2, ease: 'linear' }}
+                  style={{ transformOrigin: 'left' }}
+                />
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Mini strip of all formats */}
+        <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {CHAPTERS.map((ch, i) => (
+            <button
+              key={ch.id}
+              type="button"
+              onClick={() => setActive(i)}
+              className="group relative overflow-hidden rounded-sm text-left ring-1 ring-white/15 transition hover:ring-white/35"
+              style={{
+                background: `linear-gradient(135deg, ${ch.accent}33, rgba(0,0,0,0.55))`,
+                outline: i === active ? `2px solid ${ch.accent}` : undefined,
+                outlineOffset: 0,
+              }}
+            >
+              <div className="px-3 py-3">
+                <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
+                  {ch.id}
+                </p>
+                <p className="mt-1 font-display text-sm font-extrabold tracking-tight text-white">
+                  {ch.product}
+                </p>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
+
 
 function GestureFilm() {
   const step = useCycle(5, 1600);
@@ -455,24 +527,16 @@ export function LiveDemoPage() {
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
 
-        {/* Diagonal vector rule */}
-        <motion.div
-          className="pointer-events-none absolute left-[-10%] top-[45%] h-px w-[120%] origin-left bg-gradient-to-r from-transparent via-white/40 to-transparent"
-          style={{ rotate: -9 }}
-          animate={{ opacity: [0.25, 0.7, 0.25] }}
-          transition={{ duration: 4, repeat: Infinity }}
-        />
-
         <div className="relative z-10 mx-auto w-full max-w-7xl">
-          <div className="min-h-[3.5rem] overflow-hidden">
+          <div className="min-h-[2.75rem] overflow-hidden sm:min-h-[3.25rem]">
             <AnimatePresence mode="wait">
               <motion.p
                 key={HOOKS[hook]}
-                initial={{ y: 40, opacity: 0 }}
+                initial={{ y: 28, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -28, opacity: 0 }}
+                exit={{ y: -20, opacity: 0 }}
                 transition={{ duration: 0.5, ease }}
-                className="font-mono text-[11px] uppercase tracking-[0.32em] text-lima"
+                className="font-mono text-sm font-medium uppercase tracking-[0.18em] text-lima sm:text-base md:text-lg"
               >
                 {HOOKS[hook]}
               </motion.p>
@@ -599,12 +663,8 @@ export function LiveDemoPage() {
         </motion.p>
       </section>
 
-      {/* PRODUCT CHAPTERS */}
-      <div id="obra">
-        {CHAPTERS.map((ch, i) => (
-          <Chapter key={ch.id} chapter={ch} index={i} />
-        ))}
-      </div>
+      {/* PRODUCT CHAPTERS — compact gallery */}
+      <ChapterGallery />
 
       <GestureFilm />
 
