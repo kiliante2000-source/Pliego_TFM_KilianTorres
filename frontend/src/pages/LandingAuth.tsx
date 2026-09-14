@@ -316,8 +316,8 @@ function AuthShell({
           animate={{ x: [0, -30, 0] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
         />
-        <div className="relative flex h-full flex-col justify-between px-14 pb-12 pt-14 xl:px-16 xl:pt-16">
-          <Logo markSize={36} className="gap-3.5" wordmarkClassName="text-[1.55rem] tracking-[-0.045em]" />
+        <div className="relative flex h-full flex-col justify-between px-16 pb-12 pt-16 xl:px-[4.5rem] xl:pt-[4.5rem]">
+          <Logo markSize={40} className="gap-4" wordmarkClassName="text-[1.85rem] tracking-[-0.05em]" />
           <div>
             <p className="eyebrow text-lima">Studio · Create · Publish</p>
             <PliegoWordmark variant="gradient" className="mt-6 text-6xl xl:text-8xl" />
