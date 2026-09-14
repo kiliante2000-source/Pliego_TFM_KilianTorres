@@ -22,166 +22,142 @@ const STAGE_FORMATS = [
   { id: 'portada', label: 'Portada', accent: '#A855F7', line: 'Una imagen que para el feed' },
   { id: 'revista', label: 'Revista', accent: '#B2FF3A', line: 'Página viva, no PDF plano' },
   { id: 'lookbook', label: 'Lookbook', accent: '#FF7A45', line: 'Producto con aire editorial' },
-  { id: 'deck', label: 'Presentación', accent: '#3A6AEF', line: 'Una idea. Un golpe.' },
+  { id: 'deck', label: 'Deck', accent: '#3A6AEF', line: 'Una idea. Un golpe.' },
 ] as const;
 
+/** Quiet companion stage — fills its cell, never competes with the brand. */
 function FloatingStage() {
   const ref = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(3);
   const [paused, setPaused] = useState(false);
-  const rx = useMotionValue(0);
-  const ry = useMotionValue(0);
-  const rotateX = useSpring(useTransform(ry, [-0.5, 0.5], [7, -7]), { stiffness: 120, damping: 16 });
-  const rotateY = useSpring(useTransform(rx, [-0.5, 0.5], [-9, 9]), { stiffness: 120, damping: 16 });
-  const glare = useMotionTemplate`radial-gradient(480px circle at ${useTransform(rx, [-0.5, 0.5], [18, 82])}% ${useTransform(ry, [-0.5, 0.5], [20, 80])}%, rgba(255,255,255,0.14), transparent 42%)`;
+  const mx = useMotionValue(62);
+  const my = useMotionValue(38);
+  const sx = useSpring(mx, { stiffness: 70, damping: 22 });
+  const sy = useSpring(my, { stiffness: 70, damping: 22 });
   const format = STAGE_FORMATS[active];
+  const wash = useMotionTemplate`radial-gradient(58% 52% at ${sx}% ${sy}%, ${format.accent}66 0%, transparent 68%)`;
 
   useEffect(() => {
     if (paused) return;
-    const id = window.setInterval(() => setActive((v) => (v + 1) % STAGE_FORMATS.length), 3200);
+    const id = window.setInterval(() => setActive((v) => (v + 1) % STAGE_FORMATS.length), 4000);
     return () => window.clearInterval(id);
   }, [paused, active]);
 
   const select = (i: number) => {
     setActive(i);
     setPaused(true);
-    window.setTimeout(() => setPaused(false), 7000);
+    window.setTimeout(() => setPaused(false), 8000);
   };
 
   return (
-    <motion.div
-      ref={ref}
-      style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-      onPointerMove={(e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        rx.set((e.clientX - rect.left) / rect.width - 0.5);
-        ry.set((e.clientY - rect.top) / rect.height - 0.5);
-      }}
-      onPointerLeave={() => {
-        rx.set(0);
-        ry.set(0);
-      }}
-      className="relative mx-auto aspect-square w-full max-w-md perspective-[1200px]"
-    >
-      <div
-        className="absolute -inset-8 rounded-[2rem] blur-3xl transition-colors duration-700"
-        style={{
-          background: `radial-gradient(circle at 60% 40%, ${format.accent}55, transparent 65%)`,
-        }}
-      />
-
+    <div className="flex h-full w-full flex-col gap-3">
       <motion.div
-        className="relative flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-white/10 bg-[#080b0f]/90 shadow-[0_40px_120px_rgba(0,0,0,0.55)] backdrop-blur-sm"
-        style={{ transform: 'translateZ(36px)' }}
+        ref={ref}
+        onPointerMove={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          mx.set(((e.clientX - rect.left) / rect.width) * 100);
+          my.set(((e.clientY - rect.top) / rect.height) * 100);
+        }}
+        onPointerLeave={() => {
+          mx.set(62);
+          my.set(38);
+        }}
+        className="relative min-h-[220px] flex-1 overflow-hidden rounded-sm ring-1 ring-white/10 sm:min-h-[260px] lg:min-h-0"
       >
-        <motion.div className="pointer-events-none absolute inset-0 z-20" style={{ background: glare }} />
-
-        {/* Header */}
-        <div className="relative z-10 flex items-center justify-between border-b border-white/8 px-4 py-3">
-          <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-paper/40">Studio preview</p>
-            <p className="mt-0.5 text-sm font-semibold tracking-tight text-paper">Elige un formato</p>
-          </div>
-          <Link
-            to="/demo"
-            className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/70 no-underline transition hover:bg-white/10 hover:text-paper"
-          >
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lima" />
-            Demo
-          </Link>
-        </div>
-
-        {/* Interactive stage */}
-        <div className="relative z-10 min-h-0 flex-1 p-4">
-          <div
-            className="relative h-full overflow-hidden rounded-sm ring-1 ring-white/10"
+        <div className="absolute inset-0 bg-[#07090d]" />
+        <motion.div
+          aria-hidden
+          className="absolute inset-0 opacity-90 transition-[opacity] duration-500"
+          style={{ background: wash }}
+        />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={format.id + '-tint'}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            aria-hidden
+            className="absolute inset-0"
             style={{
-              background: `linear-gradient(160deg, ${format.accent}22, #0b0e11 55%)`,
-              boxShadow: `inset 0 0 0 1px ${format.accent}33`,
+              background: `linear-gradient(160deg, ${format.accent}28 0%, transparent 42%, #050608 100%)`,
             }}
-          >
-            <motion.div
-              key={format.id + '-orb'}
-              className="absolute -right-[20%] top-[-10%] h-[70%] w-[70%] rounded-full opacity-80"
-              style={{
-                background: `radial-gradient(circle, ${format.accent}, transparent 68%)`,
-              }}
-              animate={{ scale: [1, 1.08, 1], x: [0, -10, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-            />
+          />
+        </AnimatePresence>
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={format.id}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.35, ease }}
-                className="absolute inset-0 flex flex-col justify-between p-5"
-              >
-                <div className="flex items-center justify-between">
-                  <span
-                    className="font-mono text-[10px] uppercase tracking-[0.2em]"
-                    style={{ color: format.accent }}
-                  >
-                    {String(active + 1).padStart(2, '0')} / 06
-                  </span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-paper/45">
-                    canvas vivo
-                  </span>
-                </div>
+        {/* Soft grid — modern, quiet */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.14]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(244,246,248,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(244,246,248,0.35) 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+            maskImage: 'radial-gradient(ellipse at 60% 40%, black 20%, transparent 75%)',
+          }}
+        />
 
-                <div>
-                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-paper/55">
-                    {format.label}
-                  </p>
-                  <p className="mt-2 max-w-[14ch] text-[clamp(1.6rem,5vw,2.2rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-paper">
-                    {format.line}
-                  </p>
-                  <p className="mt-3 max-w-[28ch] text-sm leading-relaxed text-paper/55">
-                    Mueve el cursor. Cambia de formato. Así se siente el estudio.
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="h-px flex-1 bg-white/10" />
-                  <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-paper/35">
-                    tipografía · capas · publish
-                  </span>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+        <div className="absolute inset-0 flex flex-col justify-between p-5 sm:p-6 lg:p-7">
+          <div className="flex items-start justify-between gap-3">
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/45">
+              <span style={{ color: format.accent }}>{String(active + 1).padStart(2, '0')}</span>
+              <span className="text-paper/25"> / 06</span>
+              <span className="ml-3 text-paper/55">{format.label}</span>
+            </p>
+            <Link
+              to="/demo"
+              className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/40 no-underline transition hover:text-paper"
+            >
+              Demo
+            </Link>
           </div>
-        </div>
 
-        {/* Format chips */}
-        <div className="relative z-10 grid grid-cols-3 gap-1.5 border-t border-white/8 p-3">
-          {STAGE_FORMATS.map((f, i) => {
-            const on = i === active;
-            return (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => select(i)}
-                className="rounded-sm px-2 py-2 text-left transition"
-                style={{
-                  background: on ? `${f.accent}22` : 'rgba(255,255,255,0.03)',
-                  boxShadow: on ? `inset 0 0 0 1px ${f.accent}` : 'inset 0 0 0 1px rgba(255,255,255,0.08)',
-                }}
+          <div className="max-w-[22ch]">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={format.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.35, ease }}
+                className="font-serif text-[clamp(1.35rem,2.6vw,1.85rem)] leading-snug text-paper/90"
               >
-                <span
-                  className="mb-1 block h-1 w-1 rounded-full"
-                  style={{ background: f.accent }}
-                />
-                <span className="block font-mono text-[9px] uppercase tracking-[0.12em] text-paper/70">
-                  {f.label}
-                </span>
-              </button>
-            );
-          })}
+                {format.line}
+              </motion.p>
+            </AnimatePresence>
+            <p className="mt-3 max-w-[28ch] text-sm leading-relaxed text-paper/45">
+              Tipografía, capas y publicación en el mismo gesto.
+            </p>
+          </div>
         </div>
       </motion.div>
-    </motion.div>
+
+      <div
+        role="tablist"
+        aria-label="Formatos"
+        className="flex flex-wrap gap-1"
+      >
+        {STAGE_FORMATS.map((f, i) => {
+          const on = i === active;
+          return (
+            <button
+              key={f.id}
+              type="button"
+              role="tab"
+              aria-selected={on}
+              onClick={() => select(i)}
+              className="rounded-sm px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] transition"
+              style={{
+                color: on ? '#050608' : 'rgba(244,246,248,0.42)',
+                background: on ? f.accent : 'transparent',
+              }}
+            >
+              {f.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
@@ -227,9 +203,9 @@ export function LandingPage() {
 
       <motion.section
         style={{ scale: heroScale, opacity: heroOpacity }}
-        className="relative z-10 mx-auto grid min-h-[calc(100svh-88px)] w-full max-w-7xl items-center gap-12 px-5 pb-16 pt-6 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]"
+        className="relative z-10 mx-auto grid min-h-[calc(100svh-88px)] w-full max-w-7xl gap-10 px-5 pb-16 pt-8 sm:px-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-stretch lg:gap-12 lg:pb-20"
       >
-        <div>
+        <div className="relative z-10 flex max-w-xl flex-col justify-center">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -246,14 +222,14 @@ export function LandingPage() {
           >
             <PliegoWordmark
               variant="gradient"
-              className="block text-[clamp(4rem,16vw,9.5rem)] leading-[0.82]"
+              className="block text-[clamp(3.8rem,13vw,8rem)] leading-[0.88]"
             />
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease }}
-            className="mt-7 max-w-lg font-serif text-2xl leading-snug text-paper/75 sm:text-3xl"
+            className="mt-6 max-w-md font-serif text-xl leading-snug text-paper/75 sm:text-2xl"
           >
             Diseña revistas, portadas y sistemas visuales con la fluidez de un estudio creativo.
           </motion.p>
@@ -261,7 +237,7 @@ export function LandingPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.25, ease }}
-            className="mt-10 flex flex-wrap items-center gap-3"
+            className="mt-9 flex flex-wrap items-center gap-3"
           >
             <Magnetic strength={0.35}>
               <ButtonLink to={user ? '/app' : '/register'} className="min-w-48 px-6 py-3 text-base">
@@ -279,17 +255,17 @@ export function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="mt-14 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-paper/45 no-underline hover:text-paper"
+            className="mt-12 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-paper/45 no-underline hover:text-paper"
           >
             Explorar el sistema <ArrowDownRight size={14} />
           </motion.a>
         </div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.94, y: 24 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.15, ease }}
-          className="relative"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.85, delay: 0.22, ease }}
+          className="relative flex min-h-[280px] w-full lg:min-h-0 lg:py-6"
         >
           <FloatingStage />
         </motion.div>
