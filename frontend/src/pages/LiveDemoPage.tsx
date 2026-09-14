@@ -261,31 +261,58 @@ function ChapterGallery() {
 function GestureFilm() {
   const step = useCycle(5, 1600);
   const frames = [
-    { t: 'Abrir', d: 'El estudio aparece. Negro. Marca. Silencio.' },
-    { t: 'Componer', d: 'Type, orbe, marco. Tres gestos. Una portada.' },
-    { t: 'Mover', d: 'La capa respira. El cursor deja rastro.' },
-    { t: 'Versionar', d: 'El cambio queda. La pieza no se rompe.' },
-    { t: 'Publicar', d: 'Un link. El trabajo sale del canvas.' },
+    { t: 'Abrir', d: 'El estudio aparece. Negro. Marca. Silencio.', accent: '#4F80FF' },
+    { t: 'Componer', d: 'Type, orbe, marco. Tres gestos. Una portada.', accent: '#FF4EDB' },
+    { t: 'Mover', d: 'La capa respira. El cursor deja rastro.', accent: '#A855F7' },
+    { t: 'Versionar', d: 'El cambio queda. La pieza no se rompe.', accent: '#FF7A45' },
+    { t: 'Publicar', d: 'Un link. El trabajo sale del canvas.', accent: '#B2FF3A' },
   ] as const;
+  const accent = frames[step].accent;
 
   return (
     <section className="relative min-h-svh overflow-hidden bg-[#050608] py-28">
+      {/* Atmospheric brand lighting */}
       <div className="pointer-events-none absolute inset-0">
-        <motion.div
-          className="absolute left-1/2 top-1/2 h-[80vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        <div
+          className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(circle, rgba(255,78,219,0.18), rgba(79,128,255,0.08), transparent 70%)',
+              'radial-gradient(ellipse 70% 55% at 18% 20%, rgba(255,78,219,0.22), transparent 55%), radial-gradient(ellipse 55% 50% at 82% 28%, rgba(79,128,255,0.2), transparent 55%), radial-gradient(ellipse 50% 45% at 55% 88%, rgba(168,85,247,0.16), transparent 50%)',
           }}
-          animate={{ scale: [1, 1.15, 1], rotate: [0, 20, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute -left-[10%] top-[8%] h-[55vmin] w-[55vmin] rounded-full blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(255,78,219,0.45), transparent 68%)' }}
+          animate={{ x: [0, 40, 0], y: [0, 28, 0], scale: [1, 1.12, 1] }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute -right-[8%] top-[18%] h-[60vmin] w-[60vmin] rounded-full blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(79,128,255,0.4), transparent 68%)' }}
+          animate={{ x: [0, -36, 0], y: [0, 22, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute bottom-[-10%] left-[35%] h-[50vmin] w-[50vmin] rounded-full blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(178,255,58,0.18), transparent 70%)' }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.45, 0.85, 0.45] }}
+          transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute right-[6%] top-0 h-full w-[44%]"
+          style={{
+            background:
+              'linear-gradient(105deg, transparent 0%, rgba(168,85,247,0.08) 35%, rgba(79,128,255,0.14) 55%, rgba(255,78,219,0.1) 75%, transparent 100%)',
+          }}
+          animate={{ opacity: [0.35, 0.75, 0.35] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-rosa">El gesto</p>
         <h2
-          className="mt-4 max-w-4xl text-[clamp(2.6rem,7vw,5rem)] font-extrabold leading-[0.95] tracking-[-0.05em]"
+          className="mt-4 max-w-4xl overflow-visible pb-1 text-[clamp(2.6rem,7vw,5rem)] font-extrabold leading-[0.98] tracking-[-0.05em]"
           style={display}
         >
           Cinco segundos que explican PLIEGO.
@@ -301,19 +328,19 @@ function GestureFilm() {
                   x: step === i ? 12 : 0,
                 }}
                 className="border-l-2 pl-4"
-                style={{ borderColor: step === i ? '#FF4EDB' : 'rgba(255,255,255,0.12)' }}
+                style={{ borderColor: step === i ? f.accent : 'rgba(255,255,255,0.12)' }}
               >
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-paper/45">
                   0{i + 1}
                 </p>
-                <p className="font-display text-2xl font-bold tracking-tight">{f.t}</p>
+                <p className="text-2xl font-semibold tracking-tight text-paper">{f.t}</p>
                 <AnimatePresence>
                   {step === i ? (
                     <motion.p
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="mt-1 text-sm text-paper/60"
+                      className="mt-1 text-sm leading-relaxed text-paper/60"
                       style={serif}
                     >
                       {f.d}
@@ -324,121 +351,160 @@ function GestureFilm() {
             ))}
           </ol>
 
-          <div className="relative aspect-[16/10] overflow-hidden rounded-sm bg-[#0b0e11] ring-1 ring-white/15">
-            {/* stage */}
-            <div
-              className="absolute inset-0 opacity-30"
-              style={{
-                backgroundImage:
-                  'linear-gradient(rgba(244,246,248,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(244,246,248,0.06) 1px, transparent 1px)',
-                backgroundSize: '48px 48px',
+          <div className="relative">
+            <motion.div
+              className="pointer-events-none absolute -inset-6 rounded-2xl blur-2xl"
+              animate={{
+                background: [
+                  `radial-gradient(circle at 40% 40%, ${accent}55, transparent 65%)`,
+                  `radial-gradient(circle at 60% 50%, ${accent}33, transparent 70%)`,
+                  `radial-gradient(circle at 40% 40%, ${accent}55, transparent 65%)`,
+                ],
               }}
+              transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
             />
-            <AnimatePresence mode="wait">
+            <div
+              className="relative aspect-[16/10] overflow-hidden rounded-sm bg-[#0b0e11]/90 ring-1 ring-white/10 backdrop-blur-[2px]"
+              style={{
+                boxShadow: `0 0 0 1px ${accent}40, 0 30px 80px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)`,
+              }}
+            >
               <motion.div
-                key={step}
-                initial={{ opacity: 0, scale: 0.92 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.04 }}
-                transition={{ duration: 0.45, ease }}
+                key={`wash-${step}`}
                 className="absolute inset-0"
-              >
-                {step === 0 && (
-                  <div className="flex h-full items-center justify-center">
-                    <motion.span
-                      className="text-6xl font-extrabold tracking-[-0.06em]"
-                      style={display}
-                      animate={{ opacity: [0.2, 1, 1] }}
-                    >
-                      PLIEGO
-                    </motion.span>
-                  </div>
-                )}
-                {step === 1 && (
-                  <>
-                    <motion.div
-                      className="absolute right-[12%] top-[18%] h-48 w-48 rounded-full bg-gradient-to-br from-rosa to-neon"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: 'spring', stiffness: 160, damping: 14 }}
-                    />
-                    <motion.div
-                      className="absolute left-[10%] top-[42%] bg-[#152238] px-3 py-2"
-                      initial={{ x: -40, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                    >
-                      <span className="text-4xl font-extrabold tracking-tight" style={display}>
-                        VOL.01
-                      </span>
-                    </motion.div>
-                  </>
-                )}
-                {step === 2 && (
-                  <>
-                    <motion.div
-                      className="absolute right-[18%] top-[22%] h-40 w-40 rounded-full bg-violet/80"
-                      animate={{ y: [0, -16, 0], x: [0, 10, 0] }}
-                      transition={{ duration: 2.2, repeat: Infinity }}
-                    />
-                    <motion.div
-                      className="absolute left-[14%] top-[38%] border border-neon px-3 py-2"
-                      animate={{ y: [0, 8, 0] }}
-                      transition={{ duration: 2.2, repeat: Infinity }}
-                    >
-                      <span className="absolute -left-1 -top-1 h-2 w-2 bg-neon" />
-                      <span className="absolute -right-1 -top-1 h-2 w-2 bg-neon" />
-                      <span className="absolute -bottom-1 -left-1 h-2 w-2 bg-neon" />
-                      <span className="absolute -bottom-1 -right-1 h-2 w-2 bg-neon" />
-                      <span className="text-3xl font-bold">MOVE</span>
-                    </motion.div>
-                  </>
-                )}
-                {step === 3 && (
-                  <div className="flex h-full flex-col items-center justify-center gap-3">
-                    {['v1 · draft', 'v2 · review', 'v3 · final'].map((v, i) => (
-                      <motion.div
-                        key={v}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.12 }}
-                        className="w-56 rounded border border-white/15 bg-white/5 px-4 py-2 font-mono text-xs uppercase tracking-[0.16em]"
-                        style={{ opacity: 0.4 + i * 0.3 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                style={{
+                  background: `radial-gradient(ellipse 80% 70% at 70% 30%, ${accent}30, transparent 60%), radial-gradient(ellipse 60% 50% at 20% 80%, rgba(79,128,255,0.16), transparent 55%)`,
+                }}
+              />
+              <div
+                className="absolute inset-0 opacity-25"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(rgba(244,246,248,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(244,246,248,0.07) 1px, transparent 1px)',
+                  backgroundSize: '48px 48px',
+                }}
+              />
+              <div
+                className="absolute inset-x-0 top-0 h-px"
+                style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }}
+              />
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={step}
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.04 }}
+                  transition={{ duration: 0.45, ease }}
+                  className="absolute inset-0"
+                >
+                  {step === 0 && (
+                    <div className="flex h-full items-center justify-center">
+                      <motion.span
+                        className="text-6xl font-extrabold tracking-[-0.06em]"
+                        style={{
+                          ...display,
+                          backgroundImage: 'var(--brand-flow)',
+                          backgroundSize: '400% 100%',
+                          WebkitBackgroundClip: 'text',
+                          backgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                        }}
+                        animate={{ backgroundPosition: ['0% 50%', '66% 50%'], opacity: [0.35, 1, 1] }}
+                        transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
                       >
-                        {v}
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
-                {step === 4 && (
-                  <div className="flex h-full items-center justify-center p-8">
-                    <motion.div
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      className="w-full max-w-sm rounded-sm border border-lima/50 bg-black/60 p-6"
-                    >
-                      <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-lima">
-                        live link
-                      </p>
-                      <p className="mt-3 text-2xl font-bold tracking-tight" style={display}>
-                        pliego.app/p/noche
-                      </p>
+                        PLIEGO
+                      </motion.span>
+                    </div>
+                  )}
+                  {step === 1 && (
+                    <>
                       <motion.div
-                        className="mt-5 h-1 origin-left bg-lima"
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: 1 }}
-                        transition={{ duration: 0.9, ease }}
+                        className="absolute right-[12%] top-[18%] h-48 w-48 rounded-full bg-gradient-to-br from-rosa to-neon shadow-[0_0_60px_rgba(255,78,219,0.45)]"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: 'spring', stiffness: 160, damping: 14 }}
                       />
-                    </motion.div>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
+                      <motion.div
+                        className="absolute left-[10%] top-[42%] bg-[#152238] px-3 py-2"
+                        initial={{ x: -40, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                      >
+                        <span className="text-4xl font-extrabold tracking-tight" style={display}>
+                          VOL.01
+                        </span>
+                      </motion.div>
+                    </>
+                  )}
+                  {step === 2 && (
+                    <>
+                      <motion.div
+                        className="absolute right-[18%] top-[22%] h-40 w-40 rounded-full bg-violet/80 shadow-[0_0_50px_rgba(168,85,247,0.5)]"
+                        animate={{ y: [0, -16, 0], x: [0, 10, 0] }}
+                        transition={{ duration: 2.2, repeat: Infinity }}
+                      />
+                      <motion.div
+                        className="absolute left-[14%] top-[38%] border border-neon px-3 py-2"
+                        animate={{ y: [0, 8, 0] }}
+                        transition={{ duration: 2.2, repeat: Infinity }}
+                      >
+                        <span className="absolute -left-1 -top-1 h-2 w-2 bg-neon" />
+                        <span className="absolute -right-1 -top-1 h-2 w-2 bg-neon" />
+                        <span className="absolute -bottom-1 -left-1 h-2 w-2 bg-neon" />
+                        <span className="absolute -bottom-1 -right-1 h-2 w-2 bg-neon" />
+                        <span className="text-3xl font-bold">MOVE</span>
+                      </motion.div>
+                    </>
+                  )}
+                  {step === 3 && (
+                    <div className="flex h-full flex-col items-center justify-center gap-3">
+                      {['v1 · draft', 'v2 · review', 'v3 · final'].map((v, i) => (
+                        <motion.div
+                          key={v}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.12 }}
+                          className="w-56 rounded border border-white/15 bg-white/5 px-4 py-2 font-mono text-xs uppercase tracking-[0.16em]"
+                          style={{ opacity: 0.4 + i * 0.3 }}
+                        >
+                          {v}
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                  {step === 4 && (
+                    <div className="flex h-full items-center justify-center p-8">
+                      <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        className="w-full max-w-sm rounded-sm border border-lima/50 bg-black/60 p-6 shadow-[0_0_40px_rgba(178,255,58,0.2)]"
+                      >
+                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-lima">
+                          live link
+                        </p>
+                        <p className="mt-3 text-2xl font-bold tracking-tight" style={display}>
+                          pliego.app/p/noche
+                        </p>
+                        <motion.div
+                          className="mt-5 h-1 origin-left bg-lima"
+                          initial={{ scaleX: 0 }}
+                          animate={{ scaleX: 1 }}
+                          transition={{ duration: 0.9, ease }}
+                        />
+                      </motion.div>
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
 }
+
 
 export function LiveDemoPage() {
   const [intro, setIntro] = useState(0);
