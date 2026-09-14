@@ -230,8 +230,9 @@ export function LandingPage() {
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-white/10 px-5 py-10 sm:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <footer className="relative z-10 px-5 py-10 sm:px-8">
+        <div className="mx-auto h-1 max-w-7xl rounded-full bg-gradient-to-r from-neon via-rosa to-lima opacity-70" />
+        <div className="mx-auto mt-8 flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <PliegoWordmark className="text-lg" variant="gradient" />
           <p className="eyebrow text-paper/35">Diseño editorial · Tecnología · Sin límites</p>
         </div>
