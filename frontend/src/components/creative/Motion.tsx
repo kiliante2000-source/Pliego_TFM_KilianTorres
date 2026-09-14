@@ -78,26 +78,65 @@ export function Marquee({
   items,
   speed = 35,
   reverse = false,
+  colorOffset = 0,
+  phaseDelay = 0,
+  chrome = 'full',
 }: {
   items: string[];
   speed?: number;
   reverse?: boolean;
+  /** Phase into the brand palette so paired marquees stay different colors. */
+  colorOffset?: number;
+  /** ms before this track starts shifting color (stagger vs the other row). */
+  phaseDelay?: number;
+  chrome?: 'full' | 'bottom';
 }) {
+  const palette = ['#4f80ff', '#a855f7', '#ff4edb', '#ff7a45', '#b2ff3a'] as const;
+  const [tone, setTone] = useState(colorOffset % palette.length);
   const row = [...items, ...items, ...items];
+  const color = palette[tone];
+
+  useEffect(() => {
+    let intervalId = 0;
+    const startId = window.setTimeout(() => {
+      intervalId = window.setInterval(() => {
+        setTone((t) => (t + 1) % palette.length);
+      }, 3200);
+    }, phaseDelay);
+    return () => {
+      window.clearTimeout(startId);
+      window.clearInterval(intervalId);
+    };
+  }, [palette.length, phaseDelay]);
+
   return (
-    <div className="relative overflow-hidden border-y border-white/10 py-4">
+    <div
+      className="relative overflow-hidden py-5 transition-[border-color] duration-700"
+      style={{
+        borderTop: chrome === 'full' ? `2px solid ${color}55` : 'none',
+        borderBottom: `2px solid ${color}40`,
+      }}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-30 transition-colors duration-700"
+        style={{
+          background: `linear-gradient(90deg, transparent, ${color}18, transparent)`,
+        }}
+      />
       <motion.div
-        className="flex w-max gap-10 whitespace-nowrap"
+        className="relative flex w-max gap-10 whitespace-nowrap"
         animate={{ x: reverse ? ['-33.333%', '0%'] : ['0%', '-33.333%'] }}
         transition={{ duration: speed, ease: 'linear', repeat: Infinity }}
       >
         {row.map((item, i) => (
           <span
             key={`${item}-${i}`}
-            className="font-display text-4xl font-bold uppercase tracking-[-0.05em] text-paper/25 sm:text-6xl"
+            className="font-display text-4xl font-extrabold uppercase tracking-[-0.05em] transition-colors duration-700 sm:text-6xl"
+            style={{ color }}
           >
             {item}
-            <span className="mx-6 text-neon">✦</span>
+            <span className="mx-5 inline-block align-middle text-[0.55em] opacity-90">✦</span>
           </span>
         ))}
       </motion.div>

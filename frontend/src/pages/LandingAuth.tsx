@@ -59,6 +59,7 @@ export function LandingPage() {
           >
             <PliegoMark size={44} className="shrink-0" />
             <p className="eyebrow text-neon">Editorial studio · browser native</p>
+            <span className="hidden h-px flex-1 bg-gradient-to-r from-neon/50 via-rosa/30 to-transparent sm:block" />
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -93,12 +94,25 @@ export function LandingPage() {
               </ButtonLink>
             </Magnetic>
           </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.55 }}
+            className="mt-14 flex flex-wrap gap-x-6 gap-y-2 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/40"
+          >
+            {['Canvas vivo', 'Publish al instante', 'Identidad de campaña'].map((tag) => (
+              <span key={tag} className="inline-flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-lima shadow-[0_0_10px_rgba(178,255,58,0.8)]" />
+                {tag}
+              </span>
+            ))}
+          </motion.div>
           <motion.a
             href="#studio"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="mt-14 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-paper/45 no-underline hover:text-paper"
+            transition={{ delay: 0.7 }}
+            className="mt-10 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-paper/45 no-underline hover:text-paper"
           >
             Explorar el sistema <ArrowDownRight size={14} />
           </motion.a>
@@ -106,27 +120,34 @@ export function LandingPage() {
       </motion.section>
 
       <div className="relative z-10">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon/50 to-transparent" />
         <Marquee
           items={['Tipografía', 'Capas', 'Versiones', 'PDF', 'Publicación', 'Plantillas', 'Canvas']}
           speed={28}
+          colorOffset={0}
+          phaseDelay={0}
         />
         <Marquee
           items={['Readymag energy', 'Studio flow', 'Neon mesh', 'Design systems', 'Editorial UI']}
           speed={40}
           reverse
+          colorOffset={2}
+          phaseDelay={1600}
+          chrome="bottom"
         />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-rosa/50 to-transparent" />
       </div>
 
       <section id="studio" className="relative z-10 mx-auto max-w-7xl px-5 py-24 sm:px-8">
         <Reveal>
           <p className="eyebrow text-rosa">Por qué PLIEGO</p>
           <h2 className="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.05em] sm:text-6xl">
-            Una herramienta útil que se siente como una pieza de diseño.
+            Una herramienta útil que se siente como una{' '}
+            <span className="wordmark-cutout">pieza de diseño</span>.
           </h2>
           <p className="mt-5 max-w-xl font-serif text-xl text-paper/65">
             La misma disciplina visual de la demo, aplicada a tu flujo diario.
           </p>
-          <div className="editorial-rule mt-8 max-w-xs" />
         </Reveal>
 
         <div className="mt-16 grid gap-10 md:grid-cols-3 md:gap-8">
@@ -135,22 +156,36 @@ export function LandingPage() {
               k: '01',
               t: 'Canvas vivo',
               d: 'Arrastra tipografía, formas e imágenes con undo/redo y capas. El editor responde como un estudio.',
+              accent: '#4f80ff',
             },
             {
               k: '02',
               t: 'Flujo completo',
               d: 'Autoguardado, versiones, exportación PDF y publicación pública sin salir del navegador.',
+              accent: '#ff4edb',
             },
             {
               k: '03',
               t: 'Identidad fuerte',
               d: 'Mesh de marca, tipografía display y microinteracciones que mantienen la esencia de campaña.',
+              accent: '#b2ff3a',
             },
           ].map((card, i) => (
             <Reveal key={card.k} delay={i * 0.08}>
-              <article className="group relative border-t border-white/15 pt-6">
-                <div className="pointer-events-none absolute left-0 top-0 h-px w-0 bg-gradient-to-r from-neon via-rosa to-transparent transition-all duration-500 group-hover:w-full" />
-                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-neon/80">{card.k}</p>
+              <article className="group relative pt-7 transition duration-300 hover:-translate-y-1">
+                <div
+                  className="absolute inset-x-0 top-0 h-1 origin-left rounded-full transition duration-500"
+                  style={{
+                    background: `linear-gradient(90deg, ${card.accent}, transparent 85%)`,
+                    boxShadow: `0 0 18px ${card.accent}55`,
+                  }}
+                />
+                <p
+                  className="font-mono text-[11px] uppercase tracking-[0.22em]"
+                  style={{ color: card.accent }}
+                >
+                  {card.k}
+                </p>
                 <h3 className="mt-4 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
                   {card.t}
                 </h3>
@@ -161,9 +196,9 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="relative z-10 overflow-hidden border-t border-white/10 py-24">
-        <div className="pointer-events-none absolute inset-0 mesh-bg opacity-50" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(204,255,0,0.06),transparent_50%)]" />
+      <section className="relative z-10 overflow-hidden py-24">
+        <div className="pointer-events-none absolute inset-0 mesh-bg opacity-55" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(178,255,58,0.08),transparent_50%),radial-gradient(ellipse_at_80%_20%,rgba(255,78,219,0.1),transparent_45%)]" />
         <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
           <Reveal>
             <p className="eyebrow text-lima">Siguiente paso</p>
@@ -179,10 +214,15 @@ export function LandingPage() {
             </p>
           </Reveal>
           <Reveal delay={0.18}>
-            <div className="mt-10">
+            <div className="mt-10 flex flex-wrap items-center gap-4">
               <Magnetic strength={0.4}>
                 <ButtonLink to={user ? '/app' : '/register'} className="px-8 py-3.5 text-base">
                   Entrar al canvas <ArrowRight size={18} />
+                </ButtonLink>
+              </Magnetic>
+              <Magnetic>
+                <ButtonLink to="/demo" variant="soft" className="px-8 py-3.5 text-base">
+                  <Play size={15} /> Ver demo viva
                 </ButtonLink>
               </Magnetic>
             </div>
