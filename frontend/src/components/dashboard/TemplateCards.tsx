@@ -30,48 +30,48 @@ type Visual = {
   vector: 'manifesto' | 'portfolio' | 'cover' | 'magazine' | 'catalog' | 'slide';
 };
 
-/** Un color corporativo protagonista por plantilla; mesh solo con paleta Pliego. */
+/** Un color corporativo protagonista por plantilla (alineado con /demo). */
 const VISUALS: Record<string, Visual> = {
   'manifesto-digital': {
-    label: 'Editorial digital',
+    label: 'Manifiesto',
     flat: BRAND.rosa,
-    glow: glow(BRAND.rosa),
-    mesh: [BRAND.rosa, BRAND.violet, BRAND.neon],
+    glow: glow(BRAND.rosa, 0.35),
+    mesh: [BRAND.rosa, BRAND.violet],
     vector: 'manifesto',
   },
   'portfolio-kinetic': {
-    label: 'Editorial digital',
+    label: 'Portfolio',
     flat: BRAND.neon,
-    glow: glow(BRAND.neon),
-    mesh: [BRAND.neon, BRAND.violet, BRAND.rosa],
+    glow: glow(BRAND.neon, 0.35),
+    mesh: [BRAND.neon, BRAND.accent2],
     vector: 'portfolio',
   },
   'portada-editorial': {
     label: 'Portada',
     flat: BRAND.violet,
-    glow: glow(BRAND.violet),
-    mesh: [BRAND.violet, BRAND.rosa, BRAND.naranja],
+    glow: glow(BRAND.violet, 0.35),
+    mesh: [BRAND.violet, BRAND.rosa],
     vector: 'cover',
   },
   'revista-doble': {
     label: 'Revista',
     flat: BRAND.lima,
-    glow: glow(BRAND.lima, 0.45),
-    mesh: [BRAND.lima, BRAND.neon, BRAND.violet],
+    glow: glow(BRAND.lima, 0.3),
+    mesh: [BRAND.lima, '#8FD42A'],
     vector: 'magazine',
   },
   'catalogo-producto': {
     label: 'Catálogo',
     flat: BRAND.naranja,
-    glow: glow(BRAND.naranja),
-    mesh: [BRAND.naranja, BRAND.rosa, BRAND.violet],
+    glow: glow(BRAND.naranja, 0.35),
+    mesh: [BRAND.naranja, '#FF9A6A'],
     vector: 'catalog',
   },
   'presentacion-slide': {
     label: 'Presentación',
     flat: BRAND.accent2,
-    glow: glow(BRAND.accent2),
-    mesh: [BRAND.accent2, BRAND.neon, BRAND.violet],
+    glow: glow(BRAND.accent2, 0.35),
+    mesh: [BRAND.accent2, BRAND.neon],
     vector: 'slide',
   },
 };
@@ -79,8 +79,8 @@ const VISUALS: Record<string, Visual> = {
 const FALLBACK: Visual = {
   label: 'Plantilla',
   flat: BRAND.neon,
-  glow: glow(BRAND.neon, 0.45),
-  mesh: [BRAND.neon, BRAND.violet, BRAND.rosa],
+  glow: glow(BRAND.neon, 0.3),
+  mesh: [BRAND.neon, BRAND.accent2],
   vector: 'cover',
 };
 
@@ -171,31 +171,18 @@ function FormatVectors({ kind }: { kind: Visual['vector'] }) {
   );
 }
 
-function LivingGradient({ colors }: { colors: string[] }) {
-  const [a, b, c] = colors;
+/** Cover plana de marca + lavado suave (sin conic/mesh agresivo). */
+function SoftFlatCover({ flat, soft }: { flat: string; soft: string }) {
   return (
     <>
-      <motion.div
-        className="absolute -inset-[55%] opacity-90"
+      <div className="absolute inset-0" style={{ background: flat }} />
+      <div
+        className="absolute inset-0 opacity-90"
         style={{
-          background: `conic-gradient(from 90deg at 45% 45%, ${a}, ${b}, ${c}, ${a})`,
+          background: `linear-gradient(160deg, ${soft} 0%, transparent 58%), linear-gradient(0deg, rgba(5,6,8,0.28) 0%, transparent 45%)`,
         }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 18, ease: 'linear', repeat: Infinity }}
       />
-      <motion.div
-        className="absolute -left-1/3 -top-1/2 h-[150%] w-[90%] rounded-full opacity-75 blur-3xl mix-blend-screen"
-        style={{ background: b }}
-        animate={{ x: [0, 32, -16, 0], y: [0, -22, 14, 0], scale: [1, 1.08, 0.96, 1] }}
-        transition={{ duration: 8, ease: 'easeInOut', repeat: Infinity }}
-      />
-      <motion.div
-        className="absolute -bottom-1/2 -right-1/3 h-[140%] w-[85%] rounded-full opacity-65 blur-3xl mix-blend-screen"
-        style={{ background: c }}
-        animate={{ x: [0, -26, 18, 0], y: [0, 16, -24, 0], scale: [1, 0.94, 1.1, 1] }}
-        transition={{ duration: 9.5, ease: 'easeInOut', repeat: Infinity }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-black/25" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_20%,rgba(255,255,255,0.16),transparent_45%)]" />
     </>
   );
 }
@@ -235,7 +222,9 @@ export function BlankTemplateCard({
       </div>
       <div className="p-4">
         <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-paper-muted">Canvas</p>
-        <p className="mt-1 font-display text-sm font-bold tracking-tight text-paper">En blanco</p>
+        <p className="mt-1.5 text-[15px] font-semibold leading-snug tracking-[-0.01em] text-paper">
+          En blanco
+        </p>
         <p className="mt-1 font-mono text-[10px] text-paper-muted">1080 × 1350</p>
       </div>
     </button>
@@ -270,7 +259,7 @@ export function TemplateCard({
       }
     >
       <div className="relative h-32 overflow-hidden" style={{ background: visual.flat }}>
-        <LivingGradient colors={visual.mesh} />
+        <SoftFlatCover flat={visual.flat} soft={visual.mesh[1] ?? visual.flat} />
         <FormatVectors kind={visual.vector} />
       </div>
       <div className="relative bg-ink-2 p-4">
@@ -283,8 +272,12 @@ export function TemplateCard({
             {visual.label}
           </p>
         </div>
-        <p className="font-display text-sm font-bold tracking-tight text-paper">{template.name}</p>
-        <p className="mt-1 line-clamp-2 font-serif text-xs text-paper/55">{template.description}</p>
+        <p className="text-[15px] font-semibold leading-snug tracking-[-0.01em] text-paper">
+          {template.name}
+        </p>
+        <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-paper/55">
+          {template.description}
+        </p>
       </div>
     </button>
   );
