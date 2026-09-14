@@ -207,16 +207,14 @@ export function LandingPage() {
         <div className="marquee-stack relative z-20 shrink-0">
           <Marquee
             items={['Tipografía', 'Capas', 'Versiones', 'PDF', 'Publicación', 'Plantillas', 'Canvas']}
-            speed={28}
-            colorOffset={0}
-            phaseDelay={0}
+            speed={48}
+            tone={0}
           />
           <Marquee
             items={['Readymag energy', 'Studio flow', 'Neon mesh', 'Design systems', 'Editorial UI']}
-            speed={40}
+            speed={56}
             reverse
-            colorOffset={2}
-            phaseDelay={1600}
+            tone={2}
             chrome="bottom"
           />
         </div>

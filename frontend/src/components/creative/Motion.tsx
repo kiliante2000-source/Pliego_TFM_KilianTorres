@@ -76,87 +76,64 @@ export function Magnetic({
 
 export function Marquee({
   items,
-  speed = 35,
+  speed = 42,
   reverse = false,
-  colorOffset = 0,
-  phaseDelay = 0,
+  /** 0 = cool neon wash, 1 = violet, 2 = soft rosa — fixed tones, no color-jump hitch. */
+  tone = 0,
   chrome = 'full',
 }: {
   items: string[];
   speed?: number;
   reverse?: boolean;
-  /** Phase into the brand palette so paired marquees stay different colors. */
-  colorOffset?: number;
-  /** ms before this track starts shifting color (stagger vs the other row). */
-  phaseDelay?: number;
+  tone?: 0 | 1 | 2;
   chrome?: 'full' | 'bottom';
 }) {
-  // Brand hues, but only as soft washes over ink — not solid neon slabs.
-  const palette = ['#4f80ff', '#a855f7', '#ff4edb', '#ff7a45', '#b2ff3a'] as const;
-  const [tone, setTone] = useState(colorOffset % palette.length);
-  const row = [...items, ...items, ...items];
-  const accent = palette[tone];
-
-  useEffect(() => {
-    let intervalId = 0;
-    const startId = window.setTimeout(() => {
-      intervalId = window.setInterval(() => {
-        setTone((t) => (t + 1) % palette.length);
-      }, 3800);
-    }, phaseDelay);
-    return () => {
-      window.clearTimeout(startId);
-      window.clearInterval(intervalId);
-    };
-  }, [palette.length, phaseDelay]);
+  // Cool editorial palette only — no lima/naranja slabs that clash with the mesh.
+  const accents = ['#4f80ff', '#8b6cff', '#d65fcf'] as const;
+  const accent = accents[tone] ?? accents[0];
+  // Two identical sequences = seamless CSS loop (translate -50%).
+  const sequence = [...items, ...items];
 
   return (
     <div
-      className="marquee-band relative overflow-hidden py-5 transition-[background-color,border-color,box-shadow] duration-700 sm:py-6"
-      style={{
-        backgroundColor: `color-mix(in srgb, ${accent} 11%, #080b0f)`,
-        borderTop:
-          chrome === 'full' ? `1px solid color-mix(in srgb, ${accent} 26%, transparent)` : 'none',
-        borderBottom: `1px solid color-mix(in srgb, ${accent} 18%, transparent)`,
-        boxShadow: `inset 0 1px 0 color-mix(in srgb, ${accent} 14%, transparent)`,
-      }}
+      className={`marquee-band marquee-band--t${tone} relative overflow-hidden py-4 sm:py-5`}
+      style={
+        {
+          '--marquee-accent': accent,
+          borderTop:
+            chrome === 'full' ? `1px solid color-mix(in srgb, ${accent} 22%, transparent)` : 'none',
+          borderBottom: `1px solid color-mix(in srgb, ${accent} 14%, transparent)`,
+        } as React.CSSProperties
+      }
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px transition-[background,opacity] duration-700"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px opacity-50"
         style={{
-          background: `linear-gradient(90deg, transparent 5%, ${accent} 50%, transparent 95%)`,
-          opacity: 0.45,
+          background: `linear-gradient(90deg, transparent 8%, ${accent} 50%, transparent 92%)`,
         }}
       />
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 transition-[opacity,background] duration-700"
-        style={{
-          background: `radial-gradient(ellipse 85% 130% at 50% 50%, color-mix(in srgb, ${accent} 12%, transparent), transparent 72%)`,
-          opacity: 0.85,
-        }}
-      />
-      <motion.div
-        className="relative flex w-max gap-10 whitespace-nowrap"
-        animate={{ x: reverse ? ['-33.333%', '0%'] : ['0%', '-33.333%'] }}
-        transition={{ duration: speed, ease: 'linear', repeat: Infinity }}
+        className={`marquee-track flex w-max items-center ${reverse ? 'marquee-track--reverse' : ''}`}
+        style={{ animationDuration: `${speed}s` }}
       >
-        {row.map((item, i) => (
-          <span
-            key={`${item}-${i}`}
-            className="font-display text-5xl font-extrabold uppercase tracking-[-0.05em] text-paper/80 transition-colors duration-700 sm:text-6xl md:text-7xl"
-          >
-            {item}
+        {sequence.map((item, i) => (
+          <span key={`${item}-${i}`} className="marquee-unit flex items-center">
+            <span className="font-display text-[2.35rem] font-extrabold uppercase leading-none tracking-[-0.05em] text-paper/72 sm:text-5xl md:text-6xl">
+              {item}
+            </span>
             <span
-              className="mx-5 inline-block align-middle text-[0.55em] transition-colors duration-700"
-              style={{ color: `color-mix(in srgb, ${accent} 48%, #f4f6f8)` }}
+              aria-hidden
+              className="marquee-star inline-flex shrink-0 items-center justify-center"
+              style={{ color: `color-mix(in srgb, ${accent} 50%, #aeb6c2)` }}
             >
-              ✦
+              <svg viewBox="0 0 16 16" className="h-full w-full" fill="currentColor" aria-hidden>
+                <path d="M8 1.1l1.05 4.55L13.6 6.7l-3.55 1.85L8 13.1 6.0 8.55 2.4 6.7l4.55-1.05L8 1.1z" />
+              </svg>
             </span>
           </span>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

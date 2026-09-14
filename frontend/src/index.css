@@ -307,6 +307,96 @@ body {
     radial-gradient(ellipse 60% 70% at 80% 50%, rgba(255, 78, 219, 0.05), transparent 55%);
 }
 
+.marquee-band {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--marquee-accent, #4f80ff) 10%, #080b0f),
+      color-mix(in srgb, var(--marquee-accent, #4f80ff) 6%, #050608)
+    );
+}
+
+.marquee-band--t0 {
+  --marquee-accent: #4f80ff;
+}
+
+.marquee-band--t1 {
+  --marquee-accent: #8b6cff;
+}
+
+.marquee-band--t2 {
+  --marquee-accent: #c45eb8;
+}
+
+.marquee-track {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  animation-name: marquee-flow;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.marquee-track--reverse {
+  animation-name: marquee-flow-reverse;
+}
+
+.marquee-unit {
+  flex-shrink: 0;
+}
+
+.marquee-star {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-left: 1.85rem;
+  margin-right: 1.85rem;
+  opacity: 0.9;
+  transform: translateY(-0.04em);
+}
+
+@media (min-width: 640px) {
+  .marquee-star {
+    width: 1.35rem;
+    height: 1.35rem;
+    margin-left: 2.25rem;
+    margin-right: 2.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .marquee-star {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+  }
+}
+
+@keyframes marquee-flow {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-flow-reverse {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .marquee-track--reverse {
+    animation: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .landing-orb,
   .signal-frame::before,

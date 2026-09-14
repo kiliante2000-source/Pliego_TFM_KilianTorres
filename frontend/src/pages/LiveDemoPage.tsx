@@ -8,7 +8,7 @@ import {
 } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Logo, ButtonLink } from '../components/ui/primitives';
-import { Magnetic } from '../components/creative/Motion';
+import { Magnetic, Marquee } from '../components/creative/Motion';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 const serif = { fontFamily: '"Instrument Serif", Georgia, serif' } as const;
@@ -696,37 +696,33 @@ export function LiveDemoPage() {
         </div>
       </section>
 
-      {/* STATEMENT STRIP */}
-      <section className="relative z-10 border-y border-white/10 bg-black py-8 sm:py-10">
-        <div className="overflow-x-hidden">
-          <motion.div
-            className="flex w-max gap-16 whitespace-nowrap will-change-transform"
-            animate={{ x: ['0%', '-50%'] }}
-            transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
-          >
-            {[0, 1].map((c) => (
-              <div key={c} className="flex items-center gap-16 px-8">
-                {[
-                  'MANIFIESTO DIGITAL',
-                  'PORTFOLIO QUE VENDE',
-                  'PORTADAS QUE PARAN',
-                  'PÁGINAS DE REVISTA',
-                  'CATÁLOGO / LOOKBOOK',
-                  'PRESENTACIÓN QUE CIERRA',
-                ].map((w) => (
-                  <span
-                    key={`${c}-${w}`}
-                    className="inline-block py-1 text-4xl font-extrabold leading-none tracking-[-0.04em] text-paper/30 sm:text-6xl"
-                    style={display}
-                  >
-                    {w}
-                    <span className="mx-6 text-rosa">✦</span>
-                  </span>
-                ))}
-              </div>
-            ))}
-          </motion.div>
-        </div>
+      {/* STATEMENT STRIP — same soft marquee system as the landing */}
+      <section className="marquee-stack relative z-10">
+        <Marquee
+          items={[
+            'Manifiesto digital',
+            'Portfolio que vende',
+            'Portadas que paran',
+            'Páginas de revista',
+            'Catálogo / lookbook',
+            'Presentación que cierra',
+          ]}
+          speed={48}
+          tone={2}
+        />
+        <Marquee
+          items={[
+            'Studio flow',
+            'Neon mesh',
+            'Editorial UI',
+            'Design systems',
+            'Live canvas',
+          ]}
+          speed={56}
+          reverse
+          tone={0}
+          chrome="bottom"
+        />
       </section>
 
       {/* MANIFESTO */}
