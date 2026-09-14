@@ -298,6 +298,7 @@ body {
 }
 
 .wordmark-cutout {
+  overflow: visible;
   background-image: var(--brand-flow);
   /* 400%: viewport ≈ ½ periodo → lavado continuo */
   background-size: 400% 100%;
@@ -328,6 +329,42 @@ body {
 }
 
 /* Barra: misma cadena circular; slide −50% = un periodo sin salto */
+
+/* Brand CTAs — corporate chroma instead of flat neon blue */
+.btn-brand-flow {
+  background-image: var(--brand-flow);
+  background-size: 300% 100%;
+  background-position: 0% 50%;
+  animation: wordmark-flow 16s linear infinite;
+  color: #050608;
+}
+
+.btn-brand-soft {
+  background:
+    linear-gradient(rgba(11, 14, 17, 0.92), rgba(11, 14, 17, 0.92)) padding-box,
+    var(--brand-flow-static) border-box;
+  border: 1px solid transparent;
+  background-size: 100% 100%, 220% 100%;
+  background-position: 0 0, 0% 50%;
+  transition:
+    background-position 0.55s ease,
+    box-shadow 0.35s ease,
+    filter 0.35s ease;
+}
+
+.btn-brand-soft:hover {
+  background-position: 0 0, 80% 50%;
+  filter: brightness(1.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-brand-flow {
+    animation: none;
+    background-image: var(--brand-flow-static);
+    background-size: 100% 100%;
+  }
+}
+
 .brand-flow-bar {
   overflow: hidden;
   isolation: isolate;

@@ -40,8 +40,9 @@ export function PliegoWordmark({
   return (
     <span
       className={cn(
-        'font-display inline-block text-[1.35rem] font-bold uppercase tracking-[-0.06em]',
-        variant === 'gradient' && 'wordmark-cutout',
+        'font-display inline-block max-w-full overflow-visible text-[1.35rem] font-bold uppercase tracking-[-0.04em]',
+        /* Pad glyph ink so the final O never clips under overflow-x-hidden */
+        variant === 'gradient' && 'wordmark-cutout pb-[0.08em] pr-[0.12em]',
         variant === 'solid' && 'text-paper',
         variant === 'mono' && 'text-ink',
         className,
@@ -71,11 +72,12 @@ export function Logo({
 
 const buttonVariants = {
   primary:
-    'bg-neon text-white shadow-[0_0_0_1px_rgba(79,128,255,0.35)] hover:bg-accent-2 hover:shadow-[0_10px_30px_rgba(79,128,255,0.28)]',
+    'btn-brand-flow text-ink shadow-[0_10px_32px_rgba(79,128,255,0.22)] hover:brightness-[1.06] hover:shadow-[0_14px_40px_rgba(255,78,219,0.25)]',
   ghost: 'bg-transparent text-paper-muted hover:bg-ink-3 hover:text-paper',
-  soft: 'bg-ink-3 text-paper ring-1 ring-line-soft hover:bg-ink-4',
+  soft:
+    'btn-brand-soft text-paper hover:shadow-[0_0_0_1px_rgba(255,78,219,0.28)]',
   danger: 'bg-danger/15 text-danger hover:bg-danger/25',
-  lima: 'bg-lima text-ink hover:brightness-95',
+  lima: 'bg-lima text-ink shadow-[0_8px_24px_rgba(178,255,58,0.22)] hover:brightness-95',
 } as const;
 
 type ButtonVariant = keyof typeof buttonVariants;
