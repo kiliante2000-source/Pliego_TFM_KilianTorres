@@ -732,12 +732,13 @@ export function LiveDemoPage() {
           Tu próximo
           <br />
           <motion.span
-            className="text-transparent"
+            className="inline-block overflow-visible pb-[0.08em] text-transparent"
             style={{
               backgroundImage: 'var(--brand-flow)',
               backgroundSize: '400% 100%',
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
             }}
             animate={{ backgroundPosition: ['0% 50%', '66.6667% 50%'] }}
             transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
