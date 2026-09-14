@@ -1,16 +1,34 @@
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 
+/**
+ * Brand lockup helpers.
+ * `translate="no"` + `.notranslate` keep PLIEGO from becoming “Fold” / “Sheet”
+ * under Chrome / Google Translate (pliego ≈ fold in Spanish print jargon).
+ */
+export const BRAND_NAME = 'PLIEGO' as const;
+
+/** Inline brand name — never translated. */
+export function BrandName({ className }: { className?: string }) {
+  return (
+    <span className={cn('notranslate', className)} lang="es" translate="no">
+      {BRAND_NAME}
+    </span>
+  );
+}
+
 /** Brand mark — same Syne P as PLIEGO, centered in the chroma plate. */
 export function PliegoMark({ className, size = 28 }: { className?: string; size?: number }) {
   return (
     <span
       aria-hidden
       className={cn(
-        'inline-flex shrink-0 select-none items-center justify-center overflow-hidden rounded-[22%]',
+        'notranslate inline-flex shrink-0 select-none items-center justify-center overflow-hidden rounded-[22%]',
         'font-display font-extrabold uppercase leading-none text-[#050608]',
         className,
       )}
+      lang="es"
+      translate="no"
       style={{
         width: size,
         height: size,
@@ -36,15 +54,17 @@ export function PliegoWordmark({
   return (
     <span
       className={cn(
-        'font-display inline-block overflow-visible text-[1.35rem] font-bold uppercase tracking-[-0.04em]',
+        'notranslate font-display inline-block overflow-visible text-[1.35rem] font-bold uppercase tracking-[-0.04em]',
         /* Syne’s O paints past the advance width — pad the clip box for background-clip */
         variant === 'gradient' && 'wordmark-cutout pb-[0.1em] pr-[0.22em]',
         variant === 'solid' && 'text-paper',
         variant === 'mono' && 'text-ink',
         className,
       )}
+      lang="es"
+      translate="no"
     >
-      PLIEGO
+      {BRAND_NAME}
     </span>
   );
 }
@@ -54,12 +74,14 @@ export function PliegoHeroWordmark({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        'font-display wordmark-cutout inline-block max-w-full overflow-visible font-extrabold uppercase',
+        'notranslate font-display wordmark-cutout inline-block max-w-full overflow-visible font-extrabold uppercase',
         'pb-[0.08em] pr-[0.28em] text-[clamp(3.8rem,14vw,9.25rem)] leading-[0.88] tracking-[-0.045em]',
         className,
       )}
+      lang="es"
+      translate="no"
     >
-      PLIEGO
+      {BRAND_NAME}
     </span>
   );
 }
@@ -79,7 +101,12 @@ export function Logo({
   wordmarkClassName?: string;
 }) {
   return (
-    <Link to={to} className={cn('group inline-flex items-center gap-2.5 no-underline', className)}>
+    <Link
+      to={to}
+      aria-label={BRAND_NAME}
+      className={cn('group notranslate inline-flex items-center gap-2.5 no-underline', className)}
+      translate="no"
+    >
       {withMark ? <PliegoMark size={markSize} /> : null}
       <PliegoWordmark className={cn('transition group-hover:opacity-90', wordmarkClassName)} />
     </Link>

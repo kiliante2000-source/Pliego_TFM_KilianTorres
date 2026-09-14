@@ -2,7 +2,7 @@ import { useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDownRight, ArrowRight, Play } from 'lucide-react';
-import { Logo, Button, ButtonLink, Input, PliegoWordmark, PliegoMark, PliegoHeroWordmark } from '../components/ui/primitives';
+import { Logo, Button, ButtonLink, Input, PliegoWordmark, PliegoMark, PliegoHeroWordmark, BrandName } from '../components/ui/primitives';
 import { CursorGlow, Magnetic, Marquee, Reveal } from '../components/creative/Motion';
 import { useAuthStore } from '../stores/authStore';
 
@@ -232,7 +232,9 @@ export function LandingPage() {
           <div className="flex items-end justify-between gap-6">
             <div>
               <p className="section-index">01 — Sistema</p>
-              <p className="eyebrow mt-3 text-rosa">Por qué PLIEGO</p>
+              <p className="eyebrow mt-3 text-rosa">
+                Por qué <BrandName />
+              </p>
               <h2 className="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.05em] sm:text-6xl">
                 Una herramienta útil que se siente como una{' '}
                 <span className="wordmark-cutout">pieza de diseño</span>.
@@ -401,7 +403,7 @@ export function LoginPage() {
         </Magnetic>
       </form>
       <p className="mt-7 text-sm text-paper-muted">
-        ¿Nuevo en PLIEGO?{' '}
+        ¿Nuevo en <BrandName />?{' '}
         <Link to="/register" className="font-semibold text-neon no-underline hover:underline">
           Crear cuenta
         </Link>

@@ -333,7 +333,7 @@ export function EditorToolbar({ projectId }: { projectId: string }) {
             <MenuRow
               icon={<Blend size={15} />}
               label="Gradiente neón"
-              hint="Forma con mesh Pliego"
+              hint="Forma con mesh de marca"
               onClick={() => {
                 addShape('rect', true);
                 close();

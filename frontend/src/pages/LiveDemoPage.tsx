@@ -7,7 +7,7 @@ import {
   useSpring,
 } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { Logo, ButtonLink } from '../components/ui/primitives';
+import { Logo, ButtonLink, BrandName } from '../components/ui/primitives';
 import { Magnetic, Marquee } from '../components/creative/Motion';
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -200,7 +200,7 @@ function ChapterGallery() {
                 transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
               />
               <div className="absolute left-5 top-5 font-mono text-[10px] uppercase tracking-[0.22em] text-white/60">
-                PLIEGO · {chapter.id}
+                <BrandName /> · {chapter.id}
               </div>
               <div className="absolute inset-x-5 bottom-6">
                 <p className="text-4xl font-extrabold tracking-[-0.05em] text-white sm:text-5xl" style={display}>
@@ -315,7 +315,7 @@ function GestureFilm() {
           className="mt-4 max-w-4xl overflow-visible pb-1 text-[clamp(2.6rem,7vw,5rem)] font-extrabold leading-[0.98] tracking-[-0.05em]"
           style={display}
         >
-          Cinco segundos que explican PLIEGO.
+          Cinco segundos que explican <BrandName />.
         </h2>
 
         <div className="mt-16 grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
@@ -402,7 +402,9 @@ function GestureFilm() {
                   {step === 0 && (
                     <div className="flex h-full items-center justify-center">
                       <motion.span
-                        className="text-6xl font-extrabold tracking-[-0.06em]"
+                        className="notranslate text-6xl font-extrabold tracking-[-0.06em]"
+                        lang="es"
+                        translate="no"
                         style={{
                           ...display,
                           backgroundImage: 'var(--brand-flow)',
@@ -577,7 +579,9 @@ export function LiveDemoPage() {
                   className="text-center"
                 >
                   <p
-                    className="bg-gradient-to-r from-neon via-rosa to-lima bg-clip-text text-6xl font-extrabold text-transparent sm:text-8xl"
+                    className="notranslate bg-gradient-to-r from-neon via-rosa to-lima bg-clip-text text-6xl font-extrabold text-transparent sm:text-8xl"
+                    lang="es"
+                    translate="no"
                     style={display}
                   >
                     PLIEGO
@@ -671,7 +675,7 @@ export function LiveDemoPage() {
             className="mt-8 max-w-xl text-xl leading-snug text-paper/70 sm:text-2xl"
             style={serif}
           >
-            PLIEGO es el estudio editorial donde tipografía, vector y motion se publican juntos —
+            <BrandName /> es el estudio editorial donde tipografía, vector y motion se publican juntos —
             en el browser, con cara de campaña.
           </motion.p>
 
@@ -732,7 +736,10 @@ export function LiveDemoPage() {
           style={display}
         >
           Si tu diseño cabe en un screenshot aburrido,
-          <span className="text-paper/35"> todavía no es PLIEGO.</span>
+          <span className="text-paper/35">
+            {' '}
+            todavía no es <BrandName />.
+          </span>
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 16 }}

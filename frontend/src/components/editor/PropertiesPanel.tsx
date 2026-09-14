@@ -350,7 +350,13 @@ function ShapeProps({ el }: { el: ShapeElement }) {
           )
         }
       >
-        {el.fillGradient ? 'Quitar gradiente' : 'Aplicar gradiente PLIEGO'}
+        {el.fillGradient ? (
+          'Quitar gradiente'
+        ) : (
+          <>
+            Aplicar gradiente <span className="notranslate" lang="es" translate="no">PLIEGO</span>
+          </>
+        )}
       </button>
       {el.fillGradient ? (
         <Input

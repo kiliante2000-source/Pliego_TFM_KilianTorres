@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { api } from '../services/api';
 import type { Project } from '../types/document';
 import { PublicRenderer } from '../components/editor/PublicRenderer';
-import { Logo, ButtonLink, PliegoWordmark } from '../components/ui/primitives';
+import { Logo, ButtonLink, PliegoWordmark, BrandName } from '../components/ui/primitives';
 
 export function PublicProjectPage() {
   const { slug } = useParams();
@@ -49,7 +49,7 @@ export function PublicProjectPage() {
           </p>
           <div className="editorial-rule mx-auto mt-8 w-24" />
           <ButtonLink to="/" className="mt-8">
-            Volver a PLIEGO
+            Volver a <BrandName />
           </ButtonLink>
         </div>
       </div>
