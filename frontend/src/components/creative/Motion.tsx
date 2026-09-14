@@ -31,9 +31,9 @@ export function CursorGlow() {
       style={{
         left: sx,
         top: sy,
-        opacity: visible ? 0.22 : 0,
+        opacity: visible ? 0.38 : 0,
         background:
-          'radial-gradient(circle, rgba(79,128,255,0.16) 0%, rgba(168,85,247,0.08) 38%, transparent 70%)',
+          'radial-gradient(circle, rgba(79,128,255,0.28) 0%, rgba(168,85,247,0.14) 38%, transparent 70%)',
       }}
     />
   );
