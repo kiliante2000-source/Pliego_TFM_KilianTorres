@@ -1,166 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  AnimatePresence,
-  motion,
-  useMotionTemplate,
-  useMotionValue,
-  useScroll,
-  useSpring,
-  useTransform,
-} from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDownRight, ArrowRight, Play } from 'lucide-react';
 import { Logo, Button, ButtonLink, Input, PliegoWordmark, PliegoMark } from '../components/ui/primitives';
 import { CursorGlow, Magnetic, Marquee, Reveal } from '../components/creative/Motion';
 import { useAuthStore } from '../stores/authStore';
 
 const ease = [0.16, 1, 0.3, 1] as const;
-
-const STAGE_FORMATS = [
-  { id: 'manifesto', label: 'Manifiesto', accent: '#FF4EDB', line: 'Un relato en tres actos' },
-  { id: 'portfolio', label: 'Portfolio', accent: '#4F80FF', line: 'Trabajo con ritmo de portada' },
-  { id: 'portada', label: 'Portada', accent: '#A855F7', line: 'Una imagen que para el feed' },
-  { id: 'revista', label: 'Revista', accent: '#B2FF3A', line: 'Página viva, no PDF plano' },
-  { id: 'lookbook', label: 'Lookbook', accent: '#FF7A45', line: 'Producto con aire editorial' },
-  { id: 'deck', label: 'Deck', accent: '#3A6AEF', line: 'Una idea. Un golpe.' },
-] as const;
-
-/** Quiet companion stage — fills its cell, never competes with the brand. */
-function FloatingStage() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(3);
-  const [paused, setPaused] = useState(false);
-  const mx = useMotionValue(62);
-  const my = useMotionValue(38);
-  const sx = useSpring(mx, { stiffness: 70, damping: 22 });
-  const sy = useSpring(my, { stiffness: 70, damping: 22 });
-  const format = STAGE_FORMATS[active];
-  const wash = useMotionTemplate`radial-gradient(58% 52% at ${sx}% ${sy}%, ${format.accent}66 0%, transparent 68%)`;
-
-  useEffect(() => {
-    if (paused) return;
-    const id = window.setInterval(() => setActive((v) => (v + 1) % STAGE_FORMATS.length), 4000);
-    return () => window.clearInterval(id);
-  }, [paused, active]);
-
-  const select = (i: number) => {
-    setActive(i);
-    setPaused(true);
-    window.setTimeout(() => setPaused(false), 8000);
-  };
-
-  return (
-    <div className="flex h-full w-full flex-col gap-3">
-      <motion.div
-        ref={ref}
-        onPointerMove={(e) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          mx.set(((e.clientX - rect.left) / rect.width) * 100);
-          my.set(((e.clientY - rect.top) / rect.height) * 100);
-        }}
-        onPointerLeave={() => {
-          mx.set(62);
-          my.set(38);
-        }}
-        className="relative min-h-[220px] flex-1 overflow-hidden rounded-sm ring-1 ring-white/10 sm:min-h-[260px] lg:min-h-0"
-      >
-        <div className="absolute inset-0 bg-[#07090d]" />
-        <motion.div
-          aria-hidden
-          className="absolute inset-0 opacity-90 transition-[opacity] duration-500"
-          style={{ background: wash }}
-        />
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={format.id + '-tint'}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(160deg, ${format.accent}28 0%, transparent 42%, #050608 100%)`,
-            }}
-          />
-        </AnimatePresence>
-
-        {/* Soft grid — modern, quiet */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.14]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(244,246,248,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(244,246,248,0.35) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-            maskImage: 'radial-gradient(ellipse at 60% 40%, black 20%, transparent 75%)',
-          }}
-        />
-
-        <div className="absolute inset-0 flex flex-col justify-between p-5 sm:p-6 lg:p-7">
-          <div className="flex items-start justify-between gap-3">
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/45">
-              <span style={{ color: format.accent }}>{String(active + 1).padStart(2, '0')}</span>
-              <span className="text-paper/25"> / 06</span>
-              <span className="ml-3 text-paper/55">{format.label}</span>
-            </p>
-            <Link
-              to="/demo"
-              className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/40 no-underline transition hover:text-paper"
-            >
-              Demo
-            </Link>
-          </div>
-
-          <div className="max-w-[22ch]">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={format.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.35, ease }}
-                className="font-serif text-[clamp(1.35rem,2.6vw,1.85rem)] leading-snug text-paper/90"
-              >
-                {format.line}
-              </motion.p>
-            </AnimatePresence>
-            <p className="mt-3 max-w-[28ch] text-sm leading-relaxed text-paper/45">
-              Tipografía, capas y publicación en el mismo gesto.
-            </p>
-          </div>
-        </div>
-      </motion.div>
-
-      <div
-        role="tablist"
-        aria-label="Formatos"
-        className="flex flex-wrap gap-1"
-      >
-        {STAGE_FORMATS.map((f, i) => {
-          const on = i === active;
-          return (
-            <button
-              key={f.id}
-              type="button"
-              role="tab"
-              aria-selected={on}
-              onClick={() => select(i)}
-              className="rounded-sm px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] transition"
-              style={{
-                color: on ? '#050608' : 'rgba(244,246,248,0.42)',
-                background: on ? f.accent : 'transparent',
-              }}
-            >
-              {f.label}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
 
 export function LandingPage() {
   const user = useAuthStore((s) => s.user);
@@ -203,33 +49,34 @@ export function LandingPage() {
 
       <motion.section
         style={{ scale: heroScale, opacity: heroOpacity }}
-        className="relative z-10 mx-auto grid min-h-[calc(100svh-88px)] w-full max-w-7xl gap-10 px-5 pb-16 pt-8 sm:px-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-stretch lg:gap-12 lg:pb-20"
+        className="relative z-10 mx-auto flex min-h-[calc(100svh-88px)] w-full max-w-7xl flex-col justify-center px-5 pb-20 pt-6 sm:px-8"
       >
-        <div className="relative z-10 flex max-w-xl flex-col justify-center">
-          <motion.p
+        <div className="max-w-4xl">
+          <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease }}
-            className="eyebrow text-neon"
+            className="flex items-center gap-3"
           >
-            Editorial studio · browser native
-          </motion.p>
+            <PliegoMark size={44} className="shrink-0" />
+            <p className="eyebrow text-neon">Editorial studio · browser native</p>
+          </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.05, ease }}
-            className="mt-5"
+            className="mt-7"
           >
             <PliegoWordmark
               variant="gradient"
-              className="block text-[clamp(3.8rem,13vw,8rem)] leading-[0.88]"
+              className="block text-[clamp(4.5rem,17vw,10rem)] leading-[0.84]"
             />
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease }}
-            className="mt-6 max-w-md font-serif text-xl leading-snug text-paper/75 sm:text-2xl"
+            className="mt-7 max-w-xl font-serif text-xl leading-snug text-paper/75 sm:text-2xl"
           >
             Diseña revistas, portadas y sistemas visuales con la fluidez de un estudio creativo.
           </motion.p>
@@ -237,7 +84,7 @@ export function LandingPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.25, ease }}
-            className="mt-9 flex flex-wrap items-center gap-3"
+            className="mt-10 flex flex-wrap items-center gap-3"
           >
             <Magnetic strength={0.35}>
               <ButtonLink to={user ? '/app' : '/register'} className="min-w-48 px-6 py-3 text-base">
@@ -255,20 +102,11 @@ export function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="mt-12 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-paper/45 no-underline hover:text-paper"
+            className="mt-14 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-paper/45 no-underline hover:text-paper"
           >
             Explorar el sistema <ArrowDownRight size={14} />
           </motion.a>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, delay: 0.22, ease }}
-          className="relative flex min-h-[280px] w-full lg:min-h-0 lg:py-6"
-        >
-          <FloatingStage />
-        </motion.div>
       </motion.section>
 
       <div className="relative z-10">
