@@ -73,15 +73,19 @@ export function Logo({
   className,
   withMark = true,
   to = '/',
+  markSize = 28,
+  wordmarkClassName,
 }: {
   className?: string;
   withMark?: boolean;
   to?: string;
+  markSize?: number;
+  wordmarkClassName?: string;
 }) {
   return (
     <Link to={to} className={cn('group inline-flex items-center gap-2.5 no-underline', className)}>
-      {withMark ? <PliegoMark size={28} /> : null}
-      <PliegoWordmark className="transition group-hover:opacity-90" />
+      {withMark ? <PliegoMark size={markSize} /> : null}
+      <PliegoWordmark className={cn('transition group-hover:opacity-90', wordmarkClassName)} />
     </Link>
   );
 }
