@@ -1,4 +1,3 @@
-import { useId } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 
@@ -15,9 +14,10 @@ export function PliegoMark({ className, size = 28 }: { className?: string; size?
       style={{
         width: size,
         height: size,
-        fontSize: size * 0.58,
-        letterSpacing: '-0.06em',
-        paddingBottom: size * 0.04,
+        fontSize: size * 0.62,
+        letterSpacing: '-0.055em',
+        // Optical vertical centering for Syne’s display metrics
+        paddingBottom: size * 0.06,
         background:
           'linear-gradient(135deg, #4F80FF 0%, #7B5CFF 20%, #A855F7 38%, #FF4EDB 52%, #FF7A45 68%, #D4FF3A 84%, #B2FF3A 100%)',
       }}
