@@ -16,8 +16,8 @@ export function LandingPage() {
   return (
     <div className="relative min-h-svh overflow-x-hidden bg-ink text-paper">
       <CursorGlow />
-      <div className="pointer-events-none fixed inset-0 mesh-bg opacity-55" />
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,transparent,rgba(5,6,8,0.72)_68%)]" />
+      <div className="pointer-events-none fixed inset-0 mesh-bg opacity-90" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,transparent,rgba(5,6,8,0.4)_75%)]" />
 
       <header className="relative z-30 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
         <Logo />
@@ -162,7 +162,7 @@ export function LandingPage() {
       </section>
 
       <section className="relative z-10 overflow-hidden border-t border-white/10 py-24">
-        <div className="pointer-events-none absolute inset-0 mesh-bg opacity-28" />
+        <div className="pointer-events-none absolute inset-0 mesh-bg opacity-50" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(204,255,0,0.06),transparent_50%)]" />
         <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
           <Reveal>
