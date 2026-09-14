@@ -152,15 +152,11 @@ export function Marquee({
             <span
               aria-hidden
               className="marquee-star inline-flex shrink-0 items-center justify-center transition-colors duration-[1.1s] ease-out"
-              style={{ color: `color-mix(in srgb, ${accent} 78%, #f4f6f8)` }}
+              style={{ color: accent }}
             >
-              {/* Y2K four-point sparkle — long rays, 2000s editorial mark */}
-              <svg viewBox="0 0 24 24" className="h-full w-full drop-shadow-[0_0_8px_currentColor]" fill="currentColor" aria-hidden>
+              {/* Flat Y2K four-point star — no glow */}
+              <svg viewBox="0 0 24 24" className="h-full w-full" fill="currentColor" aria-hidden>
                 <path d="M12 0.4c.35 3.9 1.55 7.1 3.55 9.05C17.5 11.4 20.7 12.6 24.6 12c-3.9.35-7.1 1.55-9.05 3.55C13.6 17.5 12.4 20.7 12 24.6c-.35-3.9-1.55-7.1-3.55-9.05C6.5 13.6 3.3 12.4-.6 12c3.9-.35 7.1-1.55 9.05-3.55C10.4 6.5 11.6 3.3 12 .4z" />
-                <path
-                  d="M12 5.2c.2 2.2.9 4 2.05 5.15C15.2 11.5 17 12.2 19.2 12c-2.2.2-4 .9-5.15 2.05C12.9 15.2 12.2 17 12 19.2c-.2-2.2-.9-4-2.05-5.15C8.8 12.9 7 12.2 4.8 12c2.2-.2 4-.9 5.15-2.05C11.1 8.8 11.8 7 12 5.2z"
-                  opacity="0.4"
-                />
               </svg>
             </span>
           </span>
@@ -181,7 +177,7 @@ export function Reveal({
 }) {
   return (
     <motion.div
-      className={className}
+      className={['min-w-0', className].filter(Boolean).join(' ')}
       initial={{ opacity: 0, y: 28, filter: 'blur(8px)' }}
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={{ once: true, margin: '-10% 0px' }}

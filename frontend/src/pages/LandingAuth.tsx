@@ -48,7 +48,7 @@ function FeatureCard({
 
   return (
     <article
-      className="feature-card flex h-full min-h-[15.5rem] flex-col rounded-2xl p-6 sm:min-h-[17rem] sm:p-7"
+      className="feature-card flex h-full min-h-[16.5rem] w-full flex-col rounded-2xl p-6 sm:min-h-[18rem] sm:p-7"
       style={{ '--feature-accent': accent } as React.CSSProperties}
       onPointerMove={onMove}
     >
@@ -80,7 +80,7 @@ export function LandingPage() {
       <CursorGlow />
 
       {/* Atmosphere stack — depth, not flat ink */}
-      <div className="pointer-events-none fixed inset-0 mesh-bg opacity-[0.88]" />
+      <div className="pointer-events-none fixed inset-0 mesh-bg mesh-bg-shift" />
       <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden>
         <div className="landing-orb landing-orb-a" />
         <div className="landing-orb landing-orb-b" />

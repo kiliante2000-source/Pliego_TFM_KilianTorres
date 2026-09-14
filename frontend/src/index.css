@@ -129,7 +129,7 @@ body {
   position: absolute;
   border-radius: 9999px;
   filter: blur(60px);
-  will-change: transform;
+  will-change: transform, background-color, opacity;
   animation: landing-orb-drift 18s ease-in-out infinite;
 }
 
@@ -139,6 +139,9 @@ body {
   left: -8%;
   top: 4%;
   background: rgba(79, 128, 255, 0.28);
+  animation:
+    landing-orb-drift 18s ease-in-out infinite,
+    landing-orb-tint-a 22s ease-in-out infinite;
 }
 
 .landing-orb-b {
@@ -147,8 +150,10 @@ body {
   right: -6%;
   top: 18%;
   background: rgba(255, 78, 219, 0.18);
-  animation-delay: -6s;
-  animation-duration: 22s;
+  animation:
+    landing-orb-drift 22s ease-in-out infinite,
+    landing-orb-tint-b 26s ease-in-out infinite;
+  animation-delay: -6s, -4s;
 }
 
 .landing-orb-c {
@@ -157,8 +162,10 @@ body {
   left: 35%;
   bottom: 8%;
   background: rgba(168, 85, 247, 0.16);
-  animation-delay: -11s;
-  animation-duration: 26s;
+  animation:
+    landing-orb-drift 26s ease-in-out infinite,
+    landing-orb-tint-c 30s ease-in-out infinite;
+  animation-delay: -11s, -8s;
 }
 
 @keyframes landing-orb-drift {
@@ -171,6 +178,58 @@ body {
   }
   70% {
     transform: translate3d(-3%, 5%, 0) scale(0.96);
+  }
+}
+
+/* Subtle chromatic breathing — same atmosphere, soft hue drift */
+@keyframes landing-orb-tint-a {
+  0%,
+  100% {
+    background-color: rgba(79, 128, 255, 0.28);
+    opacity: 1;
+  }
+  50% {
+    background-color: rgba(139, 108, 255, 0.26);
+    opacity: 0.88;
+  }
+}
+
+@keyframes landing-orb-tint-b {
+  0%,
+  100% {
+    background-color: rgba(255, 78, 219, 0.18);
+    opacity: 1;
+  }
+  50% {
+    background-color: rgba(214, 95, 207, 0.22);
+    opacity: 0.9;
+  }
+}
+
+@keyframes landing-orb-tint-c {
+  0%,
+  100% {
+    background-color: rgba(168, 85, 247, 0.16);
+    opacity: 1;
+  }
+  50% {
+    background-color: rgba(79, 128, 255, 0.14);
+    opacity: 0.85;
+  }
+}
+
+.mesh-bg-shift {
+  animation: mesh-bg-breathe 28s ease-in-out infinite alternate;
+}
+
+@keyframes mesh-bg-breathe {
+  0% {
+    filter: hue-rotate(0deg) saturate(1);
+    opacity: 0.88;
+  }
+  100% {
+    filter: hue-rotate(18deg) saturate(1.08);
+    opacity: 0.95;
   }
 }
 
@@ -399,9 +458,18 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .landing-orb,
+  .landing-orb-a,
+  .landing-orb-b,
+  .landing-orb-c,
+  .mesh-bg-shift,
   .signal-frame::before,
   .hero-signal-dot {
     animation: none !important;
+  }
+
+  .mesh-bg-shift {
+    filter: none;
+    opacity: 0.88;
   }
 
   .feature-card:hover {
