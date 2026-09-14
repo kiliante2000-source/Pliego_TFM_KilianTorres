@@ -68,11 +68,11 @@ export function PliegoHeroWordmark({ className }: { className?: string }) {
     >
       <defs>
         <linearGradient id={gradId} x1="0%" y1="50%" x2="100%" y2="50%">
-          <stop offset="0%" stopColor="#4f80ff" />
-          <stop offset="25%" stopColor="#a855f7" />
-          <stop offset="50%" stopColor="#ff4edb" />
-          <stop offset="75%" stopColor="#ff7a45" />
-          <stop offset="100%" stopColor="#b2ff3a" />
+          <stop offset="0%" stopColor="#3a6aef" />
+          <stop offset="25%" stopColor="#8b3fd4" />
+          <stop offset="50%" stopColor="#d63ab8" />
+          <stop offset="75%" stopColor="#d46535" />
+          <stop offset="100%" stopColor="#7eb82a" />
         </linearGradient>
       </defs>
       <text
@@ -110,11 +110,11 @@ export function Logo({
 
 const buttonVariants = {
   primary:
-    'btn-brand-flow shadow-[0_10px_32px_rgba(79,128,255,0.22)] hover:brightness-[1.06]',
+    'btn-brand-flow hover:brightness-[1.04]',
   ghost: 'bg-transparent text-paper-muted hover:bg-ink-3 hover:text-paper',
   soft: 'btn-brand-soft',
   danger: 'bg-danger/15 text-danger hover:bg-danger/25',
-  lima: 'bg-lima text-ink shadow-[0_8px_24px_rgba(178,255,58,0.22)] hover:brightness-95',
+  lima: 'bg-lima/90 text-ink hover:brightness-95',
 } as const;
 
 type ButtonVariant = keyof typeof buttonVariants;

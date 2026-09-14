@@ -16,8 +16,8 @@ export function LandingPage() {
   return (
     <div className="relative min-h-svh overflow-x-hidden bg-ink text-paper">
       <CursorGlow />
-      <div className="pointer-events-none fixed inset-0 mesh-bg opacity-90" />
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,transparent,rgba(11,14,17,0.55)_70%)]" />
+      <div className="pointer-events-none fixed inset-0 mesh-bg opacity-55" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,transparent,rgba(5,6,8,0.72)_68%)]" />
 
       <header className="relative z-30 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
         <Logo />
@@ -162,7 +162,7 @@ export function LandingPage() {
       </section>
 
       <section className="relative z-10 overflow-hidden border-t border-white/10 py-24">
-        <div className="pointer-events-none absolute inset-0 mesh-bg opacity-45" />
+        <div className="pointer-events-none absolute inset-0 mesh-bg opacity-28" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(204,255,0,0.06),transparent_50%)]" />
         <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
           <Reveal>
@@ -215,12 +215,12 @@ function AuthShell({
       <aside className="relative hidden overflow-hidden mesh-bg lg:block">
         <div className="absolute inset-0 bg-ink/25" />
         <motion.div
-          className="absolute -left-20 top-24 h-72 w-72 rounded-full bg-neon/30 blur-3xl"
+          className="absolute -left-20 top-24 h-72 w-72 rounded-full bg-neon/12 blur-3xl"
           animate={{ x: [0, 40, 0], y: [0, 20, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute bottom-10 right-0 h-80 w-80 rounded-full bg-rosa/25 blur-3xl"
+          className="absolute bottom-10 right-0 h-80 w-80 rounded-full bg-rosa/10 blur-3xl"
           animate={{ x: [0, -30, 0] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
         />

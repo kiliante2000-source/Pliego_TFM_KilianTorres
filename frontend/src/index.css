@@ -93,20 +93,20 @@ body {
 .mesh-bg {
   background-color: #050608;
   background-image:
-    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(79, 128, 255, 0.55), transparent 55%),
-    radial-gradient(ellipse 50% 45% at 72% 18%, rgba(255, 78, 219, 0.42), transparent 55%),
-    radial-gradient(ellipse 55% 45% at 88% 55%, rgba(168, 85, 247, 0.45), transparent 55%),
-    radial-gradient(ellipse 40% 35% at 42% 82%, rgba(178, 255, 58, 0.18), transparent 50%),
-    radial-gradient(ellipse 40% 35% at 8% 78%, rgba(255, 122, 69, 0.2), transparent 50%);
+    radial-gradient(ellipse 55% 45% at 12% 18%, rgba(79, 128, 255, 0.22), transparent 58%),
+    radial-gradient(ellipse 45% 40% at 78% 16%, rgba(255, 78, 219, 0.14), transparent 58%),
+    radial-gradient(ellipse 50% 42% at 90% 58%, rgba(168, 85, 247, 0.16), transparent 58%),
+    radial-gradient(ellipse 36% 30% at 40% 86%, rgba(178, 255, 58, 0.06), transparent 55%),
+    radial-gradient(ellipse 34% 28% at 6% 80%, rgba(255, 122, 69, 0.07), transparent 55%);
 }
 
 .mesh-bg-soft {
   background-color: #050608;
   background-image:
-    radial-gradient(ellipse 70% 55% at 80% 0%, rgba(79, 128, 255, 0.22), transparent 55%),
-    radial-gradient(ellipse 45% 40% at 20% 90%, rgba(255, 78, 219, 0.14), transparent 50%),
-    radial-gradient(ellipse 40% 35% at 55% 45%, rgba(168, 85, 247, 0.12), transparent 55%),
-    radial-gradient(ellipse 35% 30% at 90% 80%, rgba(178, 255, 58, 0.08), transparent 50%);
+    radial-gradient(ellipse 65% 50% at 82% 0%, rgba(79, 128, 255, 0.1), transparent 55%),
+    radial-gradient(ellipse 42% 36% at 18% 92%, rgba(255, 78, 219, 0.07), transparent 50%),
+    radial-gradient(ellipse 38% 32% at 55% 45%, rgba(168, 85, 247, 0.06), transparent 55%),
+    radial-gradient(ellipse 30% 26% at 90% 82%, rgba(178, 255, 58, 0.04), transparent 50%);
 }
 
 .glass {
@@ -340,91 +340,91 @@ body {
   background-color: #4f80ff;
   color: #fff;
   animation: btn-brand-shift 14s linear infinite;
-  box-shadow: 0 10px 32px rgba(79, 128, 255, 0.28);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
 .btn-brand-soft {
   background-image: none !important;
   background-color: rgba(11, 14, 17, 0.92);
-  border: 1.5px solid #4f80ff;
-  color: #f4f6f8;
+  border: 1.5px solid rgba(79, 128, 255, 0.55);
+  color: #c8d0da;
   animation: btn-brand-border-shift 14s linear infinite;
   box-shadow: none;
   transition: filter 0.35s ease;
 }
 
 .btn-brand-soft:hover {
-  filter: brightness(1.12);
+  filter: brightness(1.08);
 }
 
 /* Hold each flat color, then move to the next — no multi-stop gradient on the button */
 @keyframes btn-brand-shift {
   0%,
   14% {
-    background-color: #4f80ff;
+    background-color: #3a6aef;
     color: #fff;
-    box-shadow: 0 10px 28px rgba(79, 128, 255, 0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
   }
   20%,
   34% {
-    background-color: #a855f7;
+    background-color: #8b3fd4;
     color: #fff;
-    box-shadow: 0 10px 28px rgba(168, 85, 247, 0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
   }
   40%,
   54% {
-    background-color: #ff4edb;
-    color: #050608;
-    box-shadow: 0 10px 28px rgba(255, 78, 219, 0.3);
+    background-color: #d63ab8;
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
   }
   60%,
   74% {
-    background-color: #ff7a45;
+    background-color: #e06838;
     color: #050608;
-    box-shadow: 0 10px 28px rgba(255, 122, 69, 0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
   }
   80%,
   94% {
-    background-color: #b2ff3a;
+    background-color: #8fc92e;
     color: #050608;
-    box-shadow: 0 10px 28px rgba(178, 255, 58, 0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
   }
   100% {
-    background-color: #4f80ff;
+    background-color: #3a6aef;
     color: #fff;
-    box-shadow: 0 10px 28px rgba(79, 128, 255, 0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
   }
 }
 
 @keyframes btn-brand-border-shift {
   0%,
   14% {
-    border-color: #4f80ff;
-    color: #dbe7ff;
+    border-color: rgba(79, 128, 255, 0.5);
+    color: #9aa8c0;
   }
   20%,
   34% {
-    border-color: #a855f7;
-    color: #e9d5ff;
+    border-color: rgba(168, 85, 247, 0.5);
+    color: #b7a0d4;
   }
   40%,
   54% {
-    border-color: #ff4edb;
-    color: #ffd6f5;
+    border-color: rgba(255, 78, 219, 0.5);
+    color: #c89bb8;
   }
   60%,
   74% {
-    border-color: #ff7a45;
-    color: #ffe0d1;
+    border-color: rgba(255, 122, 69, 0.5);
+    color: #c9a590;
   }
   80%,
   94% {
-    border-color: #b2ff3a;
-    color: #eaffc2;
+    border-color: rgba(178, 255, 58, 0.45);
+    color: #a8b88a;
   }
   100% {
-    border-color: #4f80ff;
-    color: #dbe7ff;
+    border-color: rgba(79, 128, 255, 0.5);
+    color: #9aa8c0;
   }
 }
 
