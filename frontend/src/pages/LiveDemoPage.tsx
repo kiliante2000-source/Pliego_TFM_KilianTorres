@@ -513,10 +513,10 @@ export function LiveDemoPage() {
   const hook = useCycle(HOOKS.length, 2600);
 
   useEffect(() => {
-    // Give each beat enough on-screen time to read (~2.2–2.6s)
-    const t1 = window.setTimeout(() => setIntro(1), 2400);
-    const t2 = window.setTimeout(() => setIntro(2), 5000);
-    const t3 = window.setTimeout(() => setIntro(3), 7800);
+    // Normal reading pace for short phrases (~1.4–1.6s each)
+    const t1 = window.setTimeout(() => setIntro(1), 1500);
+    const t2 = window.setTimeout(() => setIntro(2), 3100);
+    const t3 = window.setTimeout(() => setIntro(3), 4800);
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
