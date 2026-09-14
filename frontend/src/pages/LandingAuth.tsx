@@ -102,7 +102,7 @@ export function LandingPage() {
           >
             {['Canvas vivo', 'Publish al instante', 'Identidad de campaña'].map((tag) => (
               <span key={tag} className="inline-flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-lima shadow-[0_0_10px_rgba(178,255,58,0.8)]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-neon shadow-[0_0_8px_rgba(79,128,255,0.65)]" />
                 {tag}
               </span>
             ))}
@@ -112,9 +112,9 @@ export function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
-            className="mt-10 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-paper/45 no-underline hover:text-paper"
+            className="mt-10 inline-flex items-center gap-2 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-paper no-underline transition hover:text-neon"
           >
-            Explorar el sistema <ArrowDownRight size={14} />
+            Explorar el sistema <ArrowDownRight size={15} />
           </motion.a>
         </div>
       </motion.section>

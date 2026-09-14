@@ -95,6 +95,8 @@ export function Marquee({
   const [tone, setTone] = useState(colorOffset % palette.length);
   const row = [...items, ...items, ...items];
   const color = palette[tone];
+  // lima / naranja need dark type; cooler brand hues keep light type
+  const inkOnFill = tone >= 3;
 
   useEffect(() => {
     let intervalId = 0;
@@ -111,19 +113,13 @@ export function Marquee({
 
   return (
     <div
-      className="relative overflow-hidden py-5 transition-[border-color] duration-700"
+      className="relative overflow-hidden py-5 transition-[background-color,border-color] duration-700"
       style={{
-        borderTop: chrome === 'full' ? `2px solid ${color}55` : 'none',
-        borderBottom: `2px solid ${color}40`,
+        backgroundColor: color,
+        borderTop: chrome === 'full' ? `2px solid rgba(5,6,8,0.35)` : 'none',
+        borderBottom: `2px solid rgba(5,6,8,0.35)`,
       }}
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-30 transition-colors duration-700"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${color}18, transparent)`,
-        }}
-      />
       <motion.div
         className="relative flex w-max gap-10 whitespace-nowrap"
         animate={{ x: reverse ? ['-33.333%', '0%'] : ['0%', '-33.333%'] }}
@@ -133,10 +129,15 @@ export function Marquee({
           <span
             key={`${item}-${i}`}
             className="font-display text-4xl font-extrabold uppercase tracking-[-0.05em] transition-colors duration-700 sm:text-6xl"
-            style={{ color }}
+            style={{ color: inkOnFill ? '#050608' : '#f4f6f8' }}
           >
             {item}
-            <span className="mx-5 inline-block align-middle text-[0.55em] opacity-90">✦</span>
+            <span
+              className="mx-5 inline-block align-middle text-[0.55em] opacity-80"
+              style={{ color: inkOnFill ? '#050608' : '#f4f6f8' }}
+            >
+              ✦
+            </span>
           </span>
         ))}
       </motion.div>
