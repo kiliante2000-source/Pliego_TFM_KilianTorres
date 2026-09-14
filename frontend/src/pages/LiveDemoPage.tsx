@@ -708,7 +708,8 @@ export function LiveDemoPage() {
             'Presentación que cierra',
           ]}
           speed={48}
-          tone={2}
+          colorOffset={2}
+          cycle={false}
         />
       </section>
 

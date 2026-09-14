@@ -48,7 +48,7 @@ function FeatureCard({
 
   return (
     <article
-      className="feature-card rounded-2xl p-6 sm:p-7"
+      className="feature-card flex h-full min-h-[15.5rem] flex-col rounded-2xl p-6 sm:min-h-[17rem] sm:p-7"
       style={{ '--feature-accent': accent } as React.CSSProperties}
       onPointerMove={onMove}
     >
@@ -64,7 +64,7 @@ function FeatureCard({
         {k}
       </p>
       <h3 className="relative mt-4 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">{t}</h3>
-      <p className="relative mt-3 font-serif text-base leading-relaxed text-paper/60">{d}</p>
+      <p className="relative mt-3 flex-1 font-serif text-base leading-relaxed text-paper/60">{d}</p>
     </article>
   );
 }
@@ -208,19 +208,21 @@ export function LandingPage() {
           <Marquee
             items={['Tipografía', 'Capas', 'Versiones', 'PDF', 'Publicación', 'Plantillas', 'Canvas']}
             speed={48}
-            tone={0}
+            colorOffset={0}
+            phaseDelay={0}
           />
           <Marquee
             items={['Readymag energy', 'Studio flow', 'Neon mesh', 'Design systems', 'Editorial UI']}
             speed={56}
             reverse
-            tone={2}
+            colorOffset={2}
+            phaseDelay={2100}
             chrome="bottom"
           />
         </div>
       </div>
 
-      <section id="studio" className="relative z-10 mx-auto max-w-7xl px-5 py-24 sm:px-8">
+      <section id="studio" className="relative z-10 mx-auto max-w-7xl px-5 pb-4 pt-24 sm:px-8 sm:pb-6">
         <Reveal>
           <div className="flex items-end justify-between gap-6">
             <div>
@@ -237,16 +239,16 @@ export function LandingPage() {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-5 md:grid-cols-3 md:gap-6">
+        <div className="mt-14 grid grid-cols-1 items-stretch gap-5 md:grid-cols-3 md:gap-6">
           {FEATURES.map((card, i) => (
-            <Reveal key={card.k} delay={i * 0.08}>
+            <Reveal key={card.k} delay={i * 0.08} className="h-full min-w-0 w-full">
               <FeatureCard {...card} />
             </Reveal>
           ))}
         </div>
       </section>
 
-      <section className="relative z-10 overflow-hidden px-5 py-16 sm:px-8 sm:py-24">
+      <section className="relative z-10 overflow-hidden px-5 pb-16 pt-0 sm:px-8 sm:pb-20 sm:pt-2">
         <div className="pointer-events-none absolute inset-0 cta-wash" />
         <div className="relative mx-auto max-w-7xl">
           <Reveal>
