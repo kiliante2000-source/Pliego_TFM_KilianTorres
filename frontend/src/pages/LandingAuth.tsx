@@ -223,7 +223,7 @@ export function LandingPage() {
         </div>
       </div>
 
-      <section id="studio" className="relative z-10 mx-auto max-w-7xl px-5 pb-16 pt-24 sm:px-8 sm:pb-20">
+      <section id="studio" className="relative z-10 mx-auto max-w-7xl px-5 pb-12 pt-24 sm:px-8 sm:pb-14">
         <Reveal>
           <div className="flex items-end justify-between gap-6">
             <div>
@@ -249,7 +249,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="relative z-10 overflow-hidden px-5 pb-16 pt-10 sm:px-8 sm:pb-20 sm:pt-12">
+      <section className="relative z-10 overflow-hidden px-5 pb-16 pt-7 sm:px-8 sm:pb-20 sm:pt-8">
         <div className="pointer-events-none absolute inset-0 cta-wash" />
         <div className="relative mx-auto max-w-7xl">
           <Reveal>
