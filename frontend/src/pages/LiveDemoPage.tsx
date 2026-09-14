@@ -513,9 +513,10 @@ export function LiveDemoPage() {
   const hook = useCycle(HOOKS.length, 2600);
 
   useEffect(() => {
-    const t1 = window.setTimeout(() => setIntro(1), 700);
-    const t2 = window.setTimeout(() => setIntro(2), 1600);
-    const t3 = window.setTimeout(() => setIntro(3), 2600);
+    // Give each beat enough on-screen time to read (~2.2–2.6s)
+    const t1 = window.setTimeout(() => setIntro(1), 2400);
+    const t2 = window.setTimeout(() => setIntro(2), 5000);
+    const t3 = window.setTimeout(() => setIntro(3), 7800);
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
@@ -537,17 +538,17 @@ export function LiveDemoPage() {
             key="intro"
             className="fixed inset-0 z-[70] flex items-center justify-center bg-[#050608]"
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease }}
+            transition={{ duration: 1, ease }}
           >
             <AnimatePresence mode="wait">
               {intro === 0 && (
                 <motion.p
                   key="a"
-                  initial={{ opacity: 0, y: 24 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20, filter: 'blur(8px)' }}
-                  transition={{ duration: 0.55, ease }}
-                  className="px-6 text-center text-3xl italic text-paper/80 sm:text-5xl"
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.7, ease }}
+                  className="px-6 text-center text-3xl italic text-paper/85 sm:text-5xl"
                   style={serif}
                 >
                   Diseñar en el browser
@@ -556,11 +557,11 @@ export function LiveDemoPage() {
               {intro === 1 && (
                 <motion.p
                   key="b"
-                  initial={{ opacity: 0, scale: 0.94 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, filter: 'blur(10px)' }}
-                  transition={{ duration: 0.55, ease }}
-                  className="px-6 text-center text-4xl font-extrabold tracking-[-0.05em] sm:text-6xl"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.7, ease }}
+                  className="px-6 text-center text-4xl font-extrabold tracking-[-0.04em] text-paper sm:text-6xl"
                   style={display}
                 >
                   nunca se sintió así.
@@ -569,10 +570,10 @@ export function LiveDemoPage() {
               {intro === 2 && (
                 <motion.div
                   key="c"
-                  initial={{ opacity: 0, letterSpacing: '0.4em' }}
+                  initial={{ opacity: 0, letterSpacing: '0.28em' }}
                   animate={{ opacity: 1, letterSpacing: '-0.06em' }}
-                  exit={{ opacity: 0, scale: 1.08 }}
-                  transition={{ duration: 0.7, ease }}
+                  exit={{ opacity: 0, scale: 1.04 }}
+                  transition={{ duration: 0.85, ease }}
                   className="text-center"
                 >
                   <p
