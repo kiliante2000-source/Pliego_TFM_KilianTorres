@@ -203,9 +203,8 @@ export function LandingPage() {
           </div>
         </motion.section>
 
-        {/* Motion bands sit on the first screen — visible without scrolling */}
-        <div className="relative z-20 shrink-0">
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-px bg-gradient-to-r from-transparent via-neon/55 to-transparent" />
+        {/* Motion bands — soft brand washes, always in first viewport */}
+        <div className="marquee-stack relative z-20 shrink-0">
           <Marquee
             items={['Tipografía', 'Capas', 'Versiones', 'PDF', 'Publicación', 'Plantillas', 'Canvas']}
             speed={28}
@@ -220,7 +219,6 @@ export function LandingPage() {
             phaseDelay={1600}
             chrome="bottom"
           />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-px bg-gradient-to-r from-transparent via-rosa/55 to-transparent" />
         </div>
       </div>
 

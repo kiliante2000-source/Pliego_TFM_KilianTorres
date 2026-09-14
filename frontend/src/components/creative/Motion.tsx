@@ -91,19 +91,18 @@ export function Marquee({
   phaseDelay?: number;
   chrome?: 'full' | 'bottom';
 }) {
+  // Brand hues, but only as soft washes over ink — not solid neon slabs.
   const palette = ['#4f80ff', '#a855f7', '#ff4edb', '#ff7a45', '#b2ff3a'] as const;
   const [tone, setTone] = useState(colorOffset % palette.length);
   const row = [...items, ...items, ...items];
-  const color = palette[tone];
-  // lima / naranja need dark type; cooler brand hues keep light type
-  const inkOnFill = tone >= 3;
+  const accent = palette[tone];
 
   useEffect(() => {
     let intervalId = 0;
     const startId = window.setTimeout(() => {
       intervalId = window.setInterval(() => {
         setTone((t) => (t + 1) % palette.length);
-      }, 3200);
+      }, 3800);
     }, phaseDelay);
     return () => {
       window.clearTimeout(startId);
@@ -113,13 +112,31 @@ export function Marquee({
 
   return (
     <div
-      className="relative overflow-hidden py-6 transition-[background-color,border-color] duration-700 sm:py-7"
+      className="marquee-band relative overflow-hidden py-5 transition-[background-color,border-color,box-shadow] duration-700 sm:py-6"
       style={{
-        backgroundColor: color,
-        borderTop: chrome === 'full' ? `3px solid rgba(5,6,8,0.4)` : 'none',
-        borderBottom: `3px solid rgba(5,6,8,0.4)`,
+        backgroundColor: `color-mix(in srgb, ${accent} 11%, #080b0f)`,
+        borderTop:
+          chrome === 'full' ? `1px solid color-mix(in srgb, ${accent} 26%, transparent)` : 'none',
+        borderBottom: `1px solid color-mix(in srgb, ${accent} 18%, transparent)`,
+        boxShadow: `inset 0 1px 0 color-mix(in srgb, ${accent} 14%, transparent)`,
       }}
     >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px transition-[background,opacity] duration-700"
+        style={{
+          background: `linear-gradient(90deg, transparent 5%, ${accent} 50%, transparent 95%)`,
+          opacity: 0.45,
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 transition-[opacity,background] duration-700"
+        style={{
+          background: `radial-gradient(ellipse 85% 130% at 50% 50%, color-mix(in srgb, ${accent} 12%, transparent), transparent 72%)`,
+          opacity: 0.85,
+        }}
+      />
       <motion.div
         className="relative flex w-max gap-10 whitespace-nowrap"
         animate={{ x: reverse ? ['-33.333%', '0%'] : ['0%', '-33.333%'] }}
@@ -128,13 +145,12 @@ export function Marquee({
         {row.map((item, i) => (
           <span
             key={`${item}-${i}`}
-            className="font-display text-5xl font-extrabold uppercase tracking-[-0.05em] transition-colors duration-700 sm:text-6xl md:text-7xl"
-            style={{ color: inkOnFill ? '#050608' : '#f4f6f8' }}
+            className="font-display text-5xl font-extrabold uppercase tracking-[-0.05em] text-paper/80 transition-colors duration-700 sm:text-6xl md:text-7xl"
           >
             {item}
             <span
-              className="mx-5 inline-block align-middle text-[0.55em] opacity-80"
-              style={{ color: inkOnFill ? '#050608' : '#f4f6f8' }}
+              className="mx-5 inline-block align-middle text-[0.55em] transition-colors duration-700"
+              style={{ color: `color-mix(in srgb, ${accent} 48%, #f4f6f8)` }}
             >
               ✦
             </span>
