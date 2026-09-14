@@ -31,11 +31,6 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-<<<<<<< HEAD
-    port: 45321,
-    strictPort: true,
-    allowedHosts: true,
-=======
     port,
     strictPort: true,
     allowedHosts: true,
@@ -47,7 +42,6 @@ export default defineConfig({
     headers: {
       'Cache-Control': 'no-store',
     },
->>>>>>> cursor/editor-creative-depth-98ca
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:45322',
@@ -57,11 +51,7 @@ export default defineConfig({
   },
   preview: {
     host: '0.0.0.0',
-<<<<<<< HEAD
-    port: 45321,
-=======
     port,
     strictPort: true,
->>>>>>> cursor/editor-creative-depth-98ca
   },
 });
