@@ -220,11 +220,11 @@ export function BlankTemplateCard({
         </div>
       </div>
       <div className="p-4">
-        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-paper-muted">Canvas</p>
+        <p className="font-mono text-xs uppercase tracking-[0.14em] text-paper-muted">Canvas</p>
         <p className="mt-1.5 text-[15px] font-semibold leading-snug tracking-[-0.01em] text-paper">
           En blanco
         </p>
-        <p className="mt-1 font-mono text-[10px] text-paper-muted">1080 × 1350</p>
+        <p className="mt-1 font-mono text-xs text-paper-muted">1080 × 1350</p>
       </div>
     </button>
   );
@@ -267,7 +267,7 @@ export function TemplateCard({
             className="inline-block h-2 w-2 rounded-full"
             style={{ background: visual.flat, boxShadow: `0 0 10px ${visual.glow}` }}
           />
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-paper-muted">
+          <p className="font-mono text-xs uppercase tracking-[0.14em] text-paper-muted">
             {visual.label}
           </p>
         </div>

@@ -23,12 +23,12 @@ export function PagesLayersPanel() {
     <aside className="studio-rail flex w-60 flex-col border-r">
       <div className="border-b border-line px-3 py-3">
         <div className="mb-2.5 flex items-center justify-between">
-          <h2 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-paper-muted">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-paper-muted">
             Páginas
           </h2>
           <button
             type="button"
-            className="rounded-md bg-ink-3 px-2 py-1 text-[11px] font-semibold text-paper transition hover:bg-ink-4"
+            className="rounded-md bg-ink-3 px-2 py-1 text-xs font-semibold text-paper transition hover:bg-ink-4"
             onClick={addPage}
           >
             + Página
@@ -49,7 +49,7 @@ export function PagesLayersPanel() {
                 <span>{p.name}</span>
                 <span className="flex gap-1">
                   <span
-                    className="text-[10px] opacity-70"
+                    className="text-xs opacity-70"
                     onClick={(e) => {
                       e.stopPropagation();
                       if (index > 0) reorderPages(index, index - 1);
@@ -59,7 +59,7 @@ export function PagesLayersPanel() {
                     ↑
                   </span>
                   <span
-                    className="text-[10px] opacity-70"
+                    className="text-xs opacity-70"
                     onClick={(e) => {
                       e.stopPropagation();
                       if (index < pages.length - 1) reorderPages(index, index + 1);
@@ -69,7 +69,7 @@ export function PagesLayersPanel() {
                     ↓
                   </span>
                   <span
-                    className="text-[10px] opacity-70"
+                    className="text-xs opacity-70"
                     onClick={(e) => {
                       e.stopPropagation();
                       duplicatePage(p.id);
@@ -79,7 +79,7 @@ export function PagesLayersPanel() {
                     ⎘
                   </span>
                   <span
-                    className="text-[10px] opacity-70"
+                    className="text-xs opacity-70"
                     onClick={(e) => {
                       e.stopPropagation();
                       deletePage(p.id);
@@ -96,7 +96,7 @@ export function PagesLayersPanel() {
       </div>
 
       <div className="flex-1 overflow-auto p-3 scrollbar-thin">
-        <h2 className="mb-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-paper-muted">
+        <h2 className="mb-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-paper-muted">
           Capas
         </h2>
         {layers.length === 0 ? (
@@ -119,7 +119,7 @@ export function PagesLayersPanel() {
                 >
                   <span className="flex items-center justify-between gap-2">
                     <span className="truncate">{elementLabel(el)}</span>
-                    <span className="shrink-0 font-mono text-[9px] uppercase opacity-50">
+                    <span className="shrink-0 font-mono text-[11px] uppercase opacity-55">
                       {el.type}
                       {el.animation?.preset && el.animation.preset !== 'none' ? ' · ✦' : ''}
                     </span>

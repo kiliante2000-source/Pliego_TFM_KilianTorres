@@ -74,9 +74,9 @@ body {
 
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12.5px;
   font-weight: 500;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
 }
 
@@ -380,10 +380,10 @@ body {
   align-items: center;
   gap: 0.55rem;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.22em;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: color-mix(in srgb, #f4f6f8 62%, transparent);
+  color: color-mix(in srgb, #f4f6f8 72%, transparent);
 }
 
 .hero-signal-dot {
@@ -422,10 +422,10 @@ body {
 
 .section-index {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.2em;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: color-mix(in srgb, #f4f6f8 42%, transparent);
+  color: color-mix(in srgb, #f4f6f8 55%, transparent);
 }
 
 .cta-wash {
@@ -795,8 +795,8 @@ body {
 .btn-brand-soft {
   background-image: none !important;
   background-color: rgba(11, 14, 17, 0.92);
-  border: 1.5px solid rgba(79, 128, 255, 0.55);
-  color: #c8d0da;
+  border: 2.75px solid rgba(79, 128, 255, 0.9);
+  color: #d7dee8;
   animation: btn-brand-border-shift 14s linear infinite;
   box-shadow: none;
   transition: filter 0.35s ease;
@@ -848,32 +848,32 @@ body {
 @keyframes btn-brand-border-shift {
   0%,
   14% {
-    border-color: rgba(79, 128, 255, 0.5);
-    color: #9aa8c0;
+    border-color: rgba(79, 128, 255, 1);
+    color: #c5d0e4;
   }
   20%,
   34% {
-    border-color: rgba(168, 85, 247, 0.5);
-    color: #b7a0d4;
+    border-color: rgba(168, 85, 247, 1);
+    color: #d2bff0;
   }
   40%,
   54% {
-    border-color: rgba(255, 78, 219, 0.5);
-    color: #c89bb8;
+    border-color: rgba(255, 78, 219, 1);
+    color: #ebc0dc;
   }
   60%,
   74% {
-    border-color: rgba(255, 122, 69, 0.5);
-    color: #c9a590;
+    border-color: rgba(255, 122, 69, 1);
+    color: #ebc4a8;
   }
   80%,
   94% {
-    border-color: rgba(178, 255, 58, 0.45);
-    color: #a8b88a;
+    border-color: rgba(178, 255, 58, 1);
+    color: #c8db9a;
   }
   100% {
-    border-color: rgba(79, 128, 255, 0.5);
-    color: #9aa8c0;
+    border-color: rgba(79, 128, 255, 1);
+    color: #c5d0e4;
   }
 }
 

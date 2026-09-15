@@ -214,7 +214,7 @@ export function PublicRenderer({ document }: { document: DocumentModel }) {
         >
           {pages.length > 1 ? (
             <div
-              className="absolute left-3 top-3 z-10 rounded-full bg-black/40 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-white/80 backdrop-blur"
+              className="absolute left-3 top-3 z-10 rounded-full bg-black/40 px-2.5 py-1 font-mono text-xs uppercase tracking-widest text-white/80 backdrop-blur"
               style={{ transform: `scale(${1 / scale})`, transformOrigin: 'top left' }}
             >
               {String(index + 1).padStart(2, '0')} / {String(pages.length).padStart(2, '0')}

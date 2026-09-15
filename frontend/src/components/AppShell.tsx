@@ -65,7 +65,7 @@ export function AppShell() {
               <p className="truncate font-display text-sm font-bold tracking-tight text-paper">
                 {user?.name}
               </p>
-              <p className="truncate font-mono text-[10px] text-paper-muted">{user?.email}</p>
+              <p className="truncate font-mono text-xs text-paper-muted">{user?.email}</p>
             </div>
           </div>
           <Button
@@ -105,7 +105,7 @@ export function AppShell() {
                 key={item.id}
                 to={item.to}
                 className={cn(
-                  'whitespace-nowrap rounded-full px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] no-underline',
+                  'whitespace-nowrap rounded-full px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] no-underline',
                   isActive ? 'nav-pill-active' : 'text-paper-muted',
                 )}
               >

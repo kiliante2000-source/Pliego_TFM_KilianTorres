@@ -17,7 +17,7 @@ import {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-2.5 border-b border-line/70 pb-4">
-      <h3 className="text-[10px] font-semibold uppercase tracking-[0.18em] text-paper-muted">
+      <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-paper-muted">
         {title}
       </h3>
       {children}
@@ -48,10 +48,10 @@ export function PropertiesPanel() {
   return (
     <aside className="studio-rail flex w-[300px] flex-col border-l">
       <div className="border-b border-line px-4 py-3.5">
-        <h2 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-paper-muted">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-paper-muted">
           Inspector
         </h2>
-        <p className="mt-1 text-[11px] text-paper-muted/80">
+        <p className="mt-1 text-xs text-paper-muted/80">
           Tipografía · efectos · motion · links
         </p>
       </div>
@@ -86,7 +86,7 @@ export function PropertiesPanel() {
                     key={b.label}
                     type="button"
                     onClick={b.fn}
-                    className="rounded-lg bg-ink-3 px-2 py-2 text-left text-[11px] font-medium text-paper transition hover:bg-ink-4 hover:ring-1 hover:ring-neon/30"
+                    className="rounded-lg bg-ink-3 px-2 py-2 text-left text-xs font-medium text-paper transition hover:bg-ink-4 hover:ring-1 hover:ring-neon/30"
                   >
                     {b.label}
                   </button>
@@ -475,7 +475,7 @@ function VideoProps({ el }: { el: VideoElement }) {
           <button
             key={key}
             type="button"
-            className={`flex-1 rounded-md px-2 py-2 text-[10px] uppercase ${el[key] ? 'bg-accent-soft text-neon' : 'bg-ink-3 text-paper'}`}
+            className={`flex-1 rounded-md px-2 py-2 text-[11px] uppercase ${el[key] ? 'bg-accent-soft text-neon' : 'bg-ink-3 text-paper'}`}
             onClick={() => updateSelected({ [key]: !el[key] } as Partial<CanvasElement>)}
           >
             {key}

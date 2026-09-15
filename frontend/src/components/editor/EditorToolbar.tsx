@@ -65,7 +65,7 @@ function ToolBtn({
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="eyebrow mb-1.5 px-0.5 text-[9px] tracking-[0.16em] text-paper-muted/70">
+    <p className="eyebrow mb-1.5 px-0.5 text-[11px] tracking-[0.14em] text-paper-muted/70">
       {children}
     </p>
   );
@@ -108,12 +108,12 @@ function Flyout({
       className="absolute left-full top-0 z-40 ml-2 w-52 rounded-xl border border-line bg-ink-2 p-2 shadow-[0_20px_50px_rgba(0,0,0,0.45)]"
     >
       <div className="mb-2 flex items-center justify-between px-1.5">
-        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-paper-muted">
+        <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-paper-muted">
           {title}
         </p>
         <button
           type="button"
-          className="rounded px-1.5 py-0.5 text-[10px] text-paper-muted hover:bg-ink-3 hover:text-paper"
+          className="rounded px-1.5 py-0.5 text-xs text-paper-muted hover:bg-ink-3 hover:text-paper"
           onClick={onClose}
         >
           Esc
@@ -147,7 +147,7 @@ function MenuRow({
       <span className="min-w-0 flex-1">
         <span className="block text-xs font-semibold text-paper">{label}</span>
         {hint ? (
-          <span className="block truncate text-[10px] text-paper-muted">{hint}</span>
+          <span className="block truncate {hint}">{hint}</span>
         ) : null}
       </span>
     </button>
@@ -361,7 +361,7 @@ export function EditorToolbar({ projectId }: { projectId: string }) {
           </div>
 
           <Flyout open={panel === 'align'} title="Alinear" onClose={close}>
-            <p className="mb-1 px-2 font-mono text-[9px] uppercase tracking-wider text-paper-muted">
+            <p className="mb-1 px-2 font-mono text-[11px] uppercase tracking-wider text-paper-muted">
               Horizontal
             </p>
             <div className="mb-2 grid grid-cols-3 gap-1 px-1">
@@ -375,7 +375,7 @@ export function EditorToolbar({ projectId }: { projectId: string }) {
                 <AlignRight size={16} />
               </ToolBtn>
             </div>
-            <p className="mb-1 px-2 font-mono text-[9px] uppercase tracking-wider text-paper-muted">
+            <p className="mb-1 px-2 font-mono text-[11px] uppercase tracking-wider text-paper-muted">
               Vertical
             </p>
             <div className="mb-2 grid grid-cols-3 gap-1 px-1">
@@ -389,7 +389,7 @@ export function EditorToolbar({ projectId }: { projectId: string }) {
                 <AlignEndVertical size={16} />
               </ToolBtn>
             </div>
-            <p className="mb-1 px-2 font-mono text-[9px] uppercase tracking-wider text-paper-muted">
+            <p className="mb-1 px-2 font-mono text-[11px] uppercase tracking-wider text-paper-muted">
               Distribuir
             </p>
             <div className="grid grid-cols-2 gap-1 px-1">
@@ -433,7 +433,7 @@ export function EditorToolbar({ projectId }: { projectId: string }) {
         </div>
         <button
           type="button"
-          className="mt-1.5 w-full rounded-md py-1 font-mono text-[10px] tabular-nums text-paper-muted hover:bg-ink-3 hover:text-paper"
+          className="mt-1.5 w-full rounded-md py-1 font-mono text-xs tabular-nums text-paper-muted hover:bg-ink-3 hover:text-paper"
           onClick={() => setZoom(0.55)}
           title="Ajustar al lienzo"
         >

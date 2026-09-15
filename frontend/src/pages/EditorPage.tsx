@@ -148,7 +148,7 @@ export function EditorPage() {
                 void api.patch(`/api/projects/${projectId}`, { title: e.target.value });
               }}
             />
-            <div className="flex items-center gap-2 px-1 font-mono text-[10px] uppercase tracking-[0.14em] text-paper-muted">
+            <div className="flex items-center gap-2 px-1 font-mono text-xs uppercase tracking-[0.12em] text-paper-muted">
               {saveStatus === 'saving' ? (
                 <>
                   <Loader2 size={12} className="animate-spin text-neon" /> Guardando…
@@ -294,7 +294,7 @@ export function EditorPage() {
                       <p className="truncate text-sm font-medium text-paper">
                         {v.label || `v${v.versionNumber}`}
                       </p>
-                      <p className="text-[11px] text-paper-muted">
+                      <p className="text-xs text-paper-muted">
                         v{v.versionNumber} · {formatDate(v.createdAt)}
                         {v.user ? ` · ${v.user.name}` : ''}
                       </p>

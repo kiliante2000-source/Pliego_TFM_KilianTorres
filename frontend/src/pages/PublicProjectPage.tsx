@@ -66,7 +66,7 @@ export function PublicProjectPage() {
             <p className="mt-1 truncate font-display text-base font-bold tracking-tight text-paper sm:text-lg">
               {project.title}
             </p>
-            <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-paper-muted">
+            <p className="mt-0.5 font-mono text-xs uppercase tracking-[0.12em] text-paper-muted">
               por {project.authorName || 'autor'}
             </p>
           </div>

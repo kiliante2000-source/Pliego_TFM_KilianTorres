@@ -125,9 +125,8 @@ export function DashboardPage() {
               </p>
             </div>
 
-            <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+            <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               <BlankTemplateCard selected={!templateId} onSelect={() => setTemplateId('')} />
-
               {templates.map((t) => (
                 <TemplateCard
                   key={t.id}
@@ -174,7 +173,7 @@ export function DashboardPage() {
                 <h2 className="mt-2 font-display text-3xl font-extrabold tracking-[-0.04em] text-paper">
                   Tus proyectos
                 </h2>
-                <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-paper-muted">
+                <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-paper-muted">
                   {loading ? 'Cargando…' : `${projects.length} activos`}
                 </p>
               </div>
@@ -214,14 +213,14 @@ export function DashboardPage() {
                             <p className="font-display text-xl font-bold leading-tight text-paper sm:text-2xl">
                               {project.title}
                             </p>
-                            <p className="mt-1.5 text-[11px] leading-snug text-paper-muted">
+                            <p className="mt-1.5 text-xs leading-snug text-paper-muted">
                               <span className="text-paper/80">{projectKindLabel(project)}</span>
                               <span className="mx-1.5 text-paper-muted/50">·</span>
-                              <span className="font-mono text-[10px] uppercase tracking-[0.12em]">
+                              <span className="font-mono text-xs uppercase tracking-[0.12em]">
                                 {project.width}×{project.height}
                               </span>
                               {project.published ? (
-                                <span className="ml-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-neon">
+                                <span className="ml-1.5 font-mono text-xs uppercase tracking-[0.12em] text-neon">
                                   · Publicado
                                 </span>
                               ) : null}
@@ -230,7 +229,7 @@ export function DashboardPage() {
                         </div>
                       </Link>
                       <div className="flex items-center justify-between gap-2 px-3 py-2.5">
-                        <span className="font-mono text-[10px] text-paper-muted">
+                        <span className="font-mono text-xs text-paper-muted">
                           {formatDate(project.updatedAt)}
                         </span>
                         <div className="flex items-center gap-0.5">
@@ -307,15 +306,15 @@ export function DashboardPage() {
           <div className="editorial-rule mt-6 mb-8 w-24" />
           <dl className="space-y-5">
             <div className="border-b border-white/8 pb-4">
-              <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper-muted">Nombre</dt>
+              <dt className="font-mono text-xs uppercase tracking-[0.16em] text-paper-muted">Nombre</dt>
               <dd className="mt-1.5 font-display text-lg font-bold text-paper">{user?.name}</dd>
             </div>
             <div className="border-b border-white/8 pb-4">
-              <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper-muted">Email</dt>
+              <dt className="font-mono text-xs uppercase tracking-[0.16em] text-paper-muted">Email</dt>
               <dd className="mt-1.5 text-sm text-paper">{user?.email}</dd>
             </div>
             <div>
-              <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper-muted">Rol</dt>
+              <dt className="font-mono text-xs uppercase tracking-[0.16em] text-paper-muted">Rol</dt>
               <dd className="mt-1.5 font-mono text-xs uppercase tracking-[0.14em] text-neon">{user?.role}</dd>
             </div>
           </dl>
