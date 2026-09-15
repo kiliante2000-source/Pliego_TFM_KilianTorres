@@ -125,21 +125,19 @@ export function DashboardPage() {
               </p>
             </div>
 
-            <div className="mb-5 space-y-3">
+            <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               <BlankTemplateCard selected={!templateId} onSelect={() => setTemplateId('')} />
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {templates.map((t) => (
-                  <TemplateCard
-                    key={t.id}
-                    template={t}
-                    selected={templateId === t.id}
-                    onSelect={() => {
-                      setTemplateId(t.id);
-                      if (title === 'Nuevo proyecto' || !title) setTitle(t.name);
-                    }}
-                  />
-                ))}
-              </div>
+              {templates.map((t) => (
+                <TemplateCard
+                  key={t.id}
+                  template={t}
+                  selected={templateId === t.id}
+                  onSelect={() => {
+                    setTemplateId(t.id);
+                    if (title === 'Nuevo proyecto' || !title) setTitle(t.name);
+                  }}
+                />
+              ))}
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
