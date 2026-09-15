@@ -20,16 +20,14 @@ function glow(hex: string, alpha = 0.5) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-/** Trazo único para todos los covers: blanco sólido, mismo peso, bien visible. */
+/** Trazo único: blanco sólido, mismo peso, bien visible. */
 const STROKE = '#FFFFFF';
 const SW = 2.85;
 
 type Visual = {
   category: string;
   index: string;
-  /** Color protagonista — se lee claro en el cover */
   accent: string;
-  /** Segundo tono del degradado en movimiento */
   soft: string;
   glow: string;
   vector: 'manifesto' | 'portfolio' | 'cover' | 'magazine' | 'catalog' | 'slide';
@@ -103,10 +101,6 @@ const strokeProps = {
   fill: 'none' as const,
 };
 
-/**
- * Composiciones tipográficas/layout — mismo grosor blanco en todos.
- * Asimétricas, editoriales, sin texto.
- */
 function FormatVectors({ kind }: { kind: Visual['vector'] }) {
   if (kind === 'magazine') {
     return (
@@ -127,7 +121,6 @@ function FormatVectors({ kind }: { kind: Visual['vector'] }) {
   }
 
   if (kind === 'portfolio') {
-    // Pieza limpia: un artboard vertical con imagen + tipografía (case study)
     return (
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 200 140" fill="none" aria-hidden>
         <rect x="52" y="12" width="96" height="116" rx="4" {...strokeProps} />
@@ -177,7 +170,6 @@ function FormatVectors({ kind }: { kind: Visual['vector'] }) {
     );
   }
 
-  // manifesto — diagonal + display blocks + orb
   return (
     <svg className="absolute inset-0 h-full w-full" viewBox="0 0 200 140" fill="none" aria-hidden>
       <rect x="18" y="16" width="164" height="108" rx="3" {...strokeProps} />
@@ -191,10 +183,7 @@ function FormatVectors({ kind }: { kind: Visual['vector'] }) {
   );
 }
 
-/**
- * Fondo plano de marca + degradado suave en movimiento.
- * El color protagonista se lee claro; el soft solo anima el plano.
- */
+/** Fondo plano de marca + wash en movimiento. */
 function LivingField({ accent, soft }: { accent: string; soft: string }) {
   return (
     <>
@@ -208,20 +197,39 @@ function LivingField({ accent, soft }: { accent: string; soft: string }) {
         transition={{ duration: 14, ease: 'easeInOut', repeat: Infinity }}
       />
       <motion.div
-        className="absolute -right-[15%] -top-[25%] h-[85%] w-[70%] rounded-full opacity-45 blur-3xl"
+        className="absolute -right-[15%] -top-[25%] h-[85%] w-[70%] rounded-full opacity-40 blur-3xl"
         style={{ background: soft }}
         animate={{ x: [0, -28, 0], y: [0, 22, 0] }}
         transition={{ duration: 11, ease: 'easeInOut', repeat: Infinity }}
       />
       <motion.div
-        className="absolute -bottom-[30%] -left-[20%] h-[70%] w-[65%] rounded-full opacity-30 blur-3xl"
+        className="absolute -bottom-[30%] -left-[20%] h-[70%] w-[65%] rounded-full opacity-28 blur-3xl"
         style={{ background: accent }}
         animate={{ x: [0, 24, 0], y: [0, -18, 0] }}
         transition={{ duration: 13, ease: 'easeInOut', repeat: Infinity }}
       />
-      {/* Contraste suave para el vector blanco, sin ensuciar el color */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/18 via-transparent to-white/12" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/14" />
+      {/* Scan digital sutil */}
+      <motion.div
+        className="pointer-events-none absolute inset-x-0 h-10 bg-gradient-to-b from-white/25 via-white/5 to-transparent"
+        animate={{ top: ['-10%', '110%'] }}
+        transition={{ duration: 4.8, ease: 'linear', repeat: Infinity, repeatDelay: 1.6 }}
+      />
     </>
+  );
+}
+
+/** Esquinas HUD — lenguaje digital sin tapar el vector. */
+function HudCorners({ color = 'rgba(255,255,255,0.7)' }: { color?: string }) {
+  const arm = 14;
+  const t = 2;
+  return (
+    <svg className="pointer-events-none absolute inset-2.5" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
+      <path d={`M0 0 H${arm} M0 0 V${arm}`} stroke={color} strokeWidth={t} fill="none" vectorEffect="non-scaling-stroke" />
+      <path d={`M100 0 H${100 - arm} M100 0 V${arm}`} stroke={color} strokeWidth={t} fill="none" vectorEffect="non-scaling-stroke" />
+      <path d={`M0 100 H${arm} M0 100 V${100 - arm}`} stroke={color} strokeWidth={t} fill="none" vectorEffect="non-scaling-stroke" />
+      <path d={`M100 100 H${100 - arm} M100 100 V${100 - arm}`} stroke={color} strokeWidth={t} fill="none" vectorEffect="non-scaling-stroke" />
+    </svg>
   );
 }
 
@@ -241,21 +249,56 @@ function CardMeta({
   size: string;
 }) {
   return (
-    <div className="relative flex flex-1 flex-col border-t border-white/8 bg-ink-2 px-4 pb-4 pt-3.5">
+    <div className="relative flex flex-1 flex-col bg-[#080b10] px-4 pb-4 pt-3.5">
       <div
-        className="pointer-events-none absolute inset-y-0 left-0 w-[3px]"
-        style={{ background: accent, boxShadow: `0 0 16px ${accentGlow}` }}
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{
+          background: `linear-gradient(90deg, ${accent}, transparent 70%)`,
+          boxShadow: `0 0 18px ${accentGlow}`,
+        }}
       />
-      <div className="mb-1.5 flex items-center justify-between gap-2 pl-1">
-        <p className="font-mono text-base uppercase tracking-[0.14em] text-paper/80">{category}</p>
-        <p className="shrink-0 font-mono text-sm tabular-nums text-paper/65">{size}</p>
+      <div className="mb-2.5 flex items-center justify-between gap-2">
+        <span
+          className="inline-flex items-center gap-2 rounded-sm px-2 py-1 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-ink"
+          style={{ background: accent, boxShadow: `0 0 20px ${accentGlow}` }}
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-ink/80" />
+          {category}
+        </span>
+        <p className="shrink-0 font-mono text-sm tabular-nums text-paper/70">{size}</p>
       </div>
-      <p className="pl-1 font-display text-xl font-extrabold leading-tight tracking-[-0.04em] text-paper">
+
+      {/* DM Sans legible — no Syne display en títulos de card */}
+      <p className="text-[1.15rem] font-semibold leading-snug tracking-[-0.015em] text-paper sm:text-[1.2rem]">
         {title}
       </p>
       {description ? (
-        <p className="mt-2 line-clamp-2 pl-1 text-base leading-relaxed text-paper/78">{description}</p>
+        <p className="mt-1.5 line-clamp-2 text-[0.98rem] leading-relaxed text-paper/80">{description}</p>
       ) : null}
+    </div>
+  );
+}
+
+function CoverStage({
+  children,
+  index,
+  blank,
+}: {
+  children: React.ReactNode;
+  index: string;
+  blank?: boolean;
+}) {
+  return (
+    <div className={cn('relative h-44 overflow-hidden', blank && 'bg-[#070a10]')}>
+      {children}
+      <span className="pointer-events-none absolute right-2.5 top-1.5 select-none font-mono text-3xl font-bold tabular-nums tracking-tight text-white/20">
+        {index}
+      </span>
+      <HudCorners />
+      <div className="pointer-events-none absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between">
+        <span className="h-1 w-8 rounded-full bg-white/35" />
+        <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/45">live</span>
+      </div>
     </div>
   );
 }
@@ -275,34 +318,37 @@ export function BlankTemplateCard({
         'group relative flex h-full flex-col overflow-hidden rounded-sm border text-left transition duration-300',
         selected
           ? 'border-neon/70 bg-ink-2 shadow-[0_18px_44px_rgba(79,128,255,0.28)] ring-1 ring-neon/40'
-          : 'border-white/10 bg-ink-2/70 hover:-translate-y-0.5 hover:border-white/25 hover:shadow-[0_16px_40px_rgba(0,0,0,0.35)]',
+          : 'border-white/10 bg-ink-2/70 hover:-translate-y-1 hover:border-white/25 hover:shadow-[0_20px_48px_rgba(0,0,0,0.4)]',
       )}
     >
-      <div className="relative h-44 overflow-hidden bg-[#0a0e14]">
-        <div className="absolute inset-0 opacity-45 [background-image:linear-gradient(rgba(79,128,255,0.35)_1px,transparent_1px),linear-gradient(90deg,rgba(79,128,255,0.35)_1px,transparent_1px)] [background-size:20px_20px]" />
+      <CoverStage index="00" blank>
+        <div className="absolute inset-0 opacity-50 [background-image:linear-gradient(rgba(79,128,255,0.4)_1px,transparent_1px),linear-gradient(90deg,rgba(79,128,255,0.4)_1px,transparent_1px)] [background-size:18px_18px]" />
         <motion.div
-          className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neon/25 blur-2xl"
-          animate={{ opacity: [0.3, 0.75, 0.3], scale: [0.85, 1.2, 0.85] }}
+          className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neon/30 blur-2xl"
+          animate={{ opacity: [0.3, 0.8, 0.3], scale: [0.85, 1.2, 0.85] }}
           transition={{ duration: 5.5, ease: 'easeInOut', repeat: Infinity }}
         />
-        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 200 140" fill="none" aria-hidden>
-          <rect x="36" y="24" width="128" height="92" rx="4" {...strokeProps} strokeDasharray="7 7" />
-          <line x1="100" y1="52" x2="100" y2="88" {...strokeProps} />
-          <line x1="82" y1="70" x2="118" y2="70" {...strokeProps} />
-        </svg>
+        <motion.div
+          className="absolute inset-3 overflow-hidden sm:inset-4"
+          whileHover={{ scale: 1.03 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 200 140" fill="none" aria-hidden>
+            <rect x="36" y="24" width="128" height="92" rx="4" {...strokeProps} strokeDasharray="7 7" />
+            <line x1="100" y1="52" x2="100" y2="88" {...strokeProps} />
+            <line x1="82" y1="70" x2="118" y2="70" {...strokeProps} />
+          </svg>
+        </motion.div>
         <div className="absolute inset-0 flex items-center justify-center">
           <Sparkles
             className={cn(
-              'text-paper/60 transition group-hover:text-neon',
+              'text-paper/65 transition group-hover:text-neon',
               selected && 'text-neon',
             )}
             size={22}
           />
         </div>
-        <span className="absolute right-3 top-2 font-display text-4xl font-extrabold tracking-tighter text-white/12">
-          00
-        </span>
-      </div>
+      </CoverStage>
       <CardMeta
         category="Canvas"
         accent={BRAND.neon}
@@ -333,34 +379,29 @@ export function TemplateCard({
         'group relative flex h-full flex-col overflow-hidden rounded-sm border text-left transition duration-300',
         selected
           ? 'border-white/40'
-          : 'border-white/10 hover:-translate-y-0.5 hover:border-white/25 hover:shadow-[0_16px_40px_rgba(0,0,0,0.35)]',
+          : 'border-white/10 hover:-translate-y-1 hover:border-white/25 hover:shadow-[0_20px_48px_rgba(0,0,0,0.4)]',
       )}
       style={
         selected
           ? {
-              boxShadow: `0 0 0 1px ${visual.accent}77, 0 22px 52px ${visual.glow}`,
+              boxShadow: `0 0 0 1px ${visual.accent}88, 0 24px 56px ${visual.glow}`,
             }
           : undefined
       }
     >
-      <div className="relative h-44 overflow-hidden" style={{ background: visual.accent }}>
-        <LivingField accent={visual.accent} soft={visual.soft} />
-
-        {/* Índice fantasma — ritmo editorial, no es el nombre del tipo */}
-        <span className="pointer-events-none absolute -right-1 -top-1 select-none font-display text-6xl font-extrabold leading-none tracking-tighter text-white/[0.14]">
-          {visual.index}
-        </span>
-
-        {/* Escenario del vector: mismo peso blanco en todas */}
+      <CoverStage index={visual.index}>
+        <div className="absolute inset-0" style={{ background: visual.accent }}>
+          <LivingField accent={visual.accent} soft={visual.soft} />
+        </div>
         <motion.div
           className="absolute inset-3 overflow-hidden sm:inset-4"
           initial={false}
-          whileHover={{ scale: 1.03 }}
+          whileHover={{ scale: 1.04 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
           <FormatVectors kind={visual.vector} />
         </motion.div>
-      </div>
+      </CoverStage>
 
       <CardMeta
         category={visual.category}
