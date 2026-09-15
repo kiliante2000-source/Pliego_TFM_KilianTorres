@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { cn } from '../../utils/cn';
 import type { TemplateInfo } from '../../types/document';
 
@@ -284,7 +285,7 @@ function CoverStage({
   index,
   blank,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   index: string;
   blank?: boolean;
 }) {
