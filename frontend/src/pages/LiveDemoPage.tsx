@@ -271,17 +271,6 @@ function GestureFilm() {
 
   return (
     <section className="relative min-h-svh overflow-hidden bg-[#050608] py-28">
-      {/* Soft ambient wash only — no panel overlays */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse 60% 50% at 15% 20%, rgba(255,78,219,0.28), transparent 60%), radial-gradient(ellipse 50% 45% at 85% 30%, rgba(79,128,255,0.24), transparent 58%), radial-gradient(ellipse 45% 40% at 50% 90%, rgba(168,85,247,0.16), transparent 55%)',
-          }}
-        />
-      </div>
-
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <p className="font-mono text-sm uppercase tracking-[0.2em] text-rosa">El gesto</p>
         <h2
