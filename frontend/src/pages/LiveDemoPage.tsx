@@ -123,7 +123,7 @@ function ChapterGallery() {
       <div className="relative z-10 mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-16">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.22em] text-white/70">
+            <p className="font-mono text-sm uppercase tracking-[0.18em] text-white/85">
               Formatos · Cap. {chapter.id}
             </p>
             <h2
@@ -144,7 +144,7 @@ function ChapterGallery() {
                 key={ch.id}
                 type="button"
                 onClick={() => select(i)}
-                className="rounded-full px-3.5 py-2 font-mono text-xs uppercase tracking-[0.14em] transition sm:text-[13px] sm:tracking-[0.16em]"
+                className="rounded-full px-3.5 py-2 font-mono text-sm uppercase tracking-[0.14em] transition sm:text-base sm:tracking-[0.14em]"
                 style={{
                   background: on ? ch.accent : 'rgba(0,0,0,0.35)',
                   color: on ? '#050608' : 'rgba(255,255,255,0.75)',
@@ -166,7 +166,7 @@ function ChapterGallery() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.4, ease }}
             >
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-white/65">
+              <p className="font-mono text-sm uppercase tracking-[0.16em] text-white/80">
                 Cap. {chapter.id} · {chapter.product}
               </p>
               <h3
@@ -199,7 +199,7 @@ function ChapterGallery() {
                 animate={{ scale: [1, 1.06, 1], rotate: [0, 6, 0] }}
                 transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
               />
-              <div className="absolute left-5 top-5 font-mono text-xs uppercase tracking-[0.18em] text-white/60">
+              <div className="absolute left-5 top-5 font-mono text-sm uppercase tracking-[0.16em] text-white/75">
                 <BrandName /> · {chapter.id}
               </div>
               <div className="absolute inset-x-5 bottom-6">
@@ -242,7 +242,7 @@ function ChapterGallery() {
               }}
             >
               <div className="px-3 py-3">
-                <p className="font-mono text-xs uppercase tracking-[0.14em] text-white/55">
+                <p className="font-mono text-xs uppercase tracking-[0.14em] text-white/75">
                   {ch.id}
                 </p>
                 <p className="mt-1 font-display text-sm font-extrabold tracking-tight text-white">
@@ -431,7 +431,7 @@ function GestureFilm() {
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: i * 0.12 }}
-                          className="w-56 rounded border border-white/15 bg-white/5 px-4 py-2 font-mono text-xs uppercase tracking-[0.16em]"
+                          className="w-56 rounded border border-white/15 bg-white/5 px-4 py-2 font-mono text-sm uppercase tracking-[0.14em]"
                           style={{ opacity: 0.4 + i * 0.3 }}
                         >
                           {v}
@@ -446,7 +446,7 @@ function GestureFilm() {
                         animate={{ y: 0, opacity: 1 }}
                         className="w-full max-w-sm rounded-sm border border-lima/50 bg-black/60 p-6 shadow-[0_0_40px_rgba(178,255,58,0.2)]"
                       >
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-lima">
+                        <p className="font-mono text-sm uppercase tracking-[0.16em] text-lima">
                           live link
                         </p>
                         <p className="mt-3 text-2xl font-bold tracking-tight" style={display}>
@@ -584,7 +584,7 @@ export function LiveDemoPage() {
         <div className="flex items-center gap-2">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-2 font-mono text-xs uppercase tracking-[0.14em] text-paper/55 no-underline transition hover:bg-white/5 hover:text-paper"
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-2 font-mono text-xs uppercase tracking-[0.14em] text-paper/72 no-underline transition hover:bg-white/5 hover:text-paper"
           >
             <ArrowLeft size={14} /> Volver
           </Link>
@@ -678,7 +678,7 @@ export function LiveDemoPage() {
             </Magnetic>
             <a
               href="#obra"
-              className="font-mono text-xs uppercase tracking-[0.18em] text-paper/50 no-underline transition hover:text-paper"
+              className="font-mono text-sm uppercase tracking-[0.16em] text-paper/70 no-underline transition hover:text-paper"
             >
               Ver la obra ↓
             </a>
@@ -709,7 +709,7 @@ export function LiveDemoPage() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.6 }}
-          className="font-mono text-xs uppercase tracking-[0.22em] text-neon"
+          className="font-mono text-sm uppercase tracking-[0.18em] text-neon"
         >
           Manifiesto
         </motion.p>
@@ -761,7 +761,7 @@ export function LiveDemoPage() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative font-mono text-xs uppercase tracking-[0.22em] text-naranja"
+          className="relative font-mono text-sm uppercase tracking-[0.18em] text-naranja"
         >
           Ahora
         </motion.p>

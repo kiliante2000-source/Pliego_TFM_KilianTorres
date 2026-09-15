@@ -157,7 +157,7 @@ export function Input({
   return (
     <label className="flex w-full flex-col gap-1.5 text-left">
       {label ? (
-        <span className="font-mono text-xs font-medium uppercase tracking-[0.16em] text-paper-muted">
+        <span className="font-mono text-sm font-medium uppercase tracking-[0.14em] text-paper-muted">
           {label}
         </span>
       ) : null}
@@ -180,7 +180,7 @@ export function Textarea({
   return (
     <label className="flex w-full flex-col gap-1.5 text-left">
       {label ? (
-        <span className="font-mono text-xs font-medium uppercase tracking-[0.16em] text-paper-muted">
+        <span className="font-mono text-sm font-medium uppercase tracking-[0.14em] text-paper-muted">
           {label}
         </span>
       ) : null}
@@ -204,7 +204,7 @@ export function Select({
   return (
     <label className="flex w-full flex-col gap-1.5 text-left">
       {label ? (
-        <span className="font-mono text-xs font-medium uppercase tracking-[0.16em] text-paper-muted">
+        <span className="font-mono text-sm font-medium uppercase tracking-[0.14em] text-paper-muted">
           {label}
         </span>
       ) : null}
