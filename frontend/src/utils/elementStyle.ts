@@ -42,12 +42,20 @@ function hexToRgba(hex: string, alpha: number) {
 
 export function elementLabel(el: CanvasElement): string {
   if (el.name) return el.name;
-  if (el.type === 'text') return el.text.slice(0, 28) || 'Texto';
-  if (el.type === 'button') return el.label || 'Botón';
-  if (el.type === 'video') return 'Vídeo';
-  if (el.type === 'image') return 'Imagen';
-  if (el.type === 'shape') return el.shape === 'ellipse' ? 'Elipse' : 'Forma';
-  return el.type;
+  switch (el.type) {
+    case 'text':
+      return el.text.slice(0, 28) || 'Texto';
+    case 'button':
+      return el.label || 'Botón';
+    case 'video':
+      return 'Vídeo';
+    case 'image':
+      return 'Imagen';
+    case 'shape':
+      return el.shape === 'ellipse' ? 'Elipse' : 'Forma';
+    default:
+      return 'Elemento';
+  }
 }
 
 export function konvaShadow(effects?: ElementEffects) {

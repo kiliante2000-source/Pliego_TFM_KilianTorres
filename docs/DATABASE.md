@@ -2,7 +2,7 @@
 
 ## Desarrollo (actual)
 
-Prisma usa **SQLite** (`file:./dev.db`) para fricción cero en local y en el agente Cloud.
+Prisma usa **SQLite** (`file:./dev.db`) para fricción cero en desarrollo local y demos.
 
 ## Producción MySQL
 

@@ -40,7 +40,7 @@ Identidad: tipografía editorial, contraste alto, interfaz oscura tipo estudio c
               └──────────┘            └──────────┘             └──────────┘
 ```
 
-\* En desarrollo local del agente: SQLite (mismo esquema Prisma adaptado). En Docker Compose / producción: MySQL 8.
+\* En desarrollo local: SQLite (mismo esquema Prisma adaptado). En Docker Compose / producción: MySQL 8.
 
 ### Capas backend (Clean Architecture ligera)
 
