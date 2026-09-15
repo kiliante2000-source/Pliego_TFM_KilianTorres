@@ -12,19 +12,19 @@ const BRAND = {
   naranja: '#FF7A45',
 } as const;
 
-function glow(hex: string, alpha = 0.45) {
+function glow(hex: string, alpha = 0.5) {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-/** Mismo trazo blanco en todos los covers. */
 const STROKE = '#FFFFFF';
 const SW = 2.85;
 
 type Visual = {
   category: string;
+  index: string;
   accent: string;
   soft: string;
   glow: string;
@@ -34,6 +34,7 @@ type Visual = {
 const VISUALS: Record<string, Visual> = {
   'manifesto-digital': {
     category: 'Manifiesto',
+    index: '01',
     accent: BRAND.rosa,
     soft: BRAND.violet,
     glow: glow(BRAND.rosa),
@@ -41,6 +42,7 @@ const VISUALS: Record<string, Visual> = {
   },
   'portfolio-kinetic': {
     category: 'Portfolio',
+    index: '02',
     accent: BRAND.neon,
     soft: BRAND.accent2,
     glow: glow(BRAND.neon),
@@ -48,6 +50,7 @@ const VISUALS: Record<string, Visual> = {
   },
   'portada-editorial': {
     category: 'Portada',
+    index: '03',
     accent: BRAND.violet,
     soft: BRAND.rosa,
     glow: glow(BRAND.violet),
@@ -55,13 +58,15 @@ const VISUALS: Record<string, Visual> = {
   },
   'revista-doble': {
     category: 'Revista',
+    index: '04',
     accent: BRAND.lima,
-    soft: '#8FD42A',
-    glow: glow(BRAND.lima, 0.35),
+    soft: '#9AE835',
+    glow: glow(BRAND.lima, 0.38),
     vector: 'magazine',
   },
   'catalogo-producto': {
     category: 'Lookbook',
+    index: '05',
     accent: BRAND.naranja,
     soft: '#FF9A6A',
     glow: glow(BRAND.naranja),
@@ -69,6 +74,7 @@ const VISUALS: Record<string, Visual> = {
   },
   'presentacion-slide': {
     category: 'Presentación',
+    index: '06',
     accent: BRAND.accent2,
     soft: BRAND.neon,
     glow: glow(BRAND.accent2),
@@ -78,6 +84,7 @@ const VISUALS: Record<string, Visual> = {
 
 const FALLBACK: Visual = {
   category: 'Plantilla',
+  index: '00',
   accent: BRAND.neon,
   soft: BRAND.violet,
   glow: glow(BRAND.neon, 0.3),
@@ -174,36 +181,35 @@ function FormatVectors({ kind }: { kind: Visual['vector'] }) {
   );
 }
 
-/** Color plano + degradado suave en movimiento. */
-function FlatMotionField({ accent, soft }: { accent: string; soft: string }) {
+/** Campo de marca con movimiento — limpio pero con presencia. */
+function BrandField({ accent, soft }: { accent: string; soft: string }) {
   return (
     <>
       <div className="absolute inset-0" style={{ background: accent }} />
       <motion.div
-        className="absolute inset-0"
+        className="absolute -inset-[40%]"
         style={{
-          background: `linear-gradient(135deg, ${accent} 0%, ${soft} 55%, ${accent} 100%)`,
+          background: `linear-gradient(120deg, ${accent} 15%, ${soft} 48%, ${accent} 82%)`,
         }}
-        animate={{ opacity: [0.85, 1, 0.85] }}
-        transition={{ duration: 6, ease: 'easeInOut', repeat: Infinity }}
+        animate={{ x: ['-10%', '10%', '-10%'], y: ['-6%', '8%', '-6%'] }}
+        transition={{ duration: 11, ease: 'easeInOut', repeat: Infinity }}
       />
       <motion.div
-        className="absolute -right-1/4 -top-1/3 h-[90%] w-[80%] rounded-full opacity-35 blur-3xl"
+        className="absolute -right-[20%] top-[-30%] h-[95%] w-[75%] rounded-full opacity-50 blur-3xl"
         style={{ background: soft }}
-        animate={{ x: [0, -20, 0], y: [0, 16, 0] }}
-        transition={{ duration: 12, ease: 'easeInOut', repeat: Infinity }}
+        animate={{ x: [0, -24, 0], y: [0, 20, 0], scale: [1, 1.08, 1] }}
+        transition={{ duration: 9, ease: 'easeInOut', repeat: Infinity }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-white/10" />
+      <motion.div
+        className="absolute -bottom-[35%] -left-[25%] h-[80%] w-[70%] rounded-full opacity-35 blur-3xl"
+        style={{ background: '#ffffff' }}
+        animate={{ x: [0, 18, 0], y: [0, -14, 0] }}
+        transition={{ duration: 10, ease: 'easeInOut', repeat: Infinity }}
+      />
+      {/* Plano tipográfico: franja inferior para anclar el vector */}
+      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/25 to-transparent" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.22),transparent_55%)]" />
     </>
-  );
-}
-
-function cardShell(selected: boolean, accent?: string, accentGlow?: string) {
-  return cn(
-    'group relative flex h-full flex-col overflow-hidden rounded-xl border text-left transition duration-250',
-    selected
-      ? 'border-white/35 bg-ink-2'
-      : 'border-white/10 bg-ink-2/80 hover:-translate-y-0.5 hover:border-white/22',
   );
 }
 
@@ -218,30 +224,43 @@ export function BlankTemplateCard({
     <button
       type="button"
       onClick={onSelect}
-      className={cardShell(selected)}
-      style={
+      className={cn(
+        'group relative flex h-full flex-col overflow-hidden rounded-2xl border text-left transition duration-300',
         selected
-          ? { boxShadow: `0 0 0 1px ${BRAND.neon}66, 0 18px 40px ${glow(BRAND.neon, 0.28)}` }
-          : undefined
-      }
+          ? 'border-neon/60 bg-ink-2 shadow-[0_20px_50px_rgba(79,128,255,0.25)]'
+          : 'border-white/10 bg-ink-2/70 hover:-translate-y-1 hover:border-white/25 hover:shadow-[0_24px_50px_rgba(0,0,0,0.45)]',
+      )}
     >
-      <div className="relative aspect-[5/3] overflow-hidden bg-[#0a0e14]">
-        <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(79,128,255,0.35)_1px,transparent_1px),linear-gradient(90deg,rgba(79,128,255,0.35)_1px,transparent_1px)] [background-size:20px_20px]" />
-        <svg className="absolute inset-0 h-full w-full p-5" viewBox="0 0 200 140" fill="none" aria-hidden>
-          <rect x="40" y="28" width="120" height="84" rx="4" {...strokeProps} strokeDasharray="8 8" />
-          <line x1="100" y1="52" x2="100" y2="88" {...strokeProps} />
-          <line x1="82" y1="70" x2="118" y2="70" {...strokeProps} />
-        </svg>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Sparkles
-            className={cn('text-paper/55 transition group-hover:text-neon', selected && 'text-neon')}
-            size={22}
-          />
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#090d13]">
+        <div className="absolute inset-0 opacity-50 [background-image:linear-gradient(rgba(79,128,255,0.45)_1px,transparent_1px),linear-gradient(90deg,rgba(79,128,255,0.45)_1px,transparent_1px)] [background-size:22px_22px]" />
+        <motion.div
+          className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neon/35 blur-3xl"
+          animate={{ opacity: [0.35, 0.75, 0.35], scale: [0.9, 1.2, 0.9] }}
+          transition={{ duration: 5, ease: 'easeInOut', repeat: Infinity }}
+        />
+        <div className="absolute inset-0 flex items-center justify-center p-8">
+          <svg className="h-full w-full" viewBox="0 0 200 140" fill="none" aria-hidden>
+            <rect x="40" y="28" width="120" height="84" rx="6" {...strokeProps} strokeDasharray="8 8" />
+            <line x1="100" y1="52" x2="100" y2="88" {...strokeProps} />
+            <line x1="82" y1="70" x2="118" y2="70" {...strokeProps} />
+          </svg>
         </div>
+        <Sparkles
+          className={cn(
+            'pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-paper/50 transition group-hover:text-neon',
+            selected && 'text-neon',
+          )}
+          size={24}
+        />
+        <span className="absolute left-4 top-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-neon/80">
+          Start
+        </span>
       </div>
-      <div className="flex flex-1 flex-col gap-1 px-4 py-3.5">
-        <p className="text-[1.05rem] font-semibold tracking-[-0.015em] text-paper">En blanco</p>
-        <p className="text-[0.95rem] text-paper/70">Canvas vacío · 1080×1350</p>
+      <div className="flex flex-1 flex-col px-4 py-4">
+        <p className="text-[1.15rem] font-semibold tracking-[-0.02em] text-paper">En blanco</p>
+        <p className="mt-1 text-[0.95rem] leading-relaxed text-paper/70">
+          Lienzo libre · 1080×1350
+        </p>
       </div>
     </button>
   );
@@ -262,35 +281,61 @@ export function TemplateCard({
     <button
       type="button"
       onClick={onSelect}
-      className={cardShell(selected, visual.accent, visual.glow)}
+      className={cn(
+        'group relative flex h-full flex-col overflow-hidden rounded-2xl border text-left transition duration-300',
+        selected
+          ? 'border-white/40 bg-ink-2'
+          : 'border-white/10 bg-ink-2/70 hover:-translate-y-1 hover:border-white/25 hover:shadow-[0_24px_50px_rgba(0,0,0,0.45)]',
+      )}
       style={
         selected
-          ? { boxShadow: `0 0 0 1px ${visual.accent}77, 0 18px 44px ${visual.glow}` }
+          ? { boxShadow: `0 0 0 1px ${visual.accent}88, 0 22px 56px ${visual.glow}` }
           : undefined
       }
     >
-      <div className="relative aspect-[5/3] overflow-hidden" style={{ background: visual.accent }}>
-        <FlatMotionField accent={visual.accent} soft={visual.soft} />
-        <div className="absolute inset-0 p-4 sm:p-5">
-          <FormatVectors kind={visual.vector} />
-        </div>
+      <div className="relative aspect-[4/3] overflow-hidden" style={{ background: visual.accent }}>
+        <BrandField accent={visual.accent} soft={visual.soft} />
+
+        {/* Índice grande, solo atmósfera */}
+        <span className="pointer-events-none absolute -right-1 top-0 select-none font-mono text-7xl font-bold leading-none tracking-tighter text-white/[0.16]">
+          {visual.index}
+        </span>
+
+        {/* Escenario del vector — panel flotante */}
+        <motion.div
+          className="absolute inset-4 overflow-hidden rounded-xl border border-white/25 bg-black/15 shadow-[0_12px_40px_rgba(0,0,0,0.25)] backdrop-blur-[2px] sm:inset-5"
+          whileHover={{ scale: 1.03, y: -2 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="absolute inset-0 p-2">
+            <FormatVectors kind={visual.vector} />
+          </div>
+        </motion.div>
       </div>
 
-      <div className="flex flex-1 flex-col px-4 py-3.5">
-        <div className="mb-1 flex items-center gap-2">
-          <span
-            className="h-2 w-2 shrink-0 rounded-full"
-            style={{ background: visual.accent, boxShadow: `0 0 10px ${visual.glow}` }}
-          />
-          <p className="text-[0.95rem] font-medium text-paper/75">{visual.category}</p>
-          <p className="ml-auto font-mono text-sm tabular-nums text-paper/55">
+      {/* Meta: acento de color + tipografía legible */}
+      <div className="relative flex flex-1 flex-col px-4 py-4">
+        <div
+          className="absolute inset-x-0 top-0 h-[2px]"
+          style={{
+            background: `linear-gradient(90deg, ${visual.accent}, transparent)`,
+          }}
+        />
+        <div className="mb-1.5 flex items-center justify-between gap-2">
+          <p
+            className="text-[0.95rem] font-semibold tracking-[-0.01em]"
+            style={{ color: visual.accent }}
+          >
+            {visual.category}
+          </p>
+          <p className="font-mono text-sm tabular-nums text-paper/55">
             {template.width}×{template.height}
           </p>
         </div>
-        <p className="text-[1.1rem] font-semibold leading-snug tracking-[-0.015em] text-paper">
+        <p className="text-[1.15rem] font-semibold leading-snug tracking-[-0.02em] text-paper">
           {template.name}
         </p>
-        <p className="mt-1 line-clamp-2 text-[0.95rem] leading-relaxed text-paper/72">
+        <p className="mt-1.5 line-clamp-2 text-[0.95rem] leading-relaxed text-paper/72">
           {template.description}
         </p>
       </div>
