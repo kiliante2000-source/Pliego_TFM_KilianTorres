@@ -27,8 +27,10 @@ const SW = 2.85;
 type Visual = {
   category: string;
   index: string;
+  /** Color protagonista — se lee claro en el cover */
   accent: string;
-  mesh: [string, string, string];
+  /** Segundo tono del degradado en movimiento */
+  soft: string;
   glow: string;
   vector: 'manifesto' | 'portfolio' | 'cover' | 'magazine' | 'catalog' | 'slide';
 };
@@ -38,7 +40,7 @@ const VISUALS: Record<string, Visual> = {
     category: 'Manifiesto',
     index: '01',
     accent: BRAND.rosa,
-    mesh: [BRAND.rosa, BRAND.violet, BRAND.neon],
+    soft: BRAND.violet,
     glow: glow(BRAND.rosa, 0.55),
     vector: 'manifesto',
   },
@@ -46,7 +48,7 @@ const VISUALS: Record<string, Visual> = {
     category: 'Portfolio',
     index: '02',
     accent: BRAND.neon,
-    mesh: [BRAND.neon, BRAND.accent2, BRAND.violet],
+    soft: BRAND.accent2,
     glow: glow(BRAND.neon, 0.55),
     vector: 'portfolio',
   },
@@ -54,7 +56,7 @@ const VISUALS: Record<string, Visual> = {
     category: 'Portada',
     index: '03',
     accent: BRAND.violet,
-    mesh: [BRAND.violet, BRAND.rosa, BRAND.neon],
+    soft: BRAND.rosa,
     glow: glow(BRAND.violet, 0.55),
     vector: 'cover',
   },
@@ -62,7 +64,7 @@ const VISUALS: Record<string, Visual> = {
     category: 'Revista',
     index: '04',
     accent: BRAND.lima,
-    mesh: [BRAND.lima, '#9AE835', BRAND.neon],
+    soft: '#8FD42A',
     glow: glow(BRAND.lima, 0.42),
     vector: 'magazine',
   },
@@ -70,7 +72,7 @@ const VISUALS: Record<string, Visual> = {
     category: 'Lookbook',
     index: '05',
     accent: BRAND.naranja,
-    mesh: [BRAND.naranja, '#FF9A6A', BRAND.rosa],
+    soft: '#FF9A6A',
     glow: glow(BRAND.naranja, 0.5),
     vector: 'catalog',
   },
@@ -78,7 +80,7 @@ const VISUALS: Record<string, Visual> = {
     category: 'Presentación',
     index: '06',
     accent: BRAND.accent2,
-    mesh: [BRAND.accent2, BRAND.neon, BRAND.violet],
+    soft: BRAND.neon,
     glow: glow(BRAND.accent2, 0.5),
     vector: 'slide',
   },
@@ -88,7 +90,7 @@ const FALLBACK: Visual = {
   category: 'Plantilla',
   index: '00',
   accent: BRAND.neon,
-  mesh: [BRAND.neon, BRAND.violet, BRAND.rosa],
+  soft: BRAND.violet,
   glow: glow(BRAND.neon, 0.35),
   vector: 'cover',
 };
@@ -125,13 +127,13 @@ function FormatVectors({ kind }: { kind: Visual['vector'] }) {
   }
 
   if (kind === 'portfolio') {
+    // Pieza limpia: un artboard vertical con imagen + tipografía (case study)
     return (
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 200 140" fill="none" aria-hidden>
-        <rect x="22" y="28" width="78" height="92" rx="5" {...strokeProps} />
-        <rect x="48" y="18" width="90" height="92" rx="5" {...strokeProps} />
-        <rect x="78" y="30" width="100" height="86" rx="5" {...strokeProps} />
-        <line x1="96" y1="88" x2="158" y2="88" {...strokeProps} />
-        <line x1="96" y1="102" x2="142" y2="102" {...strokeProps} />
+        <rect x="52" y="12" width="96" height="116" rx="4" {...strokeProps} />
+        <rect x="64" y="24" width="72" height="58" rx="3" {...strokeProps} />
+        <line x1="64" y1="96" x2="136" y2="96" {...strokeProps} />
+        <line x1="64" y1="110" x2="112" y2="110" {...strokeProps} />
       </svg>
     );
   }
@@ -189,35 +191,36 @@ function FormatVectors({ kind }: { kind: Visual['vector'] }) {
   );
 }
 
-/** Campo de color vivo — digital, con profundidad. */
-function LivingField({ colors, accent }: { colors: [string, string, string]; accent: string }) {
-  const [a, b, c] = colors;
+/**
+ * Fondo plano de marca + degradado suave en movimiento.
+ * El color protagonista se lee claro; el soft solo anima el plano.
+ */
+function LivingField({ accent, soft }: { accent: string; soft: string }) {
   return (
     <>
       <div className="absolute inset-0" style={{ background: accent }} />
       <motion.div
-        className="absolute -inset-[70%] opacity-90 mix-blend-soft-light"
+        className="absolute -inset-[30%]"
         style={{
-          background: `conic-gradient(from 140deg at 38% 42%, ${a}, ${b}, ${c}, ${a})`,
+          background: `linear-gradient(125deg, ${accent} 0%, ${soft} 42%, ${accent} 78%)`,
         }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 26, ease: 'linear', repeat: Infinity }}
+        animate={{ x: ['-8%', '8%', '-8%'], y: ['-4%', '6%', '-4%'] }}
+        transition={{ duration: 14, ease: 'easeInOut', repeat: Infinity }}
       />
       <motion.div
-        className="absolute -left-[20%] -top-[35%] h-[130%] w-[90%] rounded-full opacity-75 blur-3xl mix-blend-screen"
-        style={{ background: b }}
-        animate={{ x: [0, 36, -18, 0], y: [0, -24, 16, 0] }}
-        transition={{ duration: 10, ease: 'easeInOut', repeat: Infinity }}
+        className="absolute -right-[15%] -top-[25%] h-[85%] w-[70%] rounded-full opacity-45 blur-3xl"
+        style={{ background: soft }}
+        animate={{ x: [0, -28, 0], y: [0, 22, 0] }}
+        transition={{ duration: 11, ease: 'easeInOut', repeat: Infinity }}
       />
       <motion.div
-        className="absolute -bottom-[40%] -right-[25%] h-[120%] w-[80%] rounded-full opacity-60 blur-3xl mix-blend-screen"
-        style={{ background: c }}
-        animate={{ x: [0, -28, 20, 0], y: [0, 18, -26, 0] }}
-        transition={{ duration: 12, ease: 'easeInOut', repeat: Infinity }}
+        className="absolute -bottom-[30%] -left-[20%] h-[70%] w-[65%] rounded-full opacity-30 blur-3xl"
+        style={{ background: accent }}
+        animate={{ x: [0, 24, 0], y: [0, -18, 0] }}
+        transition={{ duration: 13, ease: 'easeInOut', repeat: Infinity }}
       />
-      {/* Plano editorial: franja diagonal oscura para contraste del vector */}
-      <div className="absolute inset-0 bg-[linear-gradient(125deg,rgba(5,6,8,0.15)_0%,transparent_42%,rgba(5,6,8,0.28)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_20%,rgba(255,255,255,0.22),transparent_50%)]" />
+      {/* Contraste suave para el vector blanco, sin ensuciar el color */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/18 via-transparent to-white/12" />
     </>
   );
 }
@@ -341,7 +344,7 @@ export function TemplateCard({
       }
     >
       <div className="relative h-44 overflow-hidden" style={{ background: visual.accent }}>
-        <LivingField colors={visual.mesh} accent={visual.accent} />
+        <LivingField accent={visual.accent} soft={visual.soft} />
 
         {/* Índice fantasma — ritmo editorial, no es el nombre del tipo */}
         <span className="pointer-events-none absolute -right-1 -top-1 select-none font-display text-6xl font-extrabold leading-none tracking-tighter text-white/[0.14]">
@@ -350,7 +353,7 @@ export function TemplateCard({
 
         {/* Escenario del vector: mismo peso blanco en todas */}
         <motion.div
-          className="absolute inset-3 overflow-hidden rounded-[2px] border border-white/20 bg-black/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] backdrop-blur-[1px] sm:inset-4"
+          className="absolute inset-3 overflow-hidden sm:inset-4"
           initial={false}
           whileHover={{ scale: 1.03 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
