@@ -271,46 +271,19 @@ function GestureFilm() {
 
   return (
     <section className="relative min-h-svh overflow-hidden bg-[#050608] py-28">
-      {/* Atmospheric brand lighting */}
-      <div className="pointer-events-none absolute inset-0">
+      {/* Soft ambient wash only — no panel overlays */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 70% 55% at 18% 20%, rgba(255,78,219,0.55), transparent 55%), radial-gradient(ellipse 55% 50% at 82% 28%, rgba(79,128,255,0.5), transparent 55%), radial-gradient(ellipse 50% 45% at 55% 88%, rgba(168,85,247,0.42), transparent 50%)',
+              'radial-gradient(ellipse 60% 50% at 15% 20%, rgba(255,78,219,0.28), transparent 60%), radial-gradient(ellipse 50% 45% at 85% 30%, rgba(79,128,255,0.24), transparent 58%), radial-gradient(ellipse 45% 40% at 50% 90%, rgba(168,85,247,0.16), transparent 55%)',
           }}
-        />
-        <motion.div
-          className="absolute -left-[10%] top-[8%] h-[55vmin] w-[55vmin] rounded-full blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(255,78,219,0.75), transparent 68%)' }}
-          animate={{ x: [0, 40, 0], y: [0, 28, 0], scale: [1, 1.12, 1] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute -right-[8%] top-[18%] h-[60vmin] w-[60vmin] rounded-full blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(79,128,255,0.7), transparent 68%)' }}
-          animate={{ x: [0, -36, 0], y: [0, 22, 0], scale: [1, 1.1, 1] }}
-          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-[-10%] left-[35%] h-[50vmin] w-[50vmin] rounded-full blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(178,255,58,0.4), transparent 70%)' }}
-          animate={{ scale: [1, 1.2, 1], opacity: [0.55, 1, 0.55] }}
-          transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute right-[6%] top-0 h-full w-[44%]"
-          style={{
-            background:
-              'linear-gradient(105deg, transparent 0%, rgba(168,85,247,0.22) 35%, rgba(79,128,255,0.32) 55%, rgba(255,78,219,0.28) 75%, transparent 100%)',
-          }}
-          animate={{ opacity: [0.45, 0.95, 0.45] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
-        <p className="font-mono text-xs uppercase tracking-[0.22em] text-rosa">El gesto</p>
+        <p className="font-mono text-sm uppercase tracking-[0.2em] text-rosa">El gesto</p>
         <h2
           className="mt-4 max-w-4xl overflow-visible pb-1 text-[clamp(2.6rem,7vw,5rem)] font-extrabold leading-[0.98] tracking-[-0.05em]"
           style={display}
@@ -319,28 +292,36 @@ function GestureFilm() {
         </h2>
 
         <div className="mt-16 grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
-          <ol className="space-y-2">
+          <ol className="space-y-3">
             {frames.map((f, i) => (
               <motion.li
                 key={f.t}
                 animate={{
-                  opacity: step === i ? 1 : 0.35,
+                  opacity: step === i ? 1 : 0.72,
                   x: step === i ? 12 : 0,
                 }}
                 className="border-l-2 pl-4"
-                style={{ borderColor: step === i ? f.accent : 'rgba(255,255,255,0.12)' }}
+                style={{ borderColor: step === i ? f.accent : 'rgba(255,255,255,0.22)' }}
               >
-                <p className="font-mono text-xs uppercase tracking-[0.16em] text-paper/45">
+                <p className="font-mono text-sm uppercase tracking-[0.16em] text-paper/70">
                   0{i + 1}
                 </p>
-                <p className="text-2xl font-semibold tracking-tight text-paper">{f.t}</p>
+                <p
+                  className={
+                    step === i
+                      ? 'text-2xl font-semibold tracking-tight text-paper sm:text-3xl'
+                      : 'text-2xl font-semibold tracking-tight text-paper/80 sm:text-3xl'
+                  }
+                >
+                  {f.t}
+                </p>
                 <AnimatePresence>
                   {step === i ? (
                     <motion.p
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="mt-1 text-sm leading-relaxed text-paper/60"
+                      className="mt-2 text-base leading-relaxed text-paper/80 sm:text-lg"
                       style={serif}
                     >
                       {f.d}
@@ -352,21 +333,10 @@ function GestureFilm() {
           </ol>
 
           <div className="relative">
-            <motion.div
-              className="pointer-events-none absolute -inset-6 rounded-2xl blur-2xl"
-              animate={{
-                background: [
-                  `radial-gradient(circle at 40% 40%, ${accent}55, transparent 65%)`,
-                  `radial-gradient(circle at 60% 50%, ${accent}33, transparent 70%)`,
-                  `radial-gradient(circle at 40% 40%, ${accent}55, transparent 65%)`,
-                ],
-              }}
-              transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
-            />
             <div
-              className="relative aspect-[16/10] overflow-hidden rounded-sm bg-[#0b0e11]/90 ring-1 ring-white/10 backdrop-blur-[2px]"
+              className="relative aspect-[16/10] overflow-hidden rounded-sm bg-[#0b0e11] ring-1 ring-white/12"
               style={{
-                boxShadow: `0 0 0 1px ${accent}40, 0 30px 80px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)`,
+                boxShadow: `0 0 0 1px ${accent}35, 0 24px 60px rgba(0,0,0,0.4)`,
               }}
             >
               <motion.div
@@ -375,11 +345,11 @@ function GestureFilm() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 style={{
-                  background: `radial-gradient(ellipse 80% 70% at 70% 30%, ${accent}30, transparent 60%), radial-gradient(ellipse 60% 50% at 20% 80%, rgba(79,128,255,0.16), transparent 55%)`,
+                  background: `radial-gradient(ellipse 80% 70% at 70% 30%, ${accent}28, transparent 60%)`,
                 }}
               />
               <div
-                className="absolute inset-0 opacity-25"
+                className="absolute inset-0 opacity-20"
                 style={{
                   backgroundImage:
                     'linear-gradient(rgba(244,246,248,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(244,246,248,0.07) 1px, transparent 1px)',
