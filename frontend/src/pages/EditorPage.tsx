@@ -131,7 +131,7 @@ export function EditorPage() {
         <div className="flex min-w-0 items-center gap-2.5">
           <Link
             to="/app"
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-paper-muted no-underline transition hover:bg-white/5 hover:text-paper"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-paper/70 no-underline transition hover:bg-white/5 hover:text-paper"
             title="Volver al estudio"
           >
             <ArrowLeft size={18} />
@@ -148,7 +148,7 @@ export function EditorPage() {
                 void api.patch(`/api/projects/${projectId}`, { title: e.target.value });
               }}
             />
-            <div className="flex items-center gap-2 px-1 font-mono text-xs uppercase tracking-[0.12em] text-paper-muted">
+            <div className="flex items-center gap-2 px-1 font-mono text-sm uppercase tracking-[0.12em] text-paper/70">
               {saveStatus === 'saving' ? (
                 <>
                   <Loader2 size={12} className="animate-spin text-neon" /> Guardando…
@@ -228,7 +228,7 @@ export function EditorPage() {
           {project.published ? (
             <Link
               to={`/p/${project.slug}`}
-              className="hidden text-xs font-medium text-neon no-underline hover:underline md:inline"
+              className="hidden text-sm font-medium text-neon no-underline hover:underline md:inline"
               target="_blank"
             >
               /p/{project.slug}
@@ -255,13 +255,13 @@ export function EditorPage() {
                 <h3 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-paper">
                   Versiones
                 </h3>
-                <p className="mt-1 font-serif text-sm text-paper/55">
+                <p className="mt-1 font-serif text-sm text-paper/72">
                   Snapshots manuales del documento.
                 </p>
               </div>
               <button
                 type="button"
-                className="rounded-full px-3 py-1.5 text-sm text-paper-muted transition hover:bg-white/5 hover:text-paper"
+                className="rounded-full px-3 py-1.5 text-sm text-paper/70 transition hover:bg-white/5 hover:text-paper"
                 onClick={() => setVersionsOpen(false)}
               >
                 Cerrar
@@ -281,7 +281,7 @@ export function EditorPage() {
             </Button>
             <ul className="max-h-80 space-y-2 overflow-auto scrollbar-thin">
               {versions.length === 0 ? (
-                <li className="rounded-lg border border-dashed border-line px-4 py-8 text-center text-sm text-paper-muted">
+                <li className="rounded-lg border border-dashed border-line px-4 py-8 text-center text-sm text-paper/70">
                   Aún no hay versiones.
                 </li>
               ) : (
@@ -294,7 +294,7 @@ export function EditorPage() {
                       <p className="truncate text-sm font-medium text-paper">
                         {v.label || `v${v.versionNumber}`}
                       </p>
-                      <p className="text-xs text-paper-muted">
+                      <p className="text-sm text-paper/70">
                         v{v.versionNumber} · {formatDate(v.createdAt)}
                         {v.user ? ` · ${v.user.name}` : ''}
                       </p>

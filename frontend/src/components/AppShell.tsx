@@ -32,7 +32,7 @@ export function AppShell() {
       <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col border-r border-white/8 bg-ink/80 px-4 py-6 backdrop-blur-xl md:flex">
         <div className="mb-10 px-2">
           <Logo to="/app" />
-          <p className="eyebrow mt-3 text-paper/40">Studio</p>
+          <p className="eyebrow mt-3 text-paper/70">Studio</p>
         </div>
 
         <nav className="flex flex-1 flex-col gap-1">
@@ -45,13 +45,13 @@ export function AppShell() {
                 key={item.id}
                 to={item.to}
                 className={cn(
-                  'flex items-center gap-3 rounded-full px-3.5 py-2.5 text-sm font-medium no-underline transition',
+                  'flex items-center gap-3 rounded-full px-3.5 py-2.5 text-base font-medium no-underline transition',
                   isActive
                     ? 'nav-pill-active'
-                    : 'text-paper-muted hover:bg-white/5 hover:text-paper',
+                    : 'text-paper/75 hover:bg-white/5 hover:text-paper',
                 )}
               >
-                <item.icon size={17} strokeWidth={1.75} />
+                <item.icon size={18} strokeWidth={1.75} />
                 {item.label}
               </NavLink>
             );
@@ -62,10 +62,10 @@ export function AppShell() {
           <div className="flex items-center gap-2.5">
             <PliegoMark size={32} />
             <div className="min-w-0">
-              <p className="truncate font-display text-sm font-bold tracking-tight text-paper">
+              <p className="truncate font-display text-base font-bold tracking-tight text-paper">
                 {user?.name}
               </p>
-              <p className="truncate font-mono text-sm text-paper-muted">{user?.email}</p>
+              <p className="truncate font-mono text-base text-paper/70">{user?.email}</p>
             </div>
           </div>
           <Button
@@ -105,8 +105,8 @@ export function AppShell() {
                 key={item.id}
                 to={item.to}
                 className={cn(
-                  'whitespace-nowrap rounded-full px-3 py-1.5 font-mono text-sm uppercase tracking-[0.1em] no-underline',
-                  isActive ? 'nav-pill-active' : 'text-paper-muted',
+                  'whitespace-nowrap rounded-full px-3 py-1.5 font-mono text-base uppercase tracking-[0.1em] no-underline',
+                  isActive ? 'nav-pill-active' : 'text-paper/70',
                 )}
               >
                 {item.label}

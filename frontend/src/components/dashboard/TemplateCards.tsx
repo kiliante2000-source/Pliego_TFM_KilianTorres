@@ -34,42 +34,42 @@ const VISUALS: Record<string, Visual> = {
   'manifesto-digital': {
     label: 'Manifiesto',
     flat: BRAND.rosa,
-    glow: glow(BRAND.rosa, 0.35),
+    glow: glow(BRAND.rosa, 0.55),
     mesh: [BRAND.rosa, BRAND.violet],
     vector: 'manifesto',
   },
   'portfolio-kinetic': {
     label: 'Portfolio',
     flat: BRAND.neon,
-    glow: glow(BRAND.neon, 0.35),
+    glow: glow(BRAND.neon, 0.55),
     mesh: [BRAND.neon, BRAND.accent2],
     vector: 'portfolio',
   },
   'portada-editorial': {
     label: 'Portada',
     flat: BRAND.violet,
-    glow: glow(BRAND.violet, 0.35),
+    glow: glow(BRAND.violet, 0.55),
     mesh: [BRAND.violet, BRAND.rosa],
     vector: 'cover',
   },
   'revista-doble': {
     label: 'Revista',
     flat: BRAND.lima,
-    glow: glow(BRAND.lima, 0.3),
+    glow: glow(BRAND.lima, 0.45),
     mesh: [BRAND.lima, '#8FD42A'],
     vector: 'magazine',
   },
   'catalogo-producto': {
-    label: 'Catálogo',
+    label: 'Lookbook',
     flat: BRAND.naranja,
-    glow: glow(BRAND.naranja, 0.35),
+    glow: glow(BRAND.naranja, 0.55),
     mesh: [BRAND.naranja, '#FF9A6A'],
     vector: 'catalog',
   },
   'presentacion-slide': {
     label: 'Presentación',
     flat: BRAND.accent2,
-    glow: glow(BRAND.accent2, 0.35),
+    glow: glow(BRAND.accent2, 0.55),
     mesh: [BRAND.accent2, BRAND.neon],
     vector: 'slide',
   },
@@ -198,33 +198,28 @@ export function BlankTemplateCard({
       type="button"
       onClick={onSelect}
       className={cn(
-        'group relative overflow-hidden rounded-sm border text-left transition',
+        'group relative flex w-full items-center gap-4 overflow-hidden rounded-sm border px-4 py-3.5 text-left transition',
         selected
           ? 'border-neon/70 bg-ink-2 ring-1 ring-neon/40 shadow-[0_16px_40px_rgba(79,128,255,0.22)]'
           : 'border-white/10 bg-ink-2/60 hover:border-white/25',
       )}
     >
-      <div className="relative h-32 overflow-hidden bg-[#12171e]">
-        <div className="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(79,128,255,0.28)_1px,transparent_1px),linear-gradient(90deg,rgba(79,128,255,0.28)_1px,transparent_1px)] [background-size:16px_16px]" />
-        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 160 128" fill="none" aria-hidden>
-          <rect x="28" y="24" width="104" height="80" rx="3" stroke="rgba(79,128,255,0.45)" strokeWidth="1.2" strokeDasharray="4 4" />
-        </svg>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Sparkles
-            className={cn(
-              'text-paper-muted transition group-hover:text-neon',
-              selected && 'text-neon',
-            )}
-            size={22}
-          />
-        </div>
+      <div className="relative flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-sm bg-[#12171e]">
+        <div className="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(79,128,255,0.28)_1px,transparent_1px),linear-gradient(90deg,rgba(79,128,255,0.28)_1px,transparent_1px)] [background-size:12px_12px]" />
+        <Sparkles
+          className={cn(
+            'relative text-paper/70 transition group-hover:text-neon',
+            selected && 'text-neon',
+          )}
+          size={20}
+        />
       </div>
-      <div className="p-4">
-        <p className="font-mono text-sm uppercase tracking-[0.12em] text-paper-muted">Canvas</p>
-        <p className="mt-1.5 text-[15px] font-semibold leading-snug tracking-[-0.01em] text-paper">
+      <div className="min-w-0">
+        <p className="font-mono text-base uppercase tracking-[0.12em] text-paper/70">Canvas</p>
+        <p className="mt-0.5 text-base font-semibold leading-snug tracking-[-0.01em] text-paper">
           En blanco
         </p>
-        <p className="mt-1 font-mono text-sm text-paper-muted">1080 × 1350</p>
+        <p className="mt-0.5 font-mono text-base text-paper/65">1080 × 1350</p>
       </div>
     </button>
   );
@@ -257,24 +252,30 @@ export function TemplateCard({
           : undefined
       }
     >
-      <div className="relative h-32 overflow-hidden" style={{ background: visual.flat }}>
+      <div className="relative h-36 overflow-hidden" style={{ background: visual.flat }}>
         <SoftFlatCover flat={visual.flat} soft={visual.mesh[1] ?? visual.flat} />
         <FormatVectors kind={visual.vector} />
+        <div
+          className="absolute bottom-2 left-2 rounded-full px-2.5 py-1 font-mono text-sm font-semibold uppercase tracking-[0.12em] text-ink"
+          style={{ background: visual.flat, boxShadow: `0 0 0 1px rgba(5,6,8,0.25)` }}
+        >
+          {visual.label}
+        </div>
       </div>
       <div className="relative bg-ink-2 p-4">
         <div className="mb-1.5 flex items-center gap-2">
           <span
-            className="inline-block h-2 w-2 rounded-full"
-            style={{ background: visual.flat, boxShadow: `0 0 10px ${visual.glow}` }}
+            className="inline-block h-2.5 w-2.5 rounded-full"
+            style={{ background: visual.flat, boxShadow: `0 0 12px ${visual.glow}` }}
           />
-          <p className="font-mono text-sm uppercase tracking-[0.12em] text-paper-muted">
+          <p className="font-mono text-base uppercase tracking-[0.12em] text-paper/75">
             {visual.label}
           </p>
         </div>
-        <p className="text-[15px] font-semibold leading-snug tracking-[-0.01em] text-paper">
+        <p className="text-base font-semibold leading-snug tracking-[-0.01em] text-paper">
           {template.name}
         </p>
-        <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-paper/55">
+        <p className="mt-1.5 line-clamp-2 text-base leading-relaxed text-paper/75">
           {template.description}
         </p>
       </div>

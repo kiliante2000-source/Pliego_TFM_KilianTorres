@@ -60,7 +60,7 @@ function FeatureCard({
           boxShadow: `0 0 22px ${accent}66`,
         }}
       />
-      <p className="relative font-mono text-sm uppercase tracking-[0.16em]" style={{ color: accent }}>
+      <p className="relative font-mono text-base uppercase tracking-[0.16em]" style={{ color: accent }}>
         {k}
       </p>
       <h3 className="relative mt-4 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">{t}</h3>
@@ -112,7 +112,7 @@ export function LandingPage() {
               <>
                 <Link
                   to="/login"
-                  className="rounded-full px-4 py-2 font-mono text-sm uppercase tracking-[0.14em] text-paper/85 no-underline transition hover:bg-white/5 hover:text-paper"
+                  className="rounded-full px-4 py-2 font-mono text-base uppercase tracking-[0.14em] text-paper/85 no-underline transition hover:bg-white/5 hover:text-paper"
                 >
                   Entrar
                 </Link>
@@ -186,7 +186,7 @@ export function LandingPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.55 }}
-              className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-sm uppercase tracking-[0.14em] text-paper/65 sm:mt-10"
+              className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-base uppercase tracking-[0.14em] text-paper/65 sm:mt-10"
             >
               {['Canvas vivo', 'Publish al instante', 'Identidad de campaña'].map((tag, i) => (
                 <span key={tag} className="inline-flex items-center gap-2">
@@ -200,7 +200,7 @@ export function LandingPage() {
               ))}
               <a
                 href="#studio"
-                className="inline-flex items-center gap-2 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-paper no-underline transition hover:text-neon"
+                className="inline-flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-[0.16em] text-paper no-underline transition hover:text-neon"
               >
                 Explorar el sistema <ArrowDownRight size={15} />
               </a>
@@ -402,7 +402,7 @@ export function LoginPage() {
           </Button>
         </Magnetic>
       </form>
-      <p className="mt-7 text-sm text-paper-muted">
+      <p className="mt-7 text-sm text-paper/70">
         ¿Nuevo en <BrandName />?{' '}
         <Link to="/register" className="font-semibold text-neon no-underline hover:underline">
           Crear cuenta
@@ -457,7 +457,7 @@ export function RegisterPage() {
           </Button>
         </Magnetic>
       </form>
-      <p className="mt-7 text-sm text-paper-muted">
+      <p className="mt-7 text-sm text-paper/70">
         ¿Ya tienes cuenta?{' '}
         <Link to="/login" className="font-semibold text-neon no-underline hover:underline">
           Entrar

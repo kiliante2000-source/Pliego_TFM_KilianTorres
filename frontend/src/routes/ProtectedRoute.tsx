@@ -8,7 +8,7 @@ export function ProtectedRoute() {
 
   if (!bootstrapped) {
     return (
-      <div className="grid min-h-svh place-items-center text-paper-muted">
+      <div className="grid min-h-svh place-items-center text-paper/70">
         Cargando sesión…
       </div>
     );

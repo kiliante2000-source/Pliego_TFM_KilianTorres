@@ -106,7 +106,7 @@ export function Logo({
 const buttonVariants = {
   primary:
     'btn-brand-flow hover:brightness-[1.04]',
-  ghost: 'bg-transparent text-paper-muted hover:bg-ink-3 hover:text-paper',
+  ghost: 'bg-transparent text-paper/70 hover:bg-ink-3 hover:text-paper',
   soft: 'btn-brand-soft',
   danger: 'bg-danger/15 text-danger hover:bg-danger/25',
   lima: 'bg-lima/90 text-ink hover:brightness-95',
@@ -116,7 +116,7 @@ type ButtonVariant = keyof typeof buttonVariants;
 
 function buttonClassName(variant: ButtonVariant, className?: string) {
   return cn(
-    'inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold no-underline transition duration-200 disabled:cursor-not-allowed disabled:opacity-50',
+    'inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-base font-semibold no-underline transition duration-200 disabled:cursor-not-allowed disabled:opacity-50',
     buttonVariants[variant],
     className,
   );
@@ -157,13 +157,13 @@ export function Input({
   return (
     <label className="flex w-full flex-col gap-1.5 text-left">
       {label ? (
-        <span className="font-mono text-sm font-medium uppercase tracking-[0.14em] text-paper-muted">
+        <span className="font-mono text-base font-medium uppercase tracking-[0.14em] text-paper/70">
           {label}
         </span>
       ) : null}
       <input
         className={cn(
-          'rounded-xl border border-line bg-ink/70 px-3.5 py-2.5 text-sm text-paper placeholder:text-paper-muted/50 outline-none transition focus:border-neon focus:bg-ink-2',
+          'rounded-xl border border-line bg-ink/70 px-3.5 py-2.5 text-base text-paper placeholder:text-paper/55 outline-none transition focus:border-neon focus:bg-ink-2',
           className,
         )}
         {...props}
@@ -180,13 +180,13 @@ export function Textarea({
   return (
     <label className="flex w-full flex-col gap-1.5 text-left">
       {label ? (
-        <span className="font-mono text-sm font-medium uppercase tracking-[0.14em] text-paper-muted">
+        <span className="font-mono text-base font-medium uppercase tracking-[0.14em] text-paper/70">
           {label}
         </span>
       ) : null}
       <textarea
         className={cn(
-          'min-h-24 rounded-xl border border-line bg-ink/70 px-3.5 py-2.5 text-sm text-paper outline-none transition focus:border-neon focus:bg-ink-2',
+          'min-h-24 rounded-xl border border-line bg-ink/70 px-3.5 py-2.5 text-base text-paper outline-none transition focus:border-neon focus:bg-ink-2',
           className,
         )}
         {...props}
@@ -204,13 +204,13 @@ export function Select({
   return (
     <label className="flex w-full flex-col gap-1.5 text-left">
       {label ? (
-        <span className="font-mono text-sm font-medium uppercase tracking-[0.14em] text-paper-muted">
+        <span className="font-mono text-base font-medium uppercase tracking-[0.14em] text-paper/70">
           {label}
         </span>
       ) : null}
       <select
         className={cn(
-          'rounded-xl border border-line bg-ink/70 px-3.5 py-2.5 text-sm text-paper outline-none transition focus:border-neon focus:bg-ink-2',
+          'rounded-xl border border-line bg-ink/70 px-3.5 py-2.5 text-base text-paper outline-none transition focus:border-neon focus:bg-ink-2',
           className,
         )}
         {...props}

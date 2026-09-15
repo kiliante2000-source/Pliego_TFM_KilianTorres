@@ -62,11 +62,11 @@ export function PublicProjectPage() {
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-5">
           <Logo />
           <div className="min-w-0 text-right">
-            <p className="eyebrow text-paper/40">Publicado</p>
+            <p className="eyebrow text-paper/70">Publicado</p>
             <p className="mt-1 truncate font-display text-base font-bold tracking-tight text-paper sm:text-lg">
               {project.title}
             </p>
-            <p className="mt-0.5 font-mono text-xs uppercase tracking-[0.12em] text-paper-muted">
+            <p className="mt-0.5 font-mono text-sm uppercase tracking-[0.12em] text-paper/70">
               por {project.authorName || 'autor'}
             </p>
           </div>

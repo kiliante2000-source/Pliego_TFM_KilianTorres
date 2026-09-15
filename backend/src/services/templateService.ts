@@ -1014,7 +1014,7 @@ function buildPresentacion(): DocumentModel {
 export const templates: TemplateDef[] = [
   {
     id: 'manifesto-digital',
-    name: 'Manifesto digital',
+    name: 'Manifiesto digital',
     category: 'editorial',
     description: '3 páginas cinematográficas: portada, ensayo y cierre con motion y CTA.',
     width: 1440,

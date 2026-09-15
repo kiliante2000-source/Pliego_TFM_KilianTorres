@@ -17,7 +17,7 @@ import {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-2.5 border-b border-line/70 pb-4">
-      <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-paper-muted">
+      <h3 className="text-base font-semibold uppercase tracking-[0.14em] text-paper/70">
         {title}
       </h3>
       {children}
@@ -48,10 +48,10 @@ export function PropertiesPanel() {
   return (
     <aside className="studio-rail flex w-[300px] flex-col border-l">
       <div className="border-b border-line px-4 py-3.5">
-        <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-paper-muted">
+        <h2 className="text-base font-semibold uppercase tracking-[0.14em] text-paper/70">
           Inspector
         </h2>
-        <p className="mt-1 text-xs text-paper-muted/80">
+        <p className="mt-1 text-base text-paper/80">
           Tipografía · efectos · motion · links
         </p>
       </div>
@@ -65,7 +65,7 @@ export function PropertiesPanel() {
                 value={page?.background.fill || '#ffffff'}
                 onChange={(e) => setBackground(e.target.value)}
               />
-              <p className="text-xs leading-relaxed text-paper-muted">
+              <p className="text-base leading-relaxed text-paper/80">
                 Lienzo {documentModel.meta.width}×{documentModel.meta.height}. Selecciona capas o
                 inserta bloques creativos.
               </p>
@@ -86,7 +86,7 @@ export function PropertiesPanel() {
                     key={b.label}
                     type="button"
                     onClick={b.fn}
-                    className="rounded-lg bg-ink-3 px-2 py-2 text-left text-xs font-medium text-paper transition hover:bg-ink-4 hover:ring-1 hover:ring-neon/30"
+                    className="rounded-lg bg-ink-3 px-2 py-2 text-left text-sm font-medium text-paper transition hover:bg-ink-4 hover:ring-1 hover:ring-neon/30"
                   >
                     {b.label}
                   </button>
@@ -146,7 +146,7 @@ export function PropertiesPanel() {
               </div>
               <button
                 type="button"
-                className="w-full rounded-md bg-ink-3 px-2 py-2 text-xs text-paper hover:bg-line"
+                className="w-full rounded-md bg-ink-3 px-2 py-2 text-sm text-paper hover:bg-line"
                 onClick={toggleLockSelected}
               >
                 {el.locked ? 'Desbloquear capa' : 'Bloquear capa'}
@@ -165,16 +165,16 @@ export function PropertiesPanel() {
 
             <Section title="Orden">
               <div className="grid grid-cols-2 gap-2">
-                <button className="rounded-md bg-ink-3 px-2 py-2 text-xs text-paper hover:bg-line" onClick={bringForward}>
+                <button className="rounded-md bg-ink-3 px-2 py-2 text-sm text-paper hover:bg-line" onClick={bringForward}>
                   Adelante
                 </button>
-                <button className="rounded-md bg-ink-3 px-2 py-2 text-xs text-paper hover:bg-line" onClick={sendBackward}>
+                <button className="rounded-md bg-ink-3 px-2 py-2 text-sm text-paper hover:bg-line" onClick={sendBackward}>
                   Atrás
                 </button>
-                <button className="rounded-md bg-ink-3 px-2 py-2 text-xs text-paper hover:bg-line" onClick={bringToFront}>
+                <button className="rounded-md bg-ink-3 px-2 py-2 text-sm text-paper hover:bg-line" onClick={bringToFront}>
                   Al frente
                 </button>
-                <button className="rounded-md bg-ink-3 px-2 py-2 text-xs text-paper hover:bg-line" onClick={sendToBack}>
+                <button className="rounded-md bg-ink-3 px-2 py-2 text-sm text-paper hover:bg-line" onClick={sendToBack}>
                   Al fondo
                 </button>
               </div>
@@ -273,14 +273,14 @@ function TextProps({ el }: { el: TextElement }) {
       <div className="flex gap-2">
         <button
           type="button"
-          className={`flex-1 rounded-md px-2 py-2 text-xs ${el.style.italic ? 'bg-accent-soft text-neon' : 'bg-ink-3 text-paper'}`}
+          className={`flex-1 rounded-md px-2 py-2 text-sm ${el.style.italic ? 'bg-accent-soft text-neon' : 'bg-ink-3 text-paper'}`}
           onClick={() => patchStyle({ italic: !el.style.italic })}
         >
           Itálica
         </button>
         <button
           type="button"
-          className={`flex-1 rounded-md px-2 py-2 text-xs ${el.style.underline ? 'bg-accent-soft text-neon' : 'bg-ink-3 text-paper'}`}
+          className={`flex-1 rounded-md px-2 py-2 text-sm ${el.style.underline ? 'bg-accent-soft text-neon' : 'bg-ink-3 text-paper'}`}
           onClick={() => patchStyle({ underline: !el.style.underline })}
         >
           Subrayado
@@ -326,7 +326,7 @@ function ShapeProps({ el }: { el: ShapeElement }) {
       ) : null}
       <button
         type="button"
-        className="w-full rounded-md bg-ink-3 px-2 py-2 text-xs text-paper hover:bg-line"
+        className="w-full rounded-md bg-ink-3 px-2 py-2 text-sm text-paper hover:bg-line"
         onClick={() =>
           updateSelected((item) =>
             item.type === 'shape'
@@ -475,7 +475,7 @@ function VideoProps({ el }: { el: VideoElement }) {
           <button
             key={key}
             type="button"
-            className={`flex-1 rounded-md px-2 py-2 text-[11px] uppercase ${el[key] ? 'bg-accent-soft text-neon' : 'bg-ink-3 text-paper'}`}
+            className={`flex-1 rounded-md px-2 py-2 text-sm uppercase ${el[key] ? 'bg-accent-soft text-neon' : 'bg-ink-3 text-paper'}`}
             onClick={() => updateSelected({ [key]: !el[key] } as Partial<CanvasElement>)}
           >
             {key}

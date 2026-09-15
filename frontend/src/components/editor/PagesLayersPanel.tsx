@@ -23,12 +23,12 @@ export function PagesLayersPanel() {
     <aside className="studio-rail flex w-60 flex-col border-r">
       <div className="border-b border-line px-3 py-3">
         <div className="mb-2.5 flex items-center justify-between">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-paper-muted">
+          <h2 className="text-base font-semibold uppercase tracking-[0.14em] text-paper/70">
             Páginas
           </h2>
           <button
             type="button"
-            className="rounded-md bg-ink-3 px-2 py-1 text-xs font-semibold text-paper transition hover:bg-ink-4"
+            className="rounded-md bg-ink-3 px-2 py-1 text-sm font-semibold text-paper transition hover:bg-ink-4"
             onClick={addPage}
           >
             + Página
@@ -42,14 +42,14 @@ export function PagesLayersPanel() {
                   'flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-sm transition',
                   p.id === activePageId
                     ? 'bg-accent-soft text-neon ring-1 ring-neon/30'
-                    : 'text-paper-muted hover:bg-ink-3 hover:text-paper',
+                    : 'text-paper/70 hover:bg-ink-3 hover:text-paper',
                 )}
                 onClick={() => setActivePage(p.id)}
               >
                 <span>{p.name}</span>
                 <span className="flex gap-1">
                   <span
-                    className="text-xs opacity-70"
+                    className="text-sm opacity-80"
                     onClick={(e) => {
                       e.stopPropagation();
                       if (index > 0) reorderPages(index, index - 1);
@@ -59,7 +59,7 @@ export function PagesLayersPanel() {
                     ↑
                   </span>
                   <span
-                    className="text-xs opacity-70"
+                    className="text-sm opacity-80"
                     onClick={(e) => {
                       e.stopPropagation();
                       if (index < pages.length - 1) reorderPages(index, index + 1);
@@ -69,7 +69,7 @@ export function PagesLayersPanel() {
                     ↓
                   </span>
                   <span
-                    className="text-xs opacity-70"
+                    className="text-sm opacity-80"
                     onClick={(e) => {
                       e.stopPropagation();
                       duplicatePage(p.id);
@@ -79,7 +79,7 @@ export function PagesLayersPanel() {
                     ⎘
                   </span>
                   <span
-                    className="text-xs opacity-70"
+                    className="text-sm opacity-80"
                     onClick={(e) => {
                       e.stopPropagation();
                       deletePage(p.id);
@@ -96,11 +96,11 @@ export function PagesLayersPanel() {
       </div>
 
       <div className="flex-1 overflow-auto p-3 scrollbar-thin">
-        <h2 className="mb-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-paper-muted">
+        <h2 className="mb-2.5 text-base font-semibold uppercase tracking-[0.14em] text-paper/70">
           Capas
         </h2>
         {layers.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-line px-3 py-6 text-center text-xs text-paper-muted">
+          <p className="rounded-lg border border-dashed border-line px-3 py-6 text-center text-base text-paper/75">
             Sin elementos en esta página.
           </p>
         ) : (
@@ -110,16 +110,16 @@ export function PagesLayersPanel() {
                 <button
                   type="button"
                   className={cn(
-                    'w-full rounded-lg px-2.5 py-2 text-left text-xs transition',
+                    'w-full rounded-lg px-2.5 py-2 text-left text-sm transition',
                     selectedIds.includes(el.id)
                       ? 'bg-accent-soft text-neon ring-1 ring-neon/30'
-                      : 'text-paper-muted hover:bg-ink-3 hover:text-paper',
+                      : 'text-paper/70 hover:bg-ink-3 hover:text-paper',
                   )}
                   onClick={() => select([el.id])}
                 >
                   <span className="flex items-center justify-between gap-2">
                     <span className="truncate">{elementLabel(el)}</span>
-                    <span className="shrink-0 font-mono text-[11px] uppercase opacity-55">
+                    <span className="shrink-0 font-mono text-sm uppercase opacity-80">
                       {el.type}
                       {el.animation?.preset && el.animation.preset !== 'none' ? ' · ✦' : ''}
                     </span>

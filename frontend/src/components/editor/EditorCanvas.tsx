@@ -99,7 +99,7 @@ export function EditorCanvas() {
   }, [selectedIds, page, zoom]);
 
   if (!documentModel || !page) {
-    return <div className="grid h-full place-items-center text-paper-muted">Sin documento</div>;
+    return <div className="grid h-full place-items-center text-paper/70">Sin documento</div>;
   }
 
   const stageW = documentModel.meta.width * zoom;

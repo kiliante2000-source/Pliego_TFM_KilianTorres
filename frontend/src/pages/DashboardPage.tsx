@@ -116,28 +116,30 @@ export function DashboardPage() {
         <>
           <section className="mb-14">
             <div className="mb-6">
-              <p className="eyebrow text-paper/40">Componer</p>
+              <p className="eyebrow text-paper/70">Componer</p>
               <h2 className="mt-2 font-display text-3xl font-extrabold tracking-[-0.04em] text-paper">
                 Nuevo proyecto
               </h2>
-              <p className="mt-2 font-serif text-base text-paper/55">
+              <p className="mt-2 font-serif text-base text-paper/72">
                 Elige plantilla, nombra la pieza y abre el canvas.
               </p>
             </div>
 
-            <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mb-5 space-y-3">
               <BlankTemplateCard selected={!templateId} onSelect={() => setTemplateId('')} />
-              {templates.map((t) => (
-                <TemplateCard
-                  key={t.id}
-                  template={t}
-                  selected={templateId === t.id}
-                  onSelect={() => {
-                    setTemplateId(t.id);
-                    if (title === 'Nuevo proyecto' || !title) setTitle(t.name);
-                  }}
-                />
-              ))}
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {templates.map((t) => (
+                  <TemplateCard
+                    key={t.id}
+                    template={t}
+                    selected={templateId === t.id}
+                    onSelect={() => {
+                      setTemplateId(t.id);
+                      if (title === 'Nuevo proyecto' || !title) setTitle(t.name);
+                    }}
+                  />
+                ))}
+              </div>
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
@@ -169,11 +171,11 @@ export function DashboardPage() {
           {tab === 'projects' && (
             <section>
               <div className="mb-6">
-                <p className="eyebrow text-paper/40">Archivo</p>
+                <p className="eyebrow text-paper/70">Archivo</p>
                 <h2 className="mt-2 font-display text-3xl font-extrabold tracking-[-0.04em] text-paper">
                   Tus proyectos
                 </h2>
-                <p className="mt-2 font-mono text-sm uppercase tracking-[0.12em] text-paper-muted">
+                <p className="mt-2 font-mono text-base uppercase tracking-[0.12em] text-paper/70">
                   {loading ? 'Cargando…' : `${projects.length} activos`}
                 </p>
               </div>
@@ -190,7 +192,7 @@ export function DashboardPage() {
                   <p className="mt-4 font-display text-3xl font-extrabold tracking-tight text-paper">
                     Aún no hay piezas
                   </p>
-                  <p className="mx-auto mt-3 max-w-sm font-serif text-lg text-paper/55">
+                  <p className="mx-auto mt-3 max-w-sm font-serif text-lg text-paper/72">
                     Empieza con una plantilla o un lienzo en blanco.
                   </p>
                 </div>
@@ -213,14 +215,14 @@ export function DashboardPage() {
                             <p className="font-display text-xl font-bold leading-tight text-paper sm:text-2xl">
                               {project.title}
                             </p>
-                            <p className="mt-1.5 text-sm leading-snug text-paper-muted">
+                            <p className="mt-1.5 text-base leading-snug text-paper/70">
                               <span className="text-paper/80">{projectKindLabel(project)}</span>
-                              <span className="mx-1.5 text-paper-muted/50">·</span>
-                              <span className="font-mono text-sm uppercase tracking-[0.12em]">
+                              <span className="mx-1.5 text-paper/70/50">·</span>
+                              <span className="font-mono text-base uppercase tracking-[0.12em]">
                                 {project.width}×{project.height}
                               </span>
                               {project.published ? (
-                                <span className="ml-1.5 font-mono text-sm uppercase tracking-[0.12em] text-neon">
+                                <span className="ml-1.5 font-mono text-base uppercase tracking-[0.12em] text-neon">
                                   · Publicado
                                 </span>
                               ) : null}
@@ -229,7 +231,7 @@ export function DashboardPage() {
                         </div>
                       </Link>
                       <div className="flex items-center justify-between gap-2 px-3 py-2.5">
-                        <span className="font-mono text-sm text-paper-muted">
+                        <span className="font-mono text-base text-paper/70">
                           {formatDate(project.updatedAt)}
                         </span>
                         <div className="flex items-center gap-0.5">
@@ -302,20 +304,20 @@ export function DashboardPage() {
           <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-paper">
             Tu estudio
           </h2>
-          <p className="mt-2 font-serif text-base text-paper/55">Preferencias de identidad y acceso.</p>
+          <p className="mt-2 font-serif text-base text-paper/72">Preferencias de identidad y acceso.</p>
           <div className="editorial-rule mt-6 mb-8 w-24" />
           <dl className="space-y-5">
             <div className="border-b border-white/8 pb-4">
-              <dt className="font-mono text-sm uppercase tracking-[0.14em] text-paper-muted">Nombre</dt>
+              <dt className="font-mono text-base uppercase tracking-[0.14em] text-paper/70">Nombre</dt>
               <dd className="mt-1.5 font-display text-lg font-bold text-paper">{user?.name}</dd>
             </div>
             <div className="border-b border-white/8 pb-4">
-              <dt className="font-mono text-sm uppercase tracking-[0.14em] text-paper-muted">Email</dt>
+              <dt className="font-mono text-base uppercase tracking-[0.14em] text-paper/70">Email</dt>
               <dd className="mt-1.5 text-sm text-paper">{user?.email}</dd>
             </div>
             <div>
-              <dt className="font-mono text-sm uppercase tracking-[0.14em] text-paper-muted">Rol</dt>
-              <dd className="mt-1.5 font-mono text-sm uppercase tracking-[0.12em] text-neon">{user?.role}</dd>
+              <dt className="font-mono text-base uppercase tracking-[0.14em] text-paper/70">Rol</dt>
+              <dd className="mt-1.5 font-mono text-base uppercase tracking-[0.12em] text-neon">{user?.role}</dd>
             </div>
           </dl>
         </div>
@@ -367,7 +369,7 @@ function IconAction({
     <button
       type="button"
       className={cn(
-        'rounded-lg p-1.5 text-paper-muted transition hover:bg-ink-3 hover:text-paper',
+        'rounded-lg p-1.5 text-paper/70 transition hover:bg-ink-3 hover:text-paper',
         danger && 'hover:bg-danger/15 hover:text-danger',
       )}
       title={title}
