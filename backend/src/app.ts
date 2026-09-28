@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -10,12 +12,24 @@ import { publicRouter, assetRouter } from './routes/publicRoutes.js';
 import { assetService } from './services/assetService.js';
 import { pingDatabase, prepareDatabase } from './utils/prisma.js';
 
+function resolvePublicDir() {
+  const candidates = [
+    process.env.PUBLIC_DIR,
+    path.resolve(process.cwd(), 'public'),
+    path.resolve(process.cwd(), '../frontend/dist'),
+  ].filter(Boolean) as string[];
+  return candidates.find((dir) => fs.existsSync(path.join(dir, 'index.html')));
+}
+
 export function createApp() {
   const app = express();
+  const publicDir = resolvePublicDir();
 
   app.set('trust proxy', 1);
   app.use(
     helmet({
+      // SPA + Google Fonts + inline styles from Vite build
+      contentSecurityPolicy: false,
       crossOriginResourcePolicy: { policy: 'cross-origin' },
     }),
   );
@@ -42,6 +56,17 @@ export function createApp() {
   app.use('/api/public', publicRouter);
   app.use('/api/assets', assetRouter);
 
+  if (publicDir) {
+    app.use(express.static(publicDir, { index: false, maxAge: '1h' }));
+    // Express 5 requires a named wildcard (path-to-regexp)
+    app.get('/{*path}', (req, res, next) => {
+      if (req.path.startsWith('/api/')) return next();
+      res.sendFile(path.join(publicDir, 'index.html'), (err) => {
+        if (err) next(err);
+      });
+    });
+  }
+
   app.use(errorHandler);
 
   return app;
@@ -51,7 +76,7 @@ export async function bootstrap() {
   await prepareDatabase();
   await assetService.ensureDirs();
   const app = createApp();
-  app.listen(env.PORT, () => {
-    console.log(`Pliego API listening on http://127.0.0.1:${env.PORT}`);
+  app.listen(env.PORT, '0.0.0.0', () => {
+    console.log(`Pliego listening on http://0.0.0.0:${env.PORT}`);
   });
 }

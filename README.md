@@ -67,7 +67,9 @@ Pliego_TFM_KilianTorres/
 ├── frontend/          # React + Vite (puerto 45321)
 ├── backend/           # API Express + Prisma (puerto 45322)
 ├── docs/              # Arquitectura, base de datos, roadmap
-├── docker/            # Dockerfiles
+├── docker/            # entrypoint + Dockerfiles compose
+├── Dockerfile         # imagen all-in-one (Render / Docker)
+├── render.yaml        # Blueprint Render (plan free)
 └── docker-compose.yml
 ```
 
@@ -83,9 +85,44 @@ cd backend && npm run build
 cd frontend && npm run build
 ```
 
-## Docker (opcional)
+## Despliegue gratis (sin github.io)
 
-Con Docker Desktop / Engine:
+Tu portfolio en GitHub Pages puede seguir igual. PLIEGO se despliega aparte en **Render** (plan free) con URL propia tipo `https://pliego-xxxx.onrender.com`.
+
+### Un clic (recomendado)
+
+1. Sube este repo a GitHub (si aún no está al día).
+2. Abre: [Deploy to Render](https://render.com/deploy?repo=https://github.com/kiliante2000-source/Pliego_TFM_KilianTorres)
+3. Conecta tu cuenta de Render con GitHub y pulsa **Apply**.
+4. Cuando el servicio quede **Live**, abre la URL `*.onrender.com` que te den.
+
+Cuenta demo en producción (tras el seed automático):
+
+| Campo | Valor |
+|-------|-------|
+| Email | `demo@pliego.app` |
+| Contraseña | `demo1234` |
+
+**Notas del plan free:** el servicio se duerme tras ~15 min sin tráfico (el primer cargado puede tardar ~1 min). La base SQLite es efímera: tras un redeploy o reinicio frío puede volver a la demo. No toca tu dominio `github.io`.
+
+### Blueprint manual
+
+En [dashboard.render.com](https://dashboard.render.com) → **New** → **Blueprint** → elige este repositorio (usa el `render.yaml` de la raíz).
+
+### Docker local (imagen all-in-one)
+
+```bash
+docker build -t pliego .
+docker run --rm -p 45322:45322 \
+  -e JWT_SECRET=cambia-este-secreto-largo \
+  -e CORS_ORIGIN=http://127.0.0.1:45322 \
+  -e FRONTEND_URL=http://127.0.0.1:45322 \
+  pliego
+```
+
+App: http://127.0.0.1:45322
+
+### Docker Compose (opcional)
 
 ```bash
 docker compose up --build

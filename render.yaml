@@ -1,0 +1,33 @@
+# Free deploy on Render — https://dashboard.render.com
+# Blueprint from this repo → service URL like https://pliego.onrender.com
+# Does NOT use github.io (your portfolio stays untouched).
+
+services:
+  - type: web
+    name: pliego
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: file:/app/data/pliego.db
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: COOKIE_NAME
+        value: pliego_token
+      - key: UPLOAD_DIR
+        value: /app/uploads
+      - key: EXPORT_DIR
+        value: /app/exports
+      - key: MAX_UPLOAD_BYTES
+        value: "5242880"
+      - key: CHROME_PATH
+        value: /usr/bin/chromium
+      - key: PUBLIC_DIR
+        value: /app/public
