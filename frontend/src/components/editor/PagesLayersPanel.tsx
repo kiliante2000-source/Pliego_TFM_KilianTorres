@@ -3,7 +3,7 @@ import { cn } from '../../utils/cn';
 import { getActivePage, sortElements } from '../../utils/document';
 import { elementLabel } from '../../utils/elementStyle';
 
-export function PagesLayersPanel({ width = 240 }: { width?: number }) {
+export function PagesLayersPanel({ width }: { width?: number }) {
   const documentModel = useEditorStore((s) => s.document);
   const activePageId = useEditorStore((s) => s.activePageId);
   const selectedIds = useEditorStore((s) => s.selectedIds);
@@ -20,7 +20,10 @@ export function PagesLayersPanel({ width = 240 }: { width?: number }) {
   const layers = page ? [...sortElements(page.elements)].reverse() : [];
 
   return (
-    <aside className="studio-rail flex shrink-0 flex-col overflow-hidden border-r" style={{ width }}>
+    <aside
+      className="studio-rail flex h-full min-h-0 shrink-0 flex-col overflow-y-auto border-r"
+      style={{ width: width ?? '100%' }}
+    >
       <div className="border-b border-line px-3 py-3">
         <div className="mb-2.5 flex items-center justify-between">
           <h2 className="text-base font-semibold uppercase tracking-[0.14em] text-paper/70">

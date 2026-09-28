@@ -130,7 +130,7 @@ export function DashboardPage() {
   };
 
   return (
-    <main className="relative mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-12">
+    <main className="relative mx-auto max-w-6xl px-4 py-6 sm:px-8 sm:py-12">
       <div className="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full bg-neon/15 blur-3xl" />
       <div className="pointer-events-none absolute -right-16 top-40 h-80 w-80 rounded-full bg-rosa/12 blur-3xl" />
       <div className="pointer-events-none absolute bottom-20 left-1/3 h-64 w-64 rounded-full bg-violet/10 blur-3xl" />
@@ -140,7 +140,7 @@ export function DashboardPage() {
         initial={{ opacity: 0, y: 14, filter: 'blur(6px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-        className="relative mb-12 scroll-mt-6"
+        className="relative mb-8 scroll-mt-24 sm:mb-12 sm:scroll-mt-6"
       >
         <p className="eyebrow text-neon">
           {tab === 'templates'
@@ -153,7 +153,7 @@ export function DashboardPage() {
                   ? 'Ajustes'
                   : 'Proyectos'}
         </p>
-        <h1 className="mt-3 font-display text-5xl font-extrabold tracking-[-0.055em] text-paper sm:text-7xl">
+        <h1 className="mt-2 font-display text-[1.85rem] font-extrabold tracking-[-0.045em] text-paper sm:mt-3 sm:text-7xl sm:tracking-[-0.055em]">
           {tab === 'projects' || tab === 'templates'
             ? `Hola, ${user?.name?.split(' ')[0] || 'creador'}`
             : tab === 'assets'
@@ -162,7 +162,7 @@ export function DashboardPage() {
                 ? 'Versiones'
                 : 'Ajustes'}
         </h1>
-        <p className="mt-4 max-w-xl font-serif text-lg leading-relaxed text-paper/65 sm:text-xl">
+        <p className="mt-3 max-w-xl font-serif text-base leading-relaxed text-paper/65 sm:mt-4 sm:text-xl">
           {tab === 'projects' || tab === 'templates'
             ? 'Diseña, edita y publica piezas editoriales con la energía de un estudio creativo.'
             : tab === 'assets'
@@ -171,7 +171,7 @@ export function DashboardPage() {
                 ? 'Las versiones viven en cada documento. Ábrelo para crear o restaurar snapshots.'
                 : 'Preferencias de cuenta y estudio.'}
         </p>
-        <div className="editorial-rule mt-8 max-w-md" />
+        <div className="editorial-rule mt-6 max-w-md sm:mt-8" />
       </motion.section>
 
       {(tab === 'projects' || tab === 'templates') && (
@@ -179,7 +179,7 @@ export function DashboardPage() {
           <section className="mb-16">
             <div className="mb-6">
               <p className="eyebrow text-paper/70">Componer</p>
-              <h2 className="mt-2 font-display text-3xl font-extrabold tracking-[-0.04em] text-paper">
+              <h2 className="mt-2 font-display text-2xl font-extrabold tracking-[-0.04em] text-paper sm:text-3xl">
                 Nuevo proyecto
               </h2>
             </div>

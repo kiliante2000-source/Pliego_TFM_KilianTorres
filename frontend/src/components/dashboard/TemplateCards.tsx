@@ -431,7 +431,7 @@ export function BlankCanvasLaunch({
                   }
                 }}
                 placeholder="Nombre de la pieza…"
-                className="w-full border-0 border-b border-ink/15 bg-transparent pb-2 font-display text-3xl font-extrabold tracking-[-0.045em] text-ink outline-none transition placeholder:text-ink/30 focus:border-neon sm:text-4xl lg:text-[2.65rem]"
+                className="w-full border-0 border-b border-ink/15 bg-transparent pb-2 font-display text-2xl font-extrabold tracking-[-0.045em] text-ink outline-none transition placeholder:text-ink/30 focus:border-neon sm:text-4xl lg:text-[2.65rem]"
               />
             </label>
 
@@ -630,10 +630,10 @@ export function TemplateCard({
         <p className="mb-1.5 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/65">
           {visual.tagline}
         </p>
-        {/* Título fluido al ancho de la card — nunca se corta */}
+        {/* Título fluido — puede partir en 2 líneas en móvil sin recortarse */}
         <h4
-          className="w-full whitespace-nowrap font-display font-extrabold uppercase leading-none tracking-[-0.035em] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)]"
-          style={{ fontSize: 'clamp(0.9rem, 8.2cqi, 1.75rem)' }}
+          className="w-full break-words font-display font-extrabold uppercase leading-[0.95] tracking-[-0.035em] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)] hyphens-none"
+          style={{ fontSize: 'clamp(0.78rem, 7.2cqi, 1.75rem)' }}
         >
           {visual.category}
         </h4>
@@ -696,7 +696,7 @@ export function TemplateGallery({
         <div className="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="eyebrow text-rosa">Colección PLIEGO</p>
-            <h3 className="mt-2 max-w-xl font-display text-4xl font-extrabold tracking-[-0.045em] text-paper sm:text-5xl">
+            <h3 className="mt-2 max-w-xl font-display text-[1.75rem] font-extrabold tracking-[-0.045em] text-paper sm:text-5xl">
               Seis estructuras
               <span
                 className="block text-transparent"

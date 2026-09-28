@@ -12,11 +12,11 @@ import { useAuthStore } from '../stores/authStore';
 import { cn } from '../utils/cn';
 
 const nav = [
-  { id: 'projects', to: '/app?tab=projects#studio-hello', label: 'Proyectos', icon: FolderKanban },
-  { id: 'templates', to: '/app?tab=templates#coleccion-plantillas', label: 'Plantillas', icon: LayoutTemplate },
-  { id: 'assets', to: '/app?tab=assets', label: 'Recursos', icon: ImageIcon },
-  { id: 'versions', to: '/app?tab=versions', label: 'Versiones', icon: History },
-  { id: 'settings', to: '/app?tab=settings', label: 'Ajustes', icon: Settings },
+  { id: 'projects', to: '/app?tab=projects#studio-hello', label: 'Proyectos', short: 'Proy.', icon: FolderKanban },
+  { id: 'templates', to: '/app?tab=templates#coleccion-plantillas', label: 'Plantillas', short: 'Plant.', icon: LayoutTemplate },
+  { id: 'assets', to: '/app?tab=assets', label: 'Recursos', short: 'Rec.', icon: ImageIcon },
+  { id: 'versions', to: '/app?tab=versions', label: 'Versiones', short: 'Ver.', icon: History },
+  { id: 'settings', to: '/app?tab=settings', label: 'Ajustes', short: 'Aj.', icon: Settings },
 ] as const;
 
 function isNavActive(itemId: string, tab: string | null) {
@@ -93,36 +93,47 @@ export function AppShell() {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between border-b border-white/8 px-4 py-3 md:hidden">
-          <Logo to="/app" />
-          <Button
-            variant="ghost"
-            onClick={async () => {
-              await logout();
-              navigate('/');
-            }}
-          >
-            <LogOut size={16} />
-          </Button>
-        </header>
+        {/* Sticky mobile chrome — stays with you while scrolling */}
+        <div className="sticky top-0 z-40 border-b border-white/8 bg-ink/95 backdrop-blur-xl md:hidden">
+          <header className="flex items-center justify-between gap-2 px-3 py-2.5">
+            <Logo
+              to="/app"
+              markSize={22}
+              wordmarkClassName="text-[1.05rem]"
+              className="min-w-0"
+            />
+            <Button
+              variant="ghost"
+              className="shrink-0 px-2.5 py-2"
+              onClick={async () => {
+                await logout();
+                navigate('/');
+              }}
+              aria-label="Salir"
+            >
+              <LogOut size={16} />
+            </Button>
+          </header>
 
-        <nav className="flex gap-1 overflow-x-auto border-b border-white/8 px-3 py-2 md:hidden scrollbar-thin">
-          {nav.map((item) => {
-            const isActive = isNavActive(item.id, params.get('tab'));
-            return (
-              <NavLink
-                key={item.id}
-                to={item.to}
-                className={cn(
-                  'whitespace-nowrap rounded-full px-3 py-1.5 font-mono text-base uppercase tracking-[0.1em] no-underline',
-                  isActive ? 'nav-pill-active' : 'text-paper/70',
-                )}
-              >
-                {item.label}
-              </NavLink>
-            );
-          })}
-        </nav>
+          <nav className="flex gap-1 overflow-x-auto px-2 pb-2 scrollbar-thin">
+            {nav.map((item) => {
+              const isActive = isNavActive(item.id, params.get('tab'));
+              return (
+                <NavLink
+                  key={item.id}
+                  to={item.to}
+                  className={cn(
+                    'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1.5 font-mono text-[0.65rem] uppercase tracking-[0.1em] no-underline',
+                    isActive ? 'nav-pill-active' : 'text-paper/70',
+                  )}
+                >
+                  <item.icon size={13} strokeWidth={2} />
+                  {item.short}
+                </NavLink>
+              );
+            })}
+          </nav>
+        </div>
 
         <div className="min-h-0 flex-1">
           <Outlet />

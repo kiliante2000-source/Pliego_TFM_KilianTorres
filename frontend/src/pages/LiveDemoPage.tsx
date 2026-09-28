@@ -202,11 +202,14 @@ function ChapterGallery() {
               <div className="absolute left-5 top-5 font-mono text-base uppercase tracking-[0.16em] text-white/75">
                 <BrandName /> · {chapter.id}
               </div>
-              <div className="absolute inset-x-5 bottom-6">
-                <p className="text-4xl font-extrabold tracking-[-0.05em] text-white sm:text-5xl" style={display}>
+              <div className="absolute inset-x-4 bottom-5 sm:inset-x-5 sm:bottom-6">
+                <p
+                  className="break-words text-[1.45rem] font-extrabold leading-[0.95] tracking-[-0.04em] text-white sm:text-5xl sm:tracking-[-0.05em]"
+                  style={display}
+                >
                   {chapter.product}
                 </p>
-                <p className="mt-1 text-lg italic text-white/80" style={serif}>
+                <p className="mt-1 text-base italic text-white/80 sm:text-lg" style={serif}>
                   Hecho para detenerse.
                 </p>
               </div>
@@ -241,12 +244,13 @@ function ChapterGallery() {
                 outlineOffset: 0,
               }}
             >
-              <div className="px-3 py-3">
-                <p className="font-mono text-sm uppercase tracking-[0.14em] text-white/75">
+              <div className="px-2.5 py-2.5 sm:px-3 sm:py-3">
+                <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-white/75 sm:text-sm">
                   {ch.id}
                 </p>
-                <p className="mt-1 font-display text-sm font-extrabold tracking-tight text-white">
-                  {ch.product}
+                <p className="mt-1 break-words font-display text-[0.7rem] font-extrabold leading-tight tracking-tight text-white sm:text-sm">
+                  <span className="sm:hidden">{ch.short}</span>
+                  <span className="hidden sm:inline">{ch.product}</span>
                 </p>
               </div>
             </button>
@@ -274,7 +278,7 @@ function GestureFilm() {
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <p className="font-mono text-base uppercase tracking-[0.2em] text-rosa">El gesto</p>
         <h2
-          className="mt-4 max-w-4xl overflow-visible pb-1 text-[clamp(2.6rem,7vw,5rem)] font-extrabold leading-[0.98] tracking-[-0.05em]"
+          className="mt-4 max-w-4xl overflow-visible pb-1 text-[clamp(1.75rem,6.5vw,5rem)] font-extrabold leading-[1.02] tracking-[-0.045em] sm:leading-[0.98] sm:tracking-[-0.05em]"
           style={display}
         >
           Cinco segundos que explican <BrandName />.
@@ -622,13 +626,13 @@ export function LiveDemoPage() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2.7, duration: 0.8, ease }}
-            className="mt-4 max-w-5xl overflow-visible pb-2 text-[clamp(3.2rem,12vw,8rem)] font-extrabold leading-[0.98] tracking-[-0.07em]"
+            className="mt-4 max-w-5xl overflow-visible pb-2 text-[clamp(2.1rem,10vw,8rem)] font-extrabold leading-[0.98] tracking-[-0.06em] sm:tracking-[-0.07em]"
             style={display}
           >
             Haz algo
             <br />
             <motion.span
-              className="inline-block overflow-visible pb-[0.08em] text-transparent"
+              className="inline-block max-w-full overflow-visible pb-[0.08em] text-transparent"
               style={{
                 backgroundImage: 'var(--brand-flow)',
                 backgroundSize: '400% 100%',
@@ -647,7 +651,7 @@ export function LiveDemoPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2.95, duration: 0.7, ease }}
-            className="mt-8 max-w-xl text-xl leading-snug text-paper/70 sm:text-2xl"
+            className="mt-5 max-w-xl text-base leading-snug text-paper/70 sm:mt-8 sm:text-2xl"
             style={serif}
           >
             <BrandName /> es el estudio editorial donde tipografía, vector y motion se publican juntos —
@@ -759,13 +763,13 @@ export function LiveDemoPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.85, ease }}
-          className="relative mt-5 max-w-4xl overflow-visible pb-2 text-[clamp(3rem,10vw,7rem)] font-extrabold leading-[0.98] tracking-[-0.07em]"
+          className="relative mt-5 max-w-4xl overflow-visible pb-2 text-[clamp(2rem,9vw,7rem)] font-extrabold leading-[1.02] tracking-[-0.055em] sm:leading-[0.98] sm:tracking-[-0.07em]"
           style={display}
         >
           Tu próximo
           <br />
           <motion.span
-            className="inline-block overflow-visible pb-[0.08em] text-transparent"
+            className="inline-block max-w-full overflow-visible pb-[0.08em] text-transparent"
             style={{
               backgroundImage: 'var(--brand-flow)',
               backgroundSize: '400% 100%',

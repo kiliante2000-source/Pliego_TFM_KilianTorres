@@ -110,26 +110,34 @@ export function LandingPage() {
 
       {/* First screen: brand + CTAs + motion bands always in view */}
       <div className="relative z-10 flex min-h-svh flex-col">
-        <header className="relative z-30 mx-auto flex w-full max-w-7xl shrink-0 items-center justify-between px-5 py-4 sm:px-8 sm:py-5">
-          <Logo />
-          <nav className="flex items-center gap-2">
+        <header className="relative z-30 mx-auto flex w-full max-w-7xl shrink-0 items-center justify-between gap-2 px-4 py-3 sm:gap-3 sm:px-8 sm:py-5">
+          <Logo
+            className="min-w-0 shrink"
+            markSize={24}
+            wordmarkClassName="text-[1.05rem] sm:text-[1.35rem]"
+          />
+          <nav className="flex shrink-0 items-center gap-1 sm:gap-2">
             {user ? (
               <Magnetic>
-                <ButtonLink to="/app">
-                  Abrir estudio <ArrowRight size={16} />
+                <ButtonLink to="/app" className="px-3 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base">
+                  <span className="sm:hidden">Estudio</span>
+                  <span className="hidden sm:inline">Abrir estudio</span>{' '}
+                  <ArrowRight size={16} />
                 </ButtonLink>
               </Magnetic>
             ) : (
               <>
                 <Link
                   to="/login"
-                  className="rounded-full px-4 py-2 font-mono text-base uppercase tracking-[0.14em] text-paper/85 no-underline transition hover:bg-white/5 hover:text-paper"
+                  className="rounded-full px-2.5 py-2 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-paper/85 no-underline transition hover:bg-white/5 hover:text-paper sm:px-4 sm:text-base sm:tracking-[0.14em]"
                 >
                   Entrar
                 </Link>
                 <Magnetic>
-                  <ButtonLink to="/register">
-                    Crear cuenta <ArrowRight size={16} />
+                  <ButtonLink to="/register" className="px-3 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base">
+                    <span className="sm:hidden">Crear</span>
+                    <span className="hidden sm:inline">Crear cuenta</span>{' '}
+                    <ArrowRight size={16} className="hidden sm:inline" />
                   </ButtonLink>
                 </Magnetic>
               </>
@@ -169,7 +177,7 @@ export function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.15, ease }}
-              className="mt-5 max-w-xl font-serif text-xl leading-snug text-paper/75 sm:mt-6 sm:text-2xl"
+              className="mt-4 max-w-xl font-serif text-base leading-snug text-paper/75 sm:mt-6 sm:text-2xl"
             >
               Diseña revistas, portadas y sistemas visuales con la fluidez de un estudio creativo.
             </motion.p>
@@ -178,15 +186,22 @@ export function LandingPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.25, ease }}
-              className="mt-8 flex flex-wrap items-center gap-3"
+              className="mt-6 flex w-full flex-col gap-2.5 sm:mt-8 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:gap-3"
             >
               <Magnetic strength={0.35}>
-                <ButtonLink to={user ? '/app' : '/register'} className="min-w-48 px-6 py-3 text-base">
+                <ButtonLink
+                  to={user ? '/app' : '/register'}
+                  className="w-full justify-center px-5 py-2.5 text-sm sm:min-w-48 sm:w-auto sm:px-6 sm:py-3 sm:text-base"
+                >
                   Empezar a diseñar <ArrowRight size={18} />
                 </ButtonLink>
               </Magnetic>
               <Magnetic>
-                <ButtonLink to="/demo" variant="soft" className="px-6 py-3">
+                <ButtonLink
+                  to="/demo"
+                  variant="soft"
+                  className="w-full justify-center px-5 py-2.5 text-sm sm:w-auto sm:px-6 sm:py-3 sm:text-base"
+                >
                   <Play size={15} /> Ver demo viva
                 </ButtonLink>
               </Magnetic>
@@ -196,7 +211,7 @@ export function LandingPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.55 }}
-              className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-base uppercase tracking-[0.14em] text-paper/65 sm:mt-10"
+              className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-paper/65 sm:mt-10 sm:gap-x-6 sm:text-base sm:tracking-[0.14em]"
             >
               {['Canvas vivo', 'Publish al instante', 'Identidad de campaña'].map((tag, i) => (
                 <span key={tag} className="inline-flex items-center gap-2">
@@ -245,11 +260,11 @@ export function LandingPage() {
               <p className="eyebrow mt-3 text-rosa">
                 Por qué <BrandName />
               </p>
-              <h2 className="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.05em] sm:text-6xl">
+              <h2 className="mt-3 max-w-3xl font-display text-[1.85rem] font-extrabold leading-[1.05] tracking-[-0.045em] sm:mt-4 sm:text-6xl sm:leading-[1.02] sm:tracking-[-0.05em]">
                 Una herramienta útil que se siente como una{' '}
                 <span className="wordmark-cutout">pieza de diseño</span>.
               </h2>
-              <p className="mt-5 max-w-xl font-serif text-xl text-paper/65">
+              <p className="mt-4 max-w-xl font-serif text-base text-paper/65 sm:mt-5 sm:text-xl">
                 La misma disciplina visual de la demo, aplicada a tu flujo diario.
               </p>
             </div>
@@ -269,25 +284,33 @@ export function LandingPage() {
         <div className="pointer-events-none absolute inset-0 cta-wash" />
         <div className="relative mx-auto max-w-7xl">
           <Reveal>
-            <div className="signal-frame rounded-3xl px-6 py-10 sm:px-12 sm:py-14">
+            <div className="signal-frame rounded-3xl px-5 py-8 sm:px-12 sm:py-14">
               <p className="section-index">02 — Acción</p>
               <p className="eyebrow mt-3 text-lima">Siguiente paso</p>
-              <h2 className="mt-4 max-w-4xl font-display text-5xl font-extrabold tracking-[-0.055em] sm:text-7xl">
+              <h2 className="mt-3 max-w-4xl font-display text-[2rem] font-extrabold leading-[1.05] tracking-[-0.045em] sm:mt-4 sm:text-7xl sm:tracking-[-0.055em]">
                 Crea. Publica.
+                <br className="sm:hidden" />
                 <span className="wordmark-cutout"> Revoluciona.</span>
               </h2>
-              <p className="mt-6 max-w-xl font-serif text-xl leading-snug text-paper/65">
+              <p className="mt-4 max-w-xl font-serif text-base leading-snug text-paper/65 sm:mt-6 sm:text-xl">
                 Tipografía enorme, movimiento intencional e interfaces que invitan a explorar —
                 con cara de campaña, no de panel.
               </p>
-              <div className="mt-10 flex flex-wrap items-center gap-4">
+              <div className="mt-7 flex w-full flex-col gap-2.5 sm:mt-10 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
                 <Magnetic strength={0.4}>
-                  <ButtonLink to={user ? '/app' : '/register'} className="px-8 py-3.5 text-base">
+                  <ButtonLink
+                    to={user ? '/app' : '/register'}
+                    className="w-full justify-center px-5 py-2.5 text-sm sm:w-auto sm:px-8 sm:py-3.5 sm:text-base"
+                  >
                     Entrar al canvas <ArrowRight size={18} />
                   </ButtonLink>
                 </Magnetic>
                 <Magnetic>
-                  <ButtonLink to="/demo" variant="soft" className="px-8 py-3.5 text-base">
+                  <ButtonLink
+                    to="/demo"
+                    variant="soft"
+                    className="w-full justify-center px-5 py-2.5 text-sm sm:w-auto sm:px-8 sm:py-3.5 sm:text-base"
+                  >
                     <Play size={15} /> Ver demo viva
                   </ButtonLink>
                 </Magnetic>
@@ -435,7 +458,7 @@ function AuthShell({
                   Acceso
                 </span>
               </div>
-              <PliegoFoldWordmark className="text-[3.1rem] sm:text-[3.5rem]" />
+              <PliegoFoldWordmark className="text-[2.35rem] sm:text-[3.5rem]" />
               <p className="mt-2.5 font-serif text-[0.95rem] text-ink/85">
                 Editor visual editorial
               </p>
@@ -445,10 +468,10 @@ function AuthShell({
           <div className="auth-form-panel">
             <div className="auth-form-panel-inner">
               <p className="eyebrow text-neon">Acceso</p>
-              <h1 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.05em] text-paper sm:text-5xl">
+              <h1 className="mt-3 font-display text-[1.85rem] font-extrabold tracking-[-0.05em] text-paper sm:text-5xl">
                 {title}
               </h1>
-              <p className="mt-3 font-serif text-lg leading-relaxed text-paper/70">{subtitle}</p>
+              <p className="mt-3 font-serif text-base leading-relaxed text-paper/70 sm:text-lg">{subtitle}</p>
               <div className="editorial-rule mt-6 mb-2 w-20" />
               <div className="mt-8">{children}</div>
             </div>

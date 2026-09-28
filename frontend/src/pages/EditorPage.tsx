@@ -4,11 +4,15 @@ import {
   ArrowLeft,
   Cloud,
   CloudOff,
+  Columns2,
   Download,
   Globe,
   History,
+  Layers,
   Loader2,
   Play,
+  SlidersHorizontal,
+  Wrench,
 } from 'lucide-react';
 import { useEditorStore } from '../stores/editorStore';
 import { EditorCanvas } from '../components/editor/EditorCanvas';
@@ -25,9 +29,12 @@ import { ResizeHandle } from '../components/editor/ResizeHandle';
 import { CollapsedRail } from '../components/editor/CollapsedRail';
 import { Button, Input } from '../components/ui/primitives';
 import { LAYOUT_DEFAULTS, useStudioLayout } from '../hooks/useStudioLayout';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { api } from '../services/api';
 import type { ProjectVersion } from '../types/document';
-import { formatDate } from '../utils/cn';
+import { cn, formatDate } from '../utils/cn';
+
+type MobileStudioPanel = 'canvas' | 'tools' | 'layers' | 'inspector';
 
 export function EditorPage() {
   const { projectId } = useParams();
@@ -58,6 +65,12 @@ export function EditorPage() {
   const guide = useStudioGuide();
   const layout = useStudioLayout();
   const [layoutMenuOpen, setLayoutMenuOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 767px)');
+  const [mobilePanel, setMobilePanel] = useState<MobileStudioPanel>('canvas');
+
+  useEffect(() => {
+    if (!isMobile) setMobilePanel('canvas');
+  }, [isMobile]);
 
   useEffect(() => {
     if (!projectId) return;
@@ -189,10 +202,73 @@ export function EditorPage() {
     );
   }
 
+  const saveLabel = actionFlash ? (
+    <span className="text-neon">{actionFlash}</span>
+  ) : saveStatus === 'saving' ? (
+    <>
+      <Loader2 size={12} className="animate-spin text-neon" />{' '}
+      <span className="hidden sm:inline">Guardando…</span>
+      <span className="sm:hidden">…</span>
+    </>
+  ) : saveStatus === 'saved' ? (
+    <>
+      <Cloud size={12} className="text-success" />{' '}
+      <span className="sm:hidden">OK</span>
+      <span className="hidden sm:inline">
+        Guardado{lastSavedAt ? ` · ${formatDate(lastSavedAt)}` : ''}
+      </span>
+    </>
+  ) : saveStatus === 'error' ? (
+    <>
+      <CloudOff size={12} className="text-danger" /> Error
+    </>
+  ) : (
+    <span className="hidden sm:inline">Listo para editar</span>
+  );
+
+  const exportPdf = async () => {
+    setExporting(true);
+    try {
+      await saveNow();
+      const res = await api.post<{ export: { id: string } }>(
+        `/api/projects/${projectId}/export/pdf`,
+      );
+      window.open(`/api/projects/exports/${res.export.id}/download`, '_blank');
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Error al exportar');
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const publishProject = async () => {
+    setPublishing(true);
+    try {
+      await saveNow();
+      const next = !project.published;
+      const res = await api.patch<{ project: typeof project }>(`/api/projects/${projectId}`, {
+        published: next,
+        visibility: next ? 'public' : project.visibility,
+      });
+      useEditorStore.setState({ project: res.project });
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'No se pudo publicar');
+    } finally {
+      setPublishing(false);
+    }
+  };
+
+  const mobileTabs: { id: MobileStudioPanel; label: string; icon: typeof Wrench }[] = [
+    { id: 'canvas', label: 'Lienzo', icon: Columns2 },
+    { id: 'tools', label: 'Tools', icon: Wrench },
+    { id: 'layers', label: 'Capas', icon: Layers },
+    { id: 'inspector', label: 'Props', icon: SlidersHorizontal },
+  ];
+
   return (
     <div className="flex h-svh flex-col overflow-hidden bg-ink">
-      <header className="flex items-center justify-between gap-3 border-b border-white/8 bg-[#080b0f]/95 px-3 py-2.5 backdrop-blur-md">
-        <div className="flex min-w-0 items-center gap-2.5">
+      <header className="flex items-center justify-between gap-2 border-b border-white/8 bg-[#080b0f]/95 px-2 py-2 backdrop-blur-md sm:gap-3 sm:px-3 sm:py-2.5">
+        <div className="flex min-w-0 items-center gap-1.5 sm:gap-2.5">
           <Link
             to="/app"
             className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-paper/70 no-underline transition hover:bg-white/5 hover:text-paper"
@@ -202,7 +278,7 @@ export function EditorPage() {
           </Link>
           <div className="min-w-0">
             <Input
-              className="border-transparent bg-transparent px-1 py-0.5 font-display text-lg font-extrabold tracking-[-0.04em] focus:border-white/15 focus:bg-ink/40"
+              className="border-transparent bg-transparent px-1 py-0.5 font-display text-base font-extrabold tracking-[-0.04em] focus:border-white/15 focus:bg-ink/40 sm:text-lg"
               value={documentModel.meta.title}
               onChange={(e) => {
                 useEditorStore.getState().updateDocument((doc) => ({
@@ -212,99 +288,86 @@ export function EditorPage() {
                 void api.patch(`/api/projects/${projectId}`, { title: e.target.value });
               }}
             />
-            <div className="flex items-center gap-2 px-1 font-mono text-sm uppercase tracking-[0.12em] text-paper/70">
-              {actionFlash ? (
-                <span className="text-neon">{actionFlash}</span>
-              ) : saveStatus === 'saving' ? (
-                <>
-                  <Loader2 size={12} className="animate-spin text-neon" /> Guardando…
-                </>
-              ) : saveStatus === 'saved' ? (
-                <>
-                  <Cloud size={12} className="text-success" /> Guardado
-                  {lastSavedAt ? ` · ${formatDate(lastSavedAt)}` : ''}
-                </>
-              ) : saveStatus === 'error' ? (
-                <>
-                  <CloudOff size={12} className="text-danger" /> Error al guardar
-                </>
-              ) : (
-                'Listo para editar'
-              )}
+            <div className="flex items-center gap-2 px-1 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-paper/70 sm:text-sm">
+              {saveLabel}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-end gap-2">
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setLayoutMenuOpen((o) => !o)}
-              title="Ancho de columnas"
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/12 bg-ink-2/80 px-3 py-2 text-sm font-semibold text-paper/80 transition hover:border-neon/40 hover:text-paper"
-            >
-              Columnas
-            </button>
-            {layoutMenuOpen ? (
-              <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-white/12 bg-ink-2 p-2 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                <p className="px-2 pb-2 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-paper/50">
-                  Arrastra los bordes · o elige
-                </p>
-                <button
-                  type="button"
-                  className="w-full rounded-lg px-2.5 py-2 text-left text-sm text-paper hover:bg-ink-3"
-                  onClick={() => {
-                    layout.focusCanvas();
-                    setLayoutMenuOpen(false);
-                  }}
-                >
-                  Más lienzo
-                </button>
-                <button
-                  type="button"
-                  className="w-full rounded-lg px-2.5 py-2 text-left text-sm text-paper hover:bg-ink-3"
-                  onClick={() => {
-                    layout.focusTools();
-                    setLayoutMenuOpen(false);
-                  }}
-                >
-                  Más herramientas
-                </button>
-                <button
-                  type="button"
-                  className="w-full rounded-lg px-2.5 py-2 text-left text-sm text-paper hover:bg-ink-3"
-                  onClick={() => {
-                    layout.resetLayout();
-                    setLayoutMenuOpen(false);
-                  }}
-                >
-                  Restablecer ({LAYOUT_DEFAULTS.tools}/{LAYOUT_DEFAULTS.layers}/
-                  {LAYOUT_DEFAULTS.inspector})
-                </button>
-                <button
-                  type="button"
-                  className="w-full rounded-lg px-2.5 py-2 text-left text-sm text-paper hover:bg-ink-3"
-                  onClick={() => {
-                    layout.togglePanel('layers');
-                    setLayoutMenuOpen(false);
-                  }}
-                >
-                  {layout.widths.layers > 0 ? 'Ocultar páginas/capas' : 'Mostrar páginas/capas'}
-                </button>
-                <button
-                  type="button"
-                  className="w-full rounded-lg px-2.5 py-2 text-left text-sm text-paper hover:bg-ink-3"
-                  onClick={() => {
-                    layout.togglePanel('inspector');
-                    setLayoutMenuOpen(false);
-                  }}
-                >
-                  {layout.widths.inspector > 0 ? 'Ocultar inspector' : 'Mostrar inspector'}
-                </button>
-              </div>
-            ) : null}
+        <div className="flex shrink-0 items-center justify-end gap-1.5 sm:gap-2">
+          {!isMobile ? (
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setLayoutMenuOpen((o) => !o)}
+                title="Ancho de columnas"
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/12 bg-ink-2/80 px-3 py-2 text-sm font-semibold text-paper/80 transition hover:border-neon/40 hover:text-paper"
+              >
+                Columnas
+              </button>
+              {layoutMenuOpen ? (
+                <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-white/12 bg-ink-2 p-2 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                  <p className="px-2 pb-2 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-paper/50">
+                    Arrastra los bordes · o elige
+                  </p>
+                  <button
+                    type="button"
+                    className="w-full rounded-lg px-2.5 py-2 text-left text-sm text-paper hover:bg-ink-3"
+                    onClick={() => {
+                      layout.focusCanvas();
+                      setLayoutMenuOpen(false);
+                    }}
+                  >
+                    Más lienzo
+                  </button>
+                  <button
+                    type="button"
+                    className="w-full rounded-lg px-2.5 py-2 text-left text-sm text-paper hover:bg-ink-3"
+                    onClick={() => {
+                      layout.focusTools();
+                      setLayoutMenuOpen(false);
+                    }}
+                  >
+                    Más herramientas
+                  </button>
+                  <button
+                    type="button"
+                    className="w-full rounded-lg px-2.5 py-2 text-left text-sm text-paper hover:bg-ink-3"
+                    onClick={() => {
+                      layout.resetLayout();
+                      setLayoutMenuOpen(false);
+                    }}
+                  >
+                    Restablecer ({LAYOUT_DEFAULTS.tools}/{LAYOUT_DEFAULTS.layers}/
+                    {LAYOUT_DEFAULTS.inspector})
+                  </button>
+                  <button
+                    type="button"
+                    className="w-full rounded-lg px-2.5 py-2 text-left text-sm text-paper hover:bg-ink-3"
+                    onClick={() => {
+                      layout.togglePanel('layers');
+                      setLayoutMenuOpen(false);
+                    }}
+                  >
+                    {layout.widths.layers > 0 ? 'Ocultar páginas/capas' : 'Mostrar páginas/capas'}
+                  </button>
+                  <button
+                    type="button"
+                    className="w-full rounded-lg px-2.5 py-2 text-left text-sm text-paper hover:bg-ink-3"
+                    onClick={() => {
+                      layout.togglePanel('inspector');
+                      setLayoutMenuOpen(false);
+                    }}
+                  >
+                    {layout.widths.inspector > 0 ? 'Ocultar inspector' : 'Mostrar inspector'}
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+          <div className="hidden sm:block">
+            <StudioHelpButton onClick={guide.openGuide} />
           </div>
-          <StudioHelpButton onClick={guide.openGuide} />
           <Button
             variant="lima"
             className="hidden sm:inline-flex"
@@ -326,51 +389,22 @@ export function EditorPage() {
           </Button>
           <Button
             variant="soft"
+            className="px-2.5 py-2 sm:px-5 sm:py-2.5"
             disabled={exporting}
             title="PDF interactivo: CTAs y enlaces clicables fuera de PLIEGO"
-            onClick={async () => {
-              setExporting(true);
-              try {
-                await saveNow();
-                const res = await api.post<{ export: { id: string } }>(
-                  `/api/projects/${projectId}/export/pdf`,
-                );
-                window.open(`/api/projects/exports/${res.export.id}/download`, '_blank');
-              } catch (e) {
-                alert(e instanceof Error ? e.message : 'Error al exportar');
-              } finally {
-                setExporting(false);
-              }
-            }}
+            onClick={() => void exportPdf()}
           >
             <Download size={15} />
-            {exporting ? 'Exportando…' : 'PDF interactivo'}
+            <span className="hidden md:inline">{exporting ? 'Exportando…' : 'PDF interactivo'}</span>
           </Button>
           <Button
             variant={project.published ? 'primary' : 'soft'}
+            className="px-2.5 py-2 sm:px-5 sm:py-2.5"
             disabled={publishing}
-            onClick={async () => {
-              setPublishing(true);
-              try {
-                await saveNow();
-                const next = !project.published;
-                const res = await api.patch<{ project: typeof project }>(
-                  `/api/projects/${projectId}`,
-                  {
-                    published: next,
-                    visibility: next ? 'public' : project.visibility,
-                  },
-                );
-                useEditorStore.setState({ project: res.project });
-              } catch (e) {
-                alert(e instanceof Error ? e.message : 'No se pudo publicar');
-              } finally {
-                setPublishing(false);
-              }
-            }}
+            onClick={() => void publishProject()}
           >
             <Globe size={15} />
-            {project.published ? 'Publicado' : 'Publicar'}
+            <span className="hidden md:inline">{project.published ? 'Publicado' : 'Publicar'}</span>
           </Button>
           {project.published ? (
             <Link
@@ -384,60 +418,110 @@ export function EditorPage() {
         </div>
       </header>
 
-      <div className="relative flex min-h-0 flex-1">
-        <EditorToolbar projectId={projectId} width={layout.widths.tools} />
-        <ResizeHandle
-          label="herramientas"
-          value={layout.widths.tools}
-          defaultWidth={LAYOUT_DEFAULTS.tools}
-          onChange={(w) => layout.setPanelWidth('tools', w)}
-        />
-        {layout.widths.layers > 0 ? (
-          <>
-            <PagesLayersPanel width={layout.widths.layers} />
-            <ResizeHandle
-              label="páginas y capas"
-              value={layout.widths.layers}
-              defaultWidth={LAYOUT_DEFAULTS.layers}
-              onChange={(w) => layout.setPanelWidth('layers', w)}
-            />
-          </>
-        ) : (
-          <CollapsedRail
-            side="left"
-            label="Capas"
-            onExpand={() => layout.expandPanel('layers')}
+      {isMobile ? (
+        <div className="relative flex min-h-0 flex-1 flex-col">
+          <div className="relative min-h-0 flex-1">
+            <EditorCanvas onOpenGuide={guide.openGuide} />
+            {mobilePanel !== 'canvas' ? (
+              <div className="absolute inset-0 z-40 flex flex-col bg-ink/55 backdrop-blur-[2px]">
+                <button
+                  type="button"
+                  className="h-10 shrink-0 bg-transparent text-center font-mono text-[0.65rem] uppercase tracking-[0.14em] text-paper/70"
+                  onClick={() => setMobilePanel('canvas')}
+                >
+                  Tocar para volver al lienzo
+                </button>
+                <div className="min-h-0 flex-1 overflow-hidden rounded-t-2xl border-t border-white/12 bg-ink shadow-[0_-20px_60px_rgba(0,0,0,0.45)]">
+                  {mobilePanel === 'tools' ? <EditorToolbar projectId={projectId} /> : null}
+                  {mobilePanel === 'layers' ? <PagesLayersPanel /> : null}
+                  {mobilePanel === 'inspector' ? <PropertiesPanel /> : null}
+                </div>
+              </div>
+            ) : null}
+          </div>
+          <nav className="grid shrink-0 grid-cols-4 border-t border-white/10 bg-[#080b0f] pb-[env(safe-area-inset-bottom)]">
+            {mobileTabs.map((tab) => {
+              const on = mobilePanel === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setMobilePanel(tab.id)}
+                  className={cn(
+                    'flex flex-col items-center gap-0.5 px-1 py-2.5 font-mono text-[0.62rem] uppercase tracking-[0.12em] transition',
+                    on ? 'text-neon' : 'text-paper/55',
+                  )}
+                >
+                  <tab.icon size={17} strokeWidth={on ? 2.25 : 1.75} />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </nav>
+          <StudioGuideOverlay
+            open={guide.open}
+            step={guide.step}
+            onStep={guide.setStep}
+            onClose={() => guide.setOpen(false)}
+            onFinish={guide.finish}
           />
-        )}
-        <div className="relative min-w-0 flex-1">
-          <EditorCanvas onOpenGuide={guide.openGuide} />
         </div>
-        {layout.widths.inspector > 0 ? (
-          <>
-            <ResizeHandle
-              label="inspector"
-              value={layout.widths.inspector}
-              defaultWidth={LAYOUT_DEFAULTS.inspector}
-              onChange={(w) => layout.setPanelWidth('inspector', w)}
-              inverted
-            />
-            <PropertiesPanel width={layout.widths.inspector} />
-          </>
-        ) : (
-          <CollapsedRail
-            side="right"
-            label="Inspector"
-            onExpand={() => layout.expandPanel('inspector')}
+      ) : (
+        <div className="relative flex min-h-0 flex-1">
+          <EditorToolbar projectId={projectId} width={layout.widths.tools} />
+          <ResizeHandle
+            label="herramientas"
+            value={layout.widths.tools}
+            defaultWidth={LAYOUT_DEFAULTS.tools}
+            onChange={(w) => layout.setPanelWidth('tools', w)}
           />
-        )}
-        <StudioGuideOverlay
-          open={guide.open}
-          step={guide.step}
-          onStep={guide.setStep}
-          onClose={() => guide.setOpen(false)}
-          onFinish={guide.finish}
-        />
-      </div>
+          {layout.widths.layers > 0 ? (
+            <>
+              <PagesLayersPanel width={layout.widths.layers} />
+              <ResizeHandle
+                label="páginas y capas"
+                value={layout.widths.layers}
+                defaultWidth={LAYOUT_DEFAULTS.layers}
+                onChange={(w) => layout.setPanelWidth('layers', w)}
+              />
+            </>
+          ) : (
+            <CollapsedRail
+              side="left"
+              label="Capas"
+              onExpand={() => layout.expandPanel('layers')}
+            />
+          )}
+          <div className="relative min-w-0 flex-1">
+            <EditorCanvas onOpenGuide={guide.openGuide} />
+          </div>
+          {layout.widths.inspector > 0 ? (
+            <>
+              <ResizeHandle
+                label="inspector"
+                value={layout.widths.inspector}
+                defaultWidth={LAYOUT_DEFAULTS.inspector}
+                onChange={(w) => layout.setPanelWidth('inspector', w)}
+                inverted
+              />
+              <PropertiesPanel width={layout.widths.inspector} />
+            </>
+          ) : (
+            <CollapsedRail
+              side="right"
+              label="Inspector"
+              onExpand={() => layout.expandPanel('inspector')}
+            />
+          )}
+          <StudioGuideOverlay
+            open={guide.open}
+            step={guide.step}
+            onStep={guide.setStep}
+            onClose={() => guide.setOpen(false)}
+            onFinish={guide.finish}
+          />
+        </div>
+      )}
 
       {previewOpen && documentModel ? (
         <EditorPreviewOverlay

@@ -27,7 +27,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-export function PropertiesPanel({ width = 300 }: { width?: number }) {
+export function PropertiesPanel({ width }: { width?: number }) {
   const documentModel = useEditorStore((s) => s.document);
   const activePageId = useEditorStore((s) => s.activePageId);
   const selectedIds = useEditorStore((s) => s.selectedIds);
@@ -51,7 +51,10 @@ export function PropertiesPanel({ width = 300 }: { width?: number }) {
   const el = selected[0] as CanvasElement | undefined;
 
   return (
-    <aside className="studio-rail flex shrink-0 flex-col overflow-hidden border-l" style={{ width }}>
+    <aside
+      className="studio-rail flex h-full min-h-0 shrink-0 flex-col overflow-y-auto border-l"
+      style={{ width: width ?? '100%' }}
+    >
       <div className="border-b border-line px-4 py-3.5">
         <h2 className="text-base font-semibold uppercase tracking-[0.14em] text-paper/70">
           Inspector

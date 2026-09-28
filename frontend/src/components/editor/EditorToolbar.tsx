@@ -158,9 +158,10 @@ function Accordion({
 
 export function EditorToolbar({
   projectId,
-  width = 216,
+  width,
 }: {
   projectId: string;
+  /** Omit on mobile sheets to fill the overlay. */
   width?: number;
 }) {
   const [panel, setPanel] = useState<PanelId>('text');
@@ -210,8 +211,8 @@ export function EditorToolbar({
 
   return (
     <aside
-      className="studio-rail relative z-30 flex shrink-0 flex-col border-r overflow-hidden"
-      style={{ width }}
+      className="studio-rail relative z-30 flex h-full min-h-0 shrink-0 flex-col overflow-hidden border-r"
+      style={{ width: width ?? '100%' }}
     >
       <div className="border-b border-white/8 px-3 py-3">
         <p className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-neon">
