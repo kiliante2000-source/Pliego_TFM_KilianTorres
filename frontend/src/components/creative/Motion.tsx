@@ -146,7 +146,7 @@ export function Marquee({
       >
         {sequence.map((item, i) => (
           <span key={`${item}-${i}`} className="marquee-unit flex items-center">
-            <span className="font-display text-[2.35rem] font-extrabold uppercase leading-none tracking-[-0.05em] text-paper/75 sm:text-5xl md:text-6xl">
+            <span className="font-display text-[1.35rem] font-extrabold uppercase leading-none tracking-[-0.05em] text-paper/75 sm:text-5xl md:text-6xl">
               {item}
             </span>
             <span
