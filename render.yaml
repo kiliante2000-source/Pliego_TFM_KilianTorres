@@ -8,7 +8,8 @@ services:
     runtime: node
     plan: free
     region: oregon
-    buildCommand: npm ci && npm run build:web
+    # --include=dev: Render injects NODE_ENV=production which would skip vite/tsc
+    buildCommand: npm ci --include=dev && npm run build:web
     startCommand: npm run start:web
     healthCheckPath: /api/health
     envVars:
@@ -26,6 +27,5 @@ services:
         value: pliego_token
       - key: MAX_UPLOAD_BYTES
         value: "5242880"
-      # Paths are normalized to absolute in scripts/start-web.mjs
       - key: CHROME_PATH
         value: /usr/bin/chromium
