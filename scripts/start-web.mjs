@@ -12,22 +12,26 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const backend = path.join(root, 'backend');
 
 if (process.env.RENDER_EXTERNAL_URL) {
-  process.env.CORS_ORIGIN ||= process.env.RENDER_EXTERNAL_URL;
-  process.env.FRONTEND_URL ||= process.env.RENDER_EXTERNAL_URL;
+  process.env.CORS_ORIGIN = process.env.CORS_ORIGIN || process.env.RENDER_EXTERNAL_URL;
+  process.env.FRONTEND_URL = process.env.FRONTEND_URL || process.env.RENDER_EXTERNAL_URL;
 }
 
-process.env.NODE_ENV ||= 'production';
-process.env.DATABASE_URL ||= 'file:./data/pliego.db';
-process.env.PUBLIC_DIR ||= path.join(backend, 'public');
-process.env.UPLOAD_DIR ||= path.join(backend, 'uploads');
-process.env.EXPORT_DIR ||= path.join(backend, 'exports');
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
-for (const dir of [
-  path.join(backend, 'data'),
-  process.env.UPLOAD_DIR,
-  process.env.EXPORT_DIR,
-]) {
+// Always use absolute paths — Render may inject relative values that break after cwd changes
+const dataDir = path.join(backend, 'data');
+process.env.DATABASE_URL = `file:${path.join(dataDir, 'pliego.db')}`;
+process.env.PUBLIC_DIR = path.join(backend, 'public');
+process.env.UPLOAD_DIR = path.join(backend, 'uploads');
+process.env.EXPORT_DIR = path.join(backend, 'exports');
+
+for (const dir of [dataDir, process.env.UPLOAD_DIR, process.env.EXPORT_DIR]) {
   fs.mkdirSync(dir, { recursive: true });
+}
+
+if (!fs.existsSync(path.join(process.env.PUBLIC_DIR, 'index.html'))) {
+  console.error('Missing SPA build at', process.env.PUBLIC_DIR);
+  process.exit(1);
 }
 
 function run(cmd, args, cwd) {

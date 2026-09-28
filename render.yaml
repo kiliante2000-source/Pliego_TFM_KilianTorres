@@ -8,27 +8,24 @@ services:
     runtime: node
     plan: free
     region: oregon
-    buildCommand: npm ci && npm run build:web && npm run db:generate --workspace=backend
+    buildCommand: npm ci && npm run build:web
     startCommand: npm run start:web
     healthCheckPath: /api/health
     envVars:
+      - key: NODE_VERSION
+        value: "22.14.0"
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=460
       - key: NODE_ENV
         value: production
-      - key: DATABASE_URL
-        value: file:./data/pliego.db
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN
         value: 7d
       - key: COOKIE_NAME
         value: pliego_token
-      - key: UPLOAD_DIR
-        value: ./uploads
-      - key: EXPORT_DIR
-        value: ./exports
       - key: MAX_UPLOAD_BYTES
         value: "5242880"
-      - key: PUBLIC_DIR
-        value: ./backend/public
+      # Paths are normalized to absolute in scripts/start-web.mjs
       - key: CHROME_PATH
         value: /usr/bin/chromium
