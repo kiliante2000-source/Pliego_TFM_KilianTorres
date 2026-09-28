@@ -87,14 +87,15 @@ cd frontend && npm run build
 
 ## Despliegue gratis (sin github.io)
 
-Tu portfolio en GitHub Pages puede seguir igual. PLIEGO se despliega aparte en **Render** (plan free) con URL propia tipo `https://pliego-xxxx.onrender.com`.
+Tu portfolio en GitHub Pages puede seguir igual. PLIEGO se despliega aparte en **Render** (plan free, runtime Node) con URL propia tipo `https://pliego-xxxx.onrender.com`.
 
 ### Un clic (recomendado)
 
 1. Sube este repo a GitHub (si aún no está al día).
 2. Abre: [Deploy to Render](https://render.com/deploy?repo=https://github.com/kiliante2000-source/Pliego_TFM_KilianTorres)
-3. Conecta tu cuenta de Render con GitHub y pulsa **Apply**.
+3. Blueprint Name: `pliego` → **Deploy Blueprint**.
 4. Cuando el servicio quede **Live**, abre la URL `*.onrender.com` que te den.
+5. Si un sync falla, abre el servicio **pliego** → pestaña **Logs** / **Events** para ver el error, o pulsa **Manual sync** tras un fix en `main`.
 
 Cuenta demo en producción (tras el seed automático):
 

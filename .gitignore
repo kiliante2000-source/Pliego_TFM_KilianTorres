@@ -8,6 +8,7 @@ coverage/
 .DS_Store
 frontend/dist/
 backend/dist/
+backend/public/
 backend/prisma/*.db
 backend/prisma/*.db-journal
 backend/uploads/

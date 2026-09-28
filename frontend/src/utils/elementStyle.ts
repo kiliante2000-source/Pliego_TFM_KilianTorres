@@ -77,7 +77,7 @@ export function konvaEffectsProps(effects?: ElementEffects) {
   if (!effects) {
     return {
       shadowEnabled: false,
-      filters: undefined as Konva.Filter[] | undefined,
+      filters: undefined as (typeof Konva.Filters.Blur)[] | undefined,
       blurRadius: 0,
       globalCompositeOperation: 'source-over' as GlobalCompositeOperation,
     };
