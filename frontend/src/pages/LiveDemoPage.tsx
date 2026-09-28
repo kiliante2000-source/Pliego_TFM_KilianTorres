@@ -204,12 +204,13 @@ function ChapterGallery() {
               </div>
               <div className="absolute inset-x-4 bottom-5 sm:inset-x-5 sm:bottom-6">
                 <p
-                  className="break-words text-[1.45rem] font-extrabold leading-[0.95] tracking-[-0.04em] text-white sm:text-5xl sm:tracking-[-0.05em]"
+                  className="max-w-full break-words text-[1.2rem] font-extrabold leading-[1.02] tracking-[-0.035em] text-white sm:text-5xl sm:tracking-[-0.05em]"
                   style={display}
                 >
-                  {chapter.product}
+                  <span className="sm:hidden">{chapter.short.toUpperCase()}</span>
+                  <span className="hidden sm:inline">{chapter.product}</span>
                 </p>
-                <p className="mt-1 text-base italic text-white/80 sm:text-lg" style={serif}>
+                <p className="mt-1 text-sm italic text-white/80 sm:text-lg" style={serif}>
                   Hecho para detenerse.
                 </p>
               </div>

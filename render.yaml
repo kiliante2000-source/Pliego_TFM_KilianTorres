@@ -1,6 +1,7 @@
 # Free deploy on Render — https://dashboard.render.com
 # Native Node (more reliable than Docker on free tier).
 # Does NOT use github.io (portfolio stays untouched).
+# mobile-responsive: 2026-09-28
 
 services:
   - type: web

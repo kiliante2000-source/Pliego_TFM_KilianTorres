@@ -280,17 +280,18 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="relative z-10 overflow-hidden px-5 pb-16 pt-9 sm:px-8 sm:pb-20 sm:pt-10">
+      <section className="relative z-10 overflow-x-clip px-4 pb-16 pt-9 sm:overflow-hidden sm:px-8 sm:pb-20 sm:pt-10">
         <div className="pointer-events-none absolute inset-0 cta-wash" />
         <div className="relative mx-auto max-w-7xl">
           <Reveal>
-            <div className="signal-frame rounded-3xl px-5 py-8 sm:px-12 sm:py-14">
+            <div className="signal-frame rounded-3xl px-4 py-8 sm:px-12 sm:py-14">
               <p className="section-index">02 — Acción</p>
               <p className="eyebrow mt-3 text-lima">Siguiente paso</p>
-              <h2 className="mt-3 max-w-4xl font-display text-[2rem] font-extrabold leading-[1.05] tracking-[-0.045em] sm:mt-4 sm:text-7xl sm:tracking-[-0.055em]">
-                Crea. Publica.
-                <br className="sm:hidden" />
-                <span className="wordmark-cutout"> Revoluciona.</span>
+              <h2 className="mt-3 max-w-4xl font-display text-[1.55rem] font-extrabold leading-[1.08] tracking-[-0.04em] sm:mt-4 sm:text-7xl sm:leading-none sm:tracking-[-0.055em]">
+                <span className="block">Crea. Publica.</span>
+                <span className="wordmark-cutout mt-1 block max-w-full break-words pr-[0.15em]">
+                  Revoluciona.
+                </span>
               </h2>
               <p className="mt-4 max-w-xl font-serif text-base leading-snug text-paper/65 sm:mt-6 sm:text-xl">
                 Tipografía enorme, movimiento intencional e interfaces que invitan a explorar —

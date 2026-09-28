@@ -11,6 +11,7 @@ import {
   Layers,
   Loader2,
   Play,
+  RotateCw,
   SlidersHorizontal,
   Wrench,
 } from 'lucide-react';
@@ -65,12 +66,17 @@ export function EditorPage() {
   const guide = useStudioGuide();
   const layout = useStudioLayout();
   const [layoutMenuOpen, setLayoutMenuOpen] = useState(false);
-  const isMobile = useMediaQuery('(max-width: 767px)');
+  /** Phone / small tablet portrait — sheet UI */
+  const isMobilePortrait = useMediaQuery('(max-width: 900px) and (orientation: portrait)');
+  /** Phone landscape — compact studio columns (more like desktop) */
+  const isMobileLandscape = useMediaQuery('(max-width: 960px) and (orientation: landscape)');
+  const isCompact = isMobilePortrait || isMobileLandscape;
   const [mobilePanel, setMobilePanel] = useState<MobileStudioPanel>('canvas');
+  const [dismissRotateHint, setDismissRotateHint] = useState(false);
 
   useEffect(() => {
-    if (!isMobile) setMobilePanel('canvas');
-  }, [isMobile]);
+    if (!isMobilePortrait) setMobilePanel('canvas');
+  }, [isMobilePortrait]);
 
   useEffect(() => {
     if (!projectId) return;
@@ -295,7 +301,7 @@ export function EditorPage() {
         </div>
 
         <div className="flex shrink-0 items-center justify-end gap-1.5 sm:gap-2">
-          {!isMobile ? (
+          {!isCompact ? (
             <div className="relative">
               <button
                 type="button"
@@ -418,8 +424,23 @@ export function EditorPage() {
         </div>
       </header>
 
-      {isMobile ? (
+      {isMobilePortrait ? (
         <div className="relative flex min-h-0 flex-1 flex-col">
+          {!dismissRotateHint ? (
+            <div className="flex shrink-0 items-center gap-2 border-b border-neon/25 bg-neon/10 px-3 py-2">
+              <RotateCw size={14} className="shrink-0 text-neon" />
+              <p className="min-w-0 flex-1 font-mono text-[0.62rem] uppercase leading-snug tracking-[0.1em] text-paper/85">
+                Gira el móvil a horizontal — más lienzo, como en ordenador
+              </p>
+              <button
+                type="button"
+                className="shrink-0 rounded-full px-2 py-1 font-mono text-[0.6rem] uppercase tracking-[0.12em] text-paper/55 hover:text-paper"
+                onClick={() => setDismissRotateHint(true)}
+              >
+                Ok
+              </button>
+            </div>
+          ) : null}
           <div className="relative min-h-0 flex-1">
             <EditorCanvas onOpenGuide={guide.openGuide} />
             {mobilePanel !== 'canvas' ? (
@@ -458,6 +479,21 @@ export function EditorPage() {
               );
             })}
           </nav>
+          <StudioGuideOverlay
+            open={guide.open}
+            step={guide.step}
+            onStep={guide.setStep}
+            onClose={() => guide.setOpen(false)}
+            onFinish={guide.finish}
+          />
+        </div>
+      ) : isMobileLandscape ? (
+        <div className="relative flex min-h-0 flex-1">
+          <EditorToolbar projectId={projectId} width={168} />
+          <div className="relative min-w-0 flex-1">
+            <EditorCanvas onOpenGuide={guide.openGuide} />
+          </div>
+          <PropertiesPanel width={200} />
           <StudioGuideOverlay
             open={guide.open}
             step={guide.step}

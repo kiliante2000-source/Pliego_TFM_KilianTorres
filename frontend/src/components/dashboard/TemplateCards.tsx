@@ -407,7 +407,7 @@ export function BlankCanvasLaunch({
           transition={{ duration: 9, ease: 'easeInOut', repeat: Infinity }}
         />
 
-        <div className="relative grid gap-8 p-5 sm:p-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-stretch lg:gap-10 lg:p-9">
+        <div className="relative grid gap-5 p-4 sm:gap-8 sm:p-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-stretch lg:gap-10 lg:p-9">
           <div className="flex min-w-0 flex-col">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <span className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-neon">
@@ -567,14 +567,15 @@ export function TemplateCard({
 }) {
   const visual = POSTERS[template.id] ?? FALLBACK;
 
+  /* Mobile: compact 2-col studio density (closer to desktop feel). Desktop heights unchanged. */
   const sizeClass =
     size === 'hero'
-      ? 'min-h-[30rem] sm:min-h-[34rem]'
+      ? 'min-h-[15.5rem] sm:min-h-[34rem]'
       : size === 'tall'
-        ? 'min-h-[28rem] sm:min-h-[36rem]'
+        ? 'min-h-[15.5rem] sm:min-h-[36rem]'
         : size === 'wide'
-          ? 'min-h-[26rem] sm:min-h-[30rem]'
-          : 'min-h-[26rem] sm:min-h-[30rem]';
+          ? 'min-h-[15.5rem] sm:min-h-[30rem]'
+          : 'min-h-[15.5rem] sm:min-h-[30rem]';
 
   return (
     <motion.div
@@ -608,51 +609,56 @@ export function TemplateCard({
         <div className="absolute inset-x-0 bottom-0 h-[38%] bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
       </div>
 
-      <span className="pointer-events-none absolute -right-1 -top-2 select-none font-display text-[6.5rem] font-extrabold leading-none tracking-tighter text-white/[0.14] sm:text-[7.5rem]">
+      <span className="pointer-events-none absolute -right-1 -top-2 select-none font-display text-[3.75rem] font-extrabold leading-none tracking-tighter text-white/[0.14] sm:text-[7.5rem]">
         {visual.index}
       </span>
 
-      <div className="relative z-10 flex items-start justify-between gap-3 p-4 sm:p-5">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-black/40 px-2.5 py-1 font-mono text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white ring-1 ring-white/35 backdrop-blur-md">
+      <div className="relative z-10 flex items-start justify-between gap-2 p-3 sm:gap-3 sm:p-5">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <span className="rounded-full bg-black/40 px-2 py-0.5 font-mono text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-white ring-1 ring-white/35 backdrop-blur-md sm:px-2.5 sm:py-1 sm:text-[0.65rem] sm:tracking-[0.16em]">
             {visual.index}
           </span>
-          <span className="rounded-full bg-white/18 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-white ring-1 ring-white/25 backdrop-blur-md">
+          <span className="hidden rounded-full bg-white/18 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-white ring-1 ring-white/25 backdrop-blur-md sm:inline">
             {visual.pages}
           </span>
         </div>
-        <span className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/75">
+        <span className="hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/75 sm:inline">
           {visual.motif}
         </span>
       </div>
 
-      <div className="relative z-10 mt-auto min-w-0 px-4 pb-4 pt-4 sm:px-5 sm:pb-5">
-        <p className="mb-1.5 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/65">
+      <div className="relative z-10 mt-auto min-w-0 px-3 pb-3 pt-2 sm:px-5 sm:pb-5 sm:pt-4">
+        <p className="mb-1 hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/65 sm:mb-1.5 sm:block">
           {visual.tagline}
         </p>
-        {/* Título fluido — puede partir en 2 líneas en móvil sin recortarse */}
-        <h4
-          className="w-full break-words font-display font-extrabold uppercase leading-[0.95] tracking-[-0.035em] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)] hyphens-none"
-          style={{ fontSize: 'clamp(0.78rem, 7.2cqi, 1.75rem)' }}
-        >
-          {visual.category}
+        {/* Fit-to-card title: never clip on narrow 2-col phones */}
+        <h4 className="w-full font-display text-[0.72rem] font-extrabold uppercase leading-[1.05] tracking-[-0.03em] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)] sm:text-[clamp(0.9rem,7.2cqi,1.75rem)] sm:leading-[0.95] sm:tracking-[-0.035em]">
+          {visual.category === 'Presentación' ? (
+            <>
+              <span className="sm:hidden">Slide</span>
+              <span className="hidden sm:inline">{visual.category}</span>
+            </>
+          ) : (
+            visual.category
+          )}
         </h4>
-        <p className="mt-2.5 break-words font-serif text-[0.95rem] leading-snug text-white/90 sm:text-base">
+        <p className="mt-1.5 line-clamp-2 break-words font-serif text-[0.78rem] leading-snug text-white/90 sm:mt-2.5 sm:text-base">
           {template.name}
         </p>
-        <p className="mt-1 font-mono text-sm uppercase tracking-[0.12em] text-white/65">
+        <p className="mt-0.5 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-white/65 sm:mt-1 sm:text-sm">
           {template.width}×{template.height}
         </p>
 
-        <div className="mt-4 flex items-center justify-between gap-3 border-t border-white/25 pt-3">
-          <span className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-white/75 transition group-hover:text-white">
+        <div className="mt-2.5 flex items-center justify-between gap-2 border-t border-white/25 pt-2 sm:mt-4 sm:gap-3 sm:pt-3">
+          <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-white/75 transition group-hover:text-white sm:text-[0.7rem] sm:tracking-[0.16em]">
             {opening ? 'Abriendo…' : 'Abrir'}
           </span>
           <span
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full transition duration-300 group-hover:scale-110 group-hover:brightness-110"
+            className="grid h-7 w-7 shrink-0 place-items-center rounded-full transition duration-300 group-hover:scale-110 group-hover:brightness-110 sm:h-9 sm:w-9"
             style={{ background: visual.accent, color: '#050608' }}
           >
-            <ArrowUpRight size={17} strokeWidth={2.4} />
+            <ArrowUpRight size={15} strokeWidth={2.4} className="sm:hidden" />
+            <ArrowUpRight size={17} strokeWidth={2.4} className="hidden sm:block" />
           </span>
         </div>
       </div>
@@ -749,7 +755,7 @@ export function TemplateGallery({
           Piezas largas
         </p>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-12">
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-12">
         {rowA.map((t, i) => (
           <div key={t.id} className={spanA[i]}>
             <TemplateCard
@@ -779,7 +785,7 @@ export function TemplateGallery({
           Spreads & stage
         </p>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-12">
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-12">
         {rowB.map((t, i) => (
           <div key={t.id} className={spanB[i]}>
             <TemplateCard
