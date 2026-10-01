@@ -701,36 +701,31 @@ export function TemplateGallery({
 
         <div className="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="eyebrow text-rosa">Colección PLIEGO</p>
+            <p className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-rosa">
+              Colección PLIEGO
+            </p>
             <h3
-              className="mt-2 max-w-xl text-[1.7rem] font-bold leading-[1.12] text-paper sm:text-5xl sm:leading-[1.05]"
+              className="mt-2 max-w-xl text-[1.65rem] font-bold leading-tight text-paper sm:text-5xl"
               style={{
-                fontFamily: '"Space Grotesk", system-ui, sans-serif',
-                letterSpacing: '-0.025em',
-                wordSpacing: '0em',
+                fontFamily:
+                  'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                letterSpacing: '0',
+                wordSpacing: 'normal',
               }}
             >
-              Seis estructuras
-              <span
-                className="block text-transparent"
-                style={{
-                  backgroundImage: `linear-gradient(90deg, ${BRAND.neon}, ${BRAND.rosa}, ${BRAND.lima})`,
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                }}
-              >
-                con impacto
-              </span>
+              Seis estructuras{' '}
+              <span className="text-neon">con impacto</span>
             </h3>
             <p
               className="mt-3 max-w-sm text-paper/75 sm:max-w-md"
               style={{
-                fontFamily: '"Space Grotesk", system-ui, sans-serif',
+                fontFamily:
+                  'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
                 fontSize: '15px',
-                fontWeight: 500,
+                fontWeight: 400,
                 lineHeight: 1.45,
-                letterSpacing: '-0.01em',
-                wordSpacing: '0em',
+                letterSpacing: '0',
+                wordSpacing: 'normal',
               }}
             >
               Plantillas listas para abrir, con tamaño y color propios.
