@@ -14,9 +14,9 @@ import { cn } from '../utils/cn';
 const nav = [
   { id: 'projects', to: '/app?tab=projects#studio-hello', label: 'Proyectos', short: 'Proy.', icon: FolderKanban },
   { id: 'templates', to: '/app?tab=templates#coleccion-plantillas', label: 'Plantillas', short: 'Plant.', icon: LayoutTemplate },
-  { id: 'assets', to: '/app?tab=assets', label: 'Recursos', short: 'Rec.', icon: ImageIcon },
-  { id: 'versions', to: '/app?tab=versions', label: 'Versiones', short: 'Ver.', icon: History },
-  { id: 'settings', to: '/app?tab=settings', label: 'Ajustes', short: 'Aj.', icon: Settings },
+  { id: 'assets', to: '/app?tab=assets#studio-hello', label: 'Recursos', short: 'Rec.', icon: ImageIcon },
+  { id: 'versions', to: '/app?tab=versions#studio-hello', label: 'Versiones', short: 'Ver.', icon: History },
+  { id: 'settings', to: '/app?tab=settings#studio-hello', label: 'Ajustes', short: 'Aj.', icon: Settings },
 ] as const;
 
 function isNavActive(itemId: string, tab: string | null) {
@@ -94,7 +94,10 @@ export function AppShell() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Sticky mobile chrome — stays with you while scrolling */}
-        <div className="sticky top-0 z-40 border-b border-white/8 bg-ink/95 backdrop-blur-xl md:hidden">
+        <div
+          data-studio-sticky
+          className="sticky top-0 z-40 border-b border-white/8 bg-ink/95 backdrop-blur-xl md:hidden"
+        >
           <header className="flex items-center justify-between gap-2 px-3 py-2.5">
             <Logo
               to="/app"

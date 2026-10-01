@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   AnimatePresence,
   motion,
@@ -9,6 +9,16 @@ import {
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Logo, ButtonLink, BrandName } from '../components/ui/primitives';
 import { Magnetic, Marquee } from '../components/creative/Motion';
+
+function readDemoHeroEntry() {
+  if (typeof window === 'undefined') return false;
+  if (window.location.hash === '#demo-hero') return true;
+  try {
+    return sessionStorage.getItem('pliego-demo-entry') === 'hero';
+  } catch {
+    return false;
+  }
+}
 
 const ease = [0.16, 1, 0.3, 1] as const;
 const serif = { fontFamily: '"Instrument Serif", Georgia, serif' } as const;
@@ -467,17 +477,16 @@ function GestureFilm() {
 
 
 export function LiveDemoPage() {
+  const location = useLocation();
   const [intro, setIntro] = useState(0);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 28 });
   const hook = useCycle(HOOKS.length, 2600);
-  const wantsHero =
-    typeof window !== 'undefined' &&
-    (window.location.hash === '#demo-hero' || window.location.hash === '' || window.location.hash === '#');
+  const heroJump = readDemoHeroEntry() || location.hash === '#demo-hero' || !location.hash;
 
   useEffect(() => {
-    // Faster path when arriving from “Ver demo viva” — land on the hero title
-    const heroJump = window.location.hash === '#demo-hero';
+    // Pin to top immediately so the bottom CTA never inherits a mid-page scroll
+    window.scrollTo({ top: 0, behavior: 'auto' });
     const t1 = window.setTimeout(() => setIntro(1), heroJump ? 700 : 1500);
     const t2 = window.setTimeout(() => setIntro(2), heroJump ? 1500 : 3100);
     const t3 = window.setTimeout(() => setIntro(3), heroJump ? 2400 : 4800);
@@ -486,24 +495,26 @@ export function LiveDemoPage() {
       window.clearTimeout(t2);
       window.clearTimeout(t3);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount
   }, []);
 
   useEffect(() => {
     if (intro < 3) return;
-    const hash = window.location.hash;
-    if (hash === '#obra') return;
-    // Always show “Haz algo que se recuerde” first when opening the demo
+    if (location.hash === '#obra') return;
     const el = document.getElementById('demo-hero');
-    if (!el) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    // Wait a frame so the intro overlay is gone and layout is stable
-    const id = window.requestAnimationFrame(() => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-    return () => window.cancelAnimationFrame(id);
-  }, [intro, wantsHero]);
+    const jump = () => {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' });
+      try {
+        sessionStorage.removeItem('pliego-demo-entry');
+      } catch {
+        /* ignore */
+      }
+    };
+    jump();
+    const t = window.setTimeout(jump, 120);
+    return () => window.clearTimeout(t);
+  }, [intro, location.hash, heroJump]);
 
   return (
     <div className="relative min-h-svh overflow-x-hidden bg-[#050608] text-paper">
@@ -650,7 +661,7 @@ export function LiveDemoPage() {
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.7, duration: 0.8, ease }}
+            transition={{ delay: heroJump ? 0.15 : 2.7, duration: 0.8, ease }}
             className="mt-4 max-w-5xl overflow-visible pb-2 text-[clamp(2.1rem,10vw,8rem)] font-extrabold leading-[0.98] tracking-[-0.06em] sm:tracking-[-0.07em]"
             style={display}
           >
@@ -675,7 +686,7 @@ export function LiveDemoPage() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.95, duration: 0.7, ease }}
+            transition={{ delay: heroJump ? 0.35 : 2.95, duration: 0.7, ease }}
             className="mt-5 max-w-xl text-base leading-snug text-paper/70 sm:mt-8 sm:text-2xl"
             style={serif}
           >
@@ -686,7 +697,7 @@ export function LiveDemoPage() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 3.15, duration: 0.6, ease }}
+            transition={{ delay: heroJump ? 0.5 : 3.15, duration: 0.6, ease }}
             className="mt-10 flex flex-wrap items-center gap-4"
           >
             <Magnetic strength={0.35}>

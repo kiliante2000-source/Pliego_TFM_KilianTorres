@@ -169,6 +169,7 @@ export function EditorToolbar({
   const setTool = useEditorStore((s) => s.setTool);
   const zoom = useEditorStore((s) => s.zoom);
   const setZoom = useEditorStore((s) => s.setZoom);
+  const fitZoom = useEditorStore((s) => s.fitZoom);
   const addText = useEditorStore((s) => s.addText);
   const addShape = useEditorStore((s) => s.addShape);
   const addImage = useEditorStore((s) => s.addImage);
@@ -493,7 +494,14 @@ export function EditorToolbar({
           <ToolBtn title="Alejar" onClick={() => setZoom(Math.max(0.2, zoom - 0.1))}>
             <ZoomOut size={17} />
           </ToolBtn>
-          <ToolBtn title="Encajar" onClick={() => setZoom(0.55)}>
+          <ToolBtn
+            title="Encajar"
+            onClick={() => {
+              const stage = document.querySelector('[data-editor-canvas]') as HTMLElement | null;
+              if (stage) fitZoom(stage.clientWidth, stage.clientHeight, 48);
+              else setZoom(0.55);
+            }}
+          >
             <Maximize2 size={16} />
           </ToolBtn>
           <ToolBtn title="Acercar" onClick={() => setZoom(Math.min(2.5, zoom + 0.1))}>

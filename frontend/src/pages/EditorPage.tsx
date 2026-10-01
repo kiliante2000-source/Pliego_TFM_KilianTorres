@@ -9,7 +9,6 @@ import {
   History,
   Loader2,
   Play,
-  RotateCw,
 } from 'lucide-react';
 import { useEditorStore } from '../stores/editorStore';
 import { EditorCanvas } from '../components/editor/EditorCanvas';
@@ -61,12 +60,10 @@ export function EditorPage() {
   const guide = useStudioGuide();
   const layout = useStudioLayout();
   const [layoutMenuOpen, setLayoutMenuOpen] = useState(false);
-  /** Phone / small tablet portrait — canvas + dock */
+  /** Phone / small tablet — canvas-first + dock (portrait and landscape) */
   const isMobilePortrait = useMediaQuery('(max-width: 900px) and (orientation: portrait)');
-  /** Phone landscape — compact studio columns (more like desktop) */
   const isMobileLandscape = useMediaQuery('(max-width: 960px) and (orientation: landscape)');
   const isCompact = isMobilePortrait || isMobileLandscape;
-  const [dismissRotateHint, setDismissRotateHint] = useState(false);
 
   useEffect(() => {
     if (!projectId) return;
@@ -256,18 +253,32 @@ export function EditorPage() {
 
   return (
     <div className="flex h-svh flex-col overflow-hidden bg-ink">
-      <header className="flex items-center justify-between gap-2 border-b border-white/8 bg-[#080b0f]/95 px-2 py-2 backdrop-blur-md sm:gap-3 sm:px-3 sm:py-2.5">
-        <div className="flex min-w-0 items-center gap-1.5 sm:gap-2.5">
+      <header
+        className={
+          isCompact
+            ? 'flex items-center justify-between gap-1.5 border-b border-white/8 bg-[#080b0f]/95 px-1.5 py-1.5 backdrop-blur-md'
+            : 'flex items-center justify-between gap-2 border-b border-white/8 bg-[#080b0f]/95 px-2 py-2 backdrop-blur-md sm:gap-3 sm:px-3 sm:py-2.5'
+        }
+      >
+        <div className="flex min-w-0 items-center gap-1 sm:gap-2.5">
           <Link
             to="/app"
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-paper/70 no-underline transition hover:bg-white/5 hover:text-paper"
+            className={
+              isCompact
+                ? 'grid h-8 w-8 shrink-0 place-items-center rounded-full text-paper/70 no-underline transition hover:bg-white/5 hover:text-paper'
+                : 'grid h-9 w-9 shrink-0 place-items-center rounded-full text-paper/70 no-underline transition hover:bg-white/5 hover:text-paper'
+            }
             title="Volver al estudio"
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft size={isCompact ? 16 : 18} />
           </Link>
           <div className="min-w-0">
             <Input
-              className="border-transparent bg-transparent px-1 py-0.5 font-display text-base font-extrabold tracking-[-0.04em] focus:border-white/15 focus:bg-ink/40 sm:text-lg"
+              className={
+                isCompact
+                  ? 'max-w-[9.5rem] truncate border-transparent bg-transparent px-1 py-0 font-display text-sm font-extrabold tracking-[-0.04em] focus:border-white/15 focus:bg-ink/40'
+                  : 'border-transparent bg-transparent px-1 py-0.5 font-display text-base font-extrabold tracking-[-0.04em] focus:border-white/15 focus:bg-ink/40 sm:text-lg'
+              }
               value={documentModel.meta.title}
               onChange={(e) => {
                 useEditorStore.getState().updateDocument((doc) => ({
@@ -277,13 +288,19 @@ export function EditorPage() {
                 void api.patch(`/api/projects/${projectId}`, { title: e.target.value });
               }}
             />
-            <div className="flex items-center gap-2 px-1 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-paper/70 sm:text-sm">
+            <div
+              className={
+                isCompact
+                  ? 'flex items-center gap-1 px-1 font-mono text-[0.58rem] uppercase tracking-[0.1em] text-paper/65'
+                  : 'flex items-center gap-2 px-1 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-paper/70 sm:text-sm'
+              }
+            >
               {saveLabel}
             </div>
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center justify-end gap-1.5 sm:gap-2">
+        <div className="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
           {!isCompact ? (
             <div className="relative">
               <button
@@ -354,48 +371,45 @@ export function EditorPage() {
               ) : null}
             </div>
           ) : null}
-          <div className="hidden sm:block">
-            <StudioHelpButton onClick={guide.openGuide} />
-          </div>
-          <Button
-            variant="lima"
-            className="hidden sm:inline-flex"
-            onClick={() => setPreviewOpen(true)}
-          >
-            <Play size={15} />
-            Preview
-          </Button>
-          <Button
-            variant="soft"
-            className="hidden sm:inline-flex"
-            onClick={async () => {
-              setVersionsOpen(true);
-              await refreshVersions();
-            }}
-          >
-            <History size={15} />
-            Versiones
-          </Button>
+          {!isCompact ? (
+            <>
+              <StudioHelpButton onClick={guide.openGuide} />
+              <Button variant="lima" onClick={() => setPreviewOpen(true)}>
+                <Play size={15} />
+                Preview
+              </Button>
+              <Button
+                variant="soft"
+                onClick={async () => {
+                  setVersionsOpen(true);
+                  await refreshVersions();
+                }}
+              >
+                <History size={15} />
+                Versiones
+              </Button>
+            </>
+          ) : null}
           <Button
             variant="soft"
-            className="px-2.5 py-2 sm:px-5 sm:py-2.5"
+            className={isCompact ? 'px-2 py-1.5' : 'px-2.5 py-2 sm:px-5 sm:py-2.5'}
             disabled={exporting}
             title="PDF interactivo: CTAs y enlaces clicables fuera de PLIEGO"
             onClick={() => void exportPdf()}
           >
-            <Download size={15} />
+            <Download size={isCompact ? 14 : 15} />
             <span className="hidden md:inline">{exporting ? 'Exportando…' : 'PDF interactivo'}</span>
           </Button>
           <Button
             variant={project.published ? 'primary' : 'soft'}
-            className="px-2.5 py-2 sm:px-5 sm:py-2.5"
+            className={isCompact ? 'px-2 py-1.5' : 'px-2.5 py-2 sm:px-5 sm:py-2.5'}
             disabled={publishing}
             onClick={() => void publishProject()}
           >
-            <Globe size={15} />
+            <Globe size={isCompact ? 14 : 15} />
             <span className="hidden md:inline">{project.published ? 'Publicado' : 'Publicar'}</span>
           </Button>
-          {project.published ? (
+          {project.published && !isCompact ? (
             <Link
               to={`/p/${project.slug}`}
               className="hidden text-sm font-medium text-neon no-underline hover:underline md:inline"
@@ -407,42 +421,12 @@ export function EditorPage() {
         </div>
       </header>
 
-      {isMobilePortrait ? (
+      {isCompact ? (
         <div className="relative flex min-h-0 flex-1 flex-col">
-          {!dismissRotateHint ? (
-            <div className="flex shrink-0 items-center gap-2 border-b border-neon/25 bg-neon/10 px-3 py-2">
-              <RotateCw size={14} className="shrink-0 text-neon" />
-              <p className="min-w-0 flex-1 font-mono text-[0.62rem] uppercase leading-snug tracking-[0.1em] text-paper/85">
-                Mejor en horizontal: más lienzo y paneles como en ordenador
-              </p>
-              <button
-                type="button"
-                className="shrink-0 rounded-full px-2 py-1 font-mono text-[0.6rem] uppercase tracking-[0.12em] text-paper/55 hover:text-paper"
-                onClick={() => setDismissRotateHint(true)}
-              >
-                Ok
-              </button>
-            </div>
-          ) : null}
           <div className="relative min-h-0 flex-1">
-            <EditorCanvas onOpenGuide={guide.openGuide} />
+            <EditorCanvas onOpenGuide={guide.openGuide} autoFit />
           </div>
           <MobileEditorDock projectId={projectId} />
-          <StudioGuideOverlay
-            open={guide.open}
-            step={guide.step}
-            onStep={guide.setStep}
-            onClose={() => guide.setOpen(false)}
-            onFinish={guide.finish}
-          />
-        </div>
-      ) : isMobileLandscape ? (
-        <div className="relative flex min-h-0 flex-1">
-          <EditorToolbar projectId={projectId} width={156} />
-          <div className="relative min-w-0 flex-1">
-            <EditorCanvas onOpenGuide={guide.openGuide} />
-          </div>
-          <PropertiesPanel width={188} />
           <StudioGuideOverlay
             open={guide.open}
             step={guide.step}

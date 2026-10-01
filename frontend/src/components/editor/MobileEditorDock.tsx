@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import {
   ImagePlus,
   Layers,
+  Maximize2,
   MousePointer2,
   MousePointerClick,
   Redo2,
@@ -11,6 +12,8 @@ import {
   Type,
   Undo2,
   Copy,
+  ZoomIn,
+  ZoomOut,
 } from 'lucide-react';
 import { useEditorStore } from '../../stores/editorStore';
 import { PagesLayersPanel } from './PagesLayersPanel';
@@ -41,7 +44,7 @@ function DockBtn({
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        'flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl transition',
+        'flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl transition',
         active ? 'bg-neon/20 text-neon ring-1 ring-neon/40' : 'text-paper/75 hover:bg-white/5 hover:text-paper',
         disabled && 'opacity-35',
       )}
@@ -53,7 +56,7 @@ function DockBtn({
 
 /**
  * Mobile editing chrome: canvas stays primary; key tools live in a compact dock.
- * Sheets open to ~42vh so the project remains visible above.
+ * Sheets open to ~38vh so the project remains visible above.
  */
 export function MobileEditorDock({ projectId }: { projectId: string }) {
   const [sheet, setSheet] = useState<Sheet>('none');
@@ -73,6 +76,8 @@ export function MobileEditorDock({ projectId }: { projectId: string }) {
   const past = useEditorStore((s) => s.past);
   const future = useEditorStore((s) => s.future);
   const flashAction = useEditorStore((s) => s.flashAction);
+  const zoom = useEditorStore((s) => s.zoom);
+  const setZoom = useEditorStore((s) => s.setZoom);
 
   const hasSelection = selectedIds.length > 0;
 
@@ -80,12 +85,21 @@ export function MobileEditorDock({ projectId }: { projectId: string }) {
     setSheet((cur) => (cur === next ? 'none' : next));
   };
 
+  const bumpZoom = (delta: number) => {
+    window.dispatchEvent(new Event('pliego-zoom-manual'));
+    setZoom(zoom + delta);
+  };
+
+  const fitView = () => {
+    window.dispatchEvent(new Event('pliego-zoom-fit'));
+  };
+
   return (
     <div className="relative shrink-0">
       {sheet !== 'none' ? (
-        <div className="absolute inset-x-0 bottom-full z-40 mb-2 flex max-h-[42vh] flex-col justify-end px-2">
+        <div className="absolute inset-x-0 bottom-full z-40 mb-1.5 flex max-h-[38vh] flex-col justify-end px-2">
           <div className="overflow-hidden rounded-2xl border border-white/12 bg-ink shadow-[0_-16px_50px_rgba(0,0,0,0.55)]">
-            <div className="flex items-center justify-between border-b border-white/8 px-3 py-2">
+            <div className="flex items-center justify-between border-b border-white/8 px-3 py-1.5">
               <p className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-paper/55">
                 {sheet === 'layers'
                   ? 'Páginas y capas'
@@ -103,7 +117,7 @@ export function MobileEditorDock({ projectId }: { projectId: string }) {
                 Cerrar
               </button>
             </div>
-            <div className="max-h-[36vh] overflow-y-auto overscroll-contain">
+            <div className="max-h-[32vh] overflow-y-auto overscroll-contain">
               {sheet === 'layers' ? <PagesLayersPanel /> : null}
               {sheet === 'props' ? <PropertiesPanel /> : null}
               {sheet === 'text' ? (
@@ -175,7 +189,7 @@ export function MobileEditorDock({ projectId }: { projectId: string }) {
       ) : null}
 
       <div className="border-t border-white/10 bg-[#080b0f]/98 pb-[env(safe-area-inset-bottom)] backdrop-blur-md">
-        <div className="flex items-center gap-1 overflow-x-auto px-2 py-1.5 scrollbar-thin">
+        <div className="flex items-center gap-0.5 overflow-x-auto px-1.5 py-1 scrollbar-thin">
           <DockBtn
             label="Seleccionar"
             active={tool === 'select' && sheet === 'none'}
@@ -184,13 +198,13 @@ export function MobileEditorDock({ projectId }: { projectId: string }) {
               setSheet('none');
             }}
           >
-            <MousePointer2 size={18} />
+            <MousePointer2 size={17} />
           </DockBtn>
           <DockBtn label="Texto" active={sheet === 'text'} onClick={() => toggleSheet('text')}>
-            <Type size={18} />
+            <Type size={17} />
           </DockBtn>
           <DockBtn label="Formas" active={sheet === 'shape'} onClick={() => toggleSheet('shape')}>
-            <Square size={18} />
+            <Square size={17} />
           </DockBtn>
           <DockBtn
             label="Imagen"
@@ -199,7 +213,7 @@ export function MobileEditorDock({ projectId }: { projectId: string }) {
               fileRef.current?.click();
             }}
           >
-            <ImagePlus size={18} />
+            <ImagePlus size={17} />
           </DockBtn>
           <DockBtn
             label="Botón CTA"
@@ -209,35 +223,48 @@ export function MobileEditorDock({ projectId }: { projectId: string }) {
               setTool('select');
             }}
           >
-            <MousePointerClick size={18} />
+            <MousePointerClick size={17} />
           </DockBtn>
-          <span className="mx-1 h-7 w-px shrink-0 bg-white/10" aria-hidden />
+          <span className="mx-0.5 h-6 w-px shrink-0 bg-white/10" aria-hidden />
+          <DockBtn label="Alejar" onClick={() => bumpZoom(-0.1)}>
+            <ZoomOut size={17} />
+          </DockBtn>
+          <DockBtn label="Encajar lienzo" onClick={fitView}>
+            <Maximize2 size={15} />
+          </DockBtn>
+          <DockBtn label="Acercar" onClick={() => bumpZoom(0.1)}>
+            <ZoomIn size={17} />
+          </DockBtn>
+          <span className="shrink-0 px-1 font-mono text-[0.6rem] tabular-nums text-paper/45">
+            {Math.round(zoom * 100)}%
+          </span>
+          <span className="mx-0.5 h-6 w-px shrink-0 bg-white/10" aria-hidden />
           <DockBtn label="Deshacer" disabled={past.length === 0} onClick={() => undo()}>
-            <Undo2 size={18} />
+            <Undo2 size={17} />
           </DockBtn>
           <DockBtn label="Rehacer" disabled={future.length === 0} onClick={() => redo()}>
-            <Redo2 size={18} />
+            <Redo2 size={17} />
           </DockBtn>
           <DockBtn
             label="Duplicar"
             disabled={!hasSelection}
             onClick={() => duplicateSelected()}
           >
-            <Copy size={17} />
+            <Copy size={16} />
           </DockBtn>
           <DockBtn
             label="Eliminar"
             disabled={!hasSelection}
             onClick={() => deleteSelected()}
           >
-            <Trash2 size={18} />
+            <Trash2 size={17} />
           </DockBtn>
-          <span className="mx-1 h-7 w-px shrink-0 bg-white/10" aria-hidden />
+          <span className="mx-0.5 h-6 w-px shrink-0 bg-white/10" aria-hidden />
           <DockBtn label="Capas" active={sheet === 'layers'} onClick={() => toggleSheet('layers')}>
-            <Layers size={18} />
+            <Layers size={17} />
           </DockBtn>
           <DockBtn label="Props" active={sheet === 'props'} onClick={() => toggleSheet('props')}>
-            <SlidersHorizontal size={18} />
+            <SlidersHorizontal size={17} />
           </DockBtn>
         </div>
       </div>

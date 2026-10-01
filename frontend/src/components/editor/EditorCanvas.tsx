@@ -60,7 +60,14 @@ function shapeFillProps(el: ShapeElement) {
   return { fill: el.fill };
 }
 
-export function EditorCanvas({ onOpenGuide }: { onOpenGuide?: () => void }) {
+export function EditorCanvas({
+  onOpenGuide,
+  autoFit = false,
+}: {
+  onOpenGuide?: () => void;
+  /** Keep the full artboard visible inside the viewport (mobile). */
+  autoFit?: boolean;
+}) {
   const documentModel = useEditorStore((s) => s.document);
   const activePageId = useEditorStore((s) => s.activePageId);
   const selectedIds = useEditorStore((s) => s.selectedIds);
@@ -69,9 +76,11 @@ export function EditorCanvas({ onOpenGuide }: { onOpenGuide?: () => void }) {
   const pushHistory = useEditorStore((s) => s.pushHistory);
   const updateDocument = useEditorStore((s) => s.updateDocument);
   const flashAction = useEditorStore((s) => s.flashAction);
+  const fitZoom = useEditorStore((s) => s.fitZoom);
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<Konva.Stage>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
+  const userZoomLock = useRef(false);
   const [size, setSize] = useState({ width: 800, height: 600 });
   const [editing, setEditing] = useState<{
     id: string;
@@ -97,6 +106,49 @@ export function EditorCanvas({ onOpenGuide }: { onOpenGuide?: () => void }) {
     setSize({ width: el.clientWidth, height: el.clientHeight });
     return () => ro.disconnect();
   }, []);
+
+  // Re-fit when the viewport changes unless the user picked a manual zoom
+  useEffect(() => {
+    if (!autoFit || !documentModel) return;
+    if (userZoomLock.current) return;
+    if (size.width < 40 || size.height < 40) return;
+    fitZoom(size.width, size.height, 16);
+  }, [
+    autoFit,
+    size.width,
+    size.height,
+    documentModel?.meta.width,
+    documentModel?.meta.height,
+    fitZoom,
+    documentModel,
+  ]);
+
+  useEffect(() => {
+    if (!autoFit) return;
+    const onManualZoom = () => {
+      userZoomLock.current = true;
+    };
+    const onFitRequest = () => {
+      userZoomLock.current = false;
+      const el = containerRef.current;
+      if (el) fitZoom(el.clientWidth, el.clientHeight, 16);
+    };
+    const onOrientation = () => {
+      userZoomLock.current = false;
+      window.setTimeout(() => {
+        const el = containerRef.current;
+        if (el) fitZoom(el.clientWidth, el.clientHeight, 16);
+      }, 180);
+    };
+    window.addEventListener('pliego-zoom-manual', onManualZoom);
+    window.addEventListener('pliego-zoom-fit', onFitRequest);
+    window.addEventListener('orientationchange', onOrientation);
+    return () => {
+      window.removeEventListener('pliego-zoom-manual', onManualZoom);
+      window.removeEventListener('pliego-zoom-fit', onFitRequest);
+      window.removeEventListener('orientationchange', onOrientation);
+    };
+  }, [autoFit, fitZoom]);
 
   const page = useMemo(
     () => (documentModel ? getActivePage(documentModel, activePageId) : undefined),
@@ -153,8 +205,14 @@ export function EditorCanvas({ onOpenGuide }: { onOpenGuide?: () => void }) {
     setEditing(null);
   };
 
+  const stagePad = autoFit ? 12 : 40;
+
   return (
-    <div ref={containerRef} className="canvas-stage relative h-full w-full overflow-auto scrollbar-thin">
+    <div
+      ref={containerRef}
+      data-editor-canvas
+      className="canvas-stage relative h-full w-full overflow-auto scrollbar-thin"
+    >
       {page.elements.length === 0 ? (
         <CanvasStarter
           onAddText={() => addText('display')}
@@ -164,10 +222,11 @@ export function EditorCanvas({ onOpenGuide }: { onOpenGuide?: () => void }) {
         />
       ) : null}
       <div
-        className="flex min-h-full min-w-full items-center justify-center p-10"
+        className="flex min-h-full min-w-full items-center justify-center"
         style={{
-          minWidth: Math.max(size.width, stageW + 80),
-          minHeight: Math.max(size.height, stageH + 80),
+          padding: stagePad,
+          minWidth: Math.max(size.width, stageW + stagePad * 2),
+          minHeight: Math.max(size.height, stageH + stagePad * 2),
         }}
       >
         <div

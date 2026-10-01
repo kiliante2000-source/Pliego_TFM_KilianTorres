@@ -19,6 +19,26 @@ import { cn } from '../utils/cn';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
+/** Same destination + behavior for hero and bottom CTA — no Magnetic (can steal taps). */
+function DemoVivaButton({ className }: { className?: string }) {
+  return (
+    <ButtonLink
+      to="/demo#demo-hero"
+      variant="soft"
+      className={className}
+      onClick={() => {
+        try {
+          sessionStorage.setItem('pliego-demo-entry', 'hero');
+        } catch {
+          /* private mode */
+        }
+      }}
+    >
+      <Play size={15} /> Ver demo viva
+    </ButtonLink>
+  );
+}
+
 const FEATURES = [
   {
     k: '01',
@@ -196,15 +216,7 @@ export function LandingPage() {
                   Empezar a diseñar <ArrowRight size={18} />
                 </ButtonLink>
               </Magnetic>
-              <Magnetic>
-                <ButtonLink
-                  to="/demo#demo-hero"
-                  variant="soft"
-                  className="w-full justify-center px-5 py-2.5 text-sm sm:w-auto sm:px-6 sm:py-3 sm:text-base"
-                >
-                  <Play size={15} /> Ver demo viva
-                </ButtonLink>
-              </Magnetic>
+              <DemoVivaButton className="w-full justify-center px-5 py-2.5 text-sm sm:w-auto sm:px-6 sm:py-3 sm:text-base" />
             </motion.div>
 
             <motion.div
@@ -306,15 +318,7 @@ export function LandingPage() {
                     Entrar al canvas <ArrowRight size={18} />
                   </ButtonLink>
                 </Magnetic>
-                <Magnetic>
-                  <ButtonLink
-                    to="/demo#demo-hero"
-                    variant="soft"
-                    className="w-full justify-center px-5 py-2.5 text-sm sm:w-auto sm:px-8 sm:py-3.5 sm:text-base"
-                  >
-                    <Play size={15} /> Ver demo viva
-                  </ButtonLink>
-                </Magnetic>
+                <DemoVivaButton className="w-full justify-center px-5 py-2.5 text-sm sm:w-auto sm:px-8 sm:py-3.5 sm:text-base" />
               </div>
             </div>
           </Reveal>

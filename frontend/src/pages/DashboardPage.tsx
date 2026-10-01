@@ -28,10 +28,20 @@ function prefsToBlankFormatId(): BlankFormatId {
   return 'story';
 }
 
+function stickyNavOffset() {
+  const sticky = document.querySelector('[data-studio-sticky]') as HTMLElement | null;
+  // Mobile sticky header + tab row; desktop has no sticky bar over content
+  return sticky ? sticky.getBoundingClientRect().height + 10 : 12;
+}
+
 function scrollToStudioSection(id: string) {
   const el = document.getElementById(id);
-  if (!el) return;
-  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (!el) {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    return;
+  }
+  const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - stickyNavOffset());
+  window.scrollTo({ top, behavior: 'auto' });
 }
 
 export function DashboardPage() {
@@ -73,19 +83,19 @@ export function DashboardPage() {
     void load();
   }, []);
 
-  // Plantillas → colección; Proyectos → saludo "Hola, …"
+  // Land on each section’s primary heading, fully below the sticky mobile chrome
   useEffect(() => {
-    if (tab !== 'projects' && tab !== 'templates') return;
-
     const fromHash = location.hash.replace(/^#/, '');
     const target =
       fromHash ||
       (tab === 'templates' ? 'coleccion-plantillas' : 'studio-hello');
 
     const run = () => scrollToStudioSection(target);
-    const t1 = window.setTimeout(run, 60);
-    const t2 = window.setTimeout(run, 280);
+    const t0 = window.setTimeout(run, 0);
+    const t1 = window.setTimeout(run, 100);
+    const t2 = window.setTimeout(run, 360);
     return () => {
+      window.clearTimeout(t0);
       window.clearTimeout(t1);
       window.clearTimeout(t2);
     };
@@ -140,7 +150,7 @@ export function DashboardPage() {
         initial={{ opacity: 0, y: 14, filter: 'blur(6px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-        className="relative mb-8 scroll-mt-24 sm:mb-12 sm:scroll-mt-6"
+        className="relative mb-8 scroll-mt-[7.5rem] sm:mb-12 sm:scroll-mt-6"
       >
         <p className="eyebrow text-neon">
           {tab === 'templates'
@@ -204,7 +214,7 @@ export function DashboardPage() {
             </div>
 
             {/* 2 · Plantillas — posters cinéticos 3+3 bento */}
-            <div id="coleccion-plantillas" className="scroll-mt-6">
+            <div id="coleccion-plantillas" className="scroll-mt-[7.5rem] sm:scroll-mt-6">
               <TemplateGallery
                 templates={templates}
                 openingId={openingId}

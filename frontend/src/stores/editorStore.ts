@@ -45,6 +45,8 @@ type EditorState = {
   loadProject: (projectId: string) => Promise<void>;
   setTool: (tool: EditorState['tool']) => void;
   setZoom: (zoom: number) => void;
+  /** Fit the artboard inside a viewport (used on mobile / Encajar). */
+  fitZoom: (viewW: number, viewH: number, padding?: number) => void;
   select: (ids: string[]) => void;
   setActivePage: (pageId: string) => void;
   pushHistory: () => void;
@@ -170,7 +172,17 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   },
 
   setTool: (tool) => set({ tool }),
-  setZoom: (zoom) => set({ zoom: Math.min(2.5, Math.max(0.15, zoom)) }),
+  setZoom: (zoom) => set({ zoom: Math.min(2.5, Math.max(0.12, zoom)) }),
+  fitZoom: (viewW, viewH, padding = 20) => {
+    const doc = get().document;
+    if (!doc || viewW < 40 || viewH < 40) return;
+    const next = Math.min(
+      (viewW - padding) / doc.meta.width,
+      (viewH - padding) / doc.meta.height,
+      1.25,
+    );
+    set({ zoom: Math.min(2.5, Math.max(0.12, next)) });
+  },
   select: (ids) => set({ selectedIds: ids }),
   setActivePage: (pageId) => set({ activePageId: pageId, selectedIds: [] }),
 
