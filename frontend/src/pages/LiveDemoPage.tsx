@@ -779,7 +779,7 @@ export function LiveDemoPage() {
       <GestureFilm />
 
       {/* CLOSING BILLBOARD */}
-      <section className="relative z-10 flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-20 text-center sm:pb-28 sm:pt-24">
+      <section className="relative z-10 flex min-h-[90svh] flex-col items-center justify-center overflow-hidden px-6 pb-32 pt-24 text-center sm:min-h-svh sm:pb-40 sm:pt-28">
         <motion.div
           className="pointer-events-none absolute inset-0"
           style={{
@@ -840,18 +840,18 @@ export function LiveDemoPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.25 }}
-          className="relative mt-10 flex w-full max-w-xl flex-col items-stretch justify-center gap-3 sm:mt-12 sm:flex-row sm:items-center sm:gap-4"
+          className="relative mt-10 mb-6 flex w-full max-w-lg flex-col items-stretch justify-center gap-3 sm:mt-12 sm:mb-8 sm:flex-row sm:items-center sm:gap-4"
         >
           <ButtonLink
             to="/register"
-            className="inline-flex h-14 w-full items-center justify-center px-8 text-base sm:w-auto sm:min-w-[15.5rem]"
+            className="inline-flex h-14 w-full flex-1 items-center justify-center px-8 text-base"
           >
             Crear mi cuenta <ArrowRight size={18} />
           </ButtonLink>
           <ButtonLink
             to="/login"
             variant="soft"
-            className="inline-flex h-14 w-full items-center justify-center px-8 text-base sm:w-auto sm:min-w-[15.5rem]"
+            className="inline-flex h-14 w-full flex-1 items-center justify-center px-8 text-base"
           >
             Ya tengo acceso
           </ButtonLink>
