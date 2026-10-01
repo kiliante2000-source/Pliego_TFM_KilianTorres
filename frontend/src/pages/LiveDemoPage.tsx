@@ -487,20 +487,36 @@ export function LiveDemoPage() {
   }, []);
 
   useEffect(() => {
-    // Original pacing — time to read each beat + PLIEGO mark
-    const t1 = window.setTimeout(() => setIntro(1), 1500);
-    const t2 = window.setTimeout(() => setIntro(2), 3100);
-    const t3 = window.setTimeout(() => setIntro(3), 4800);
+    // mode="wait" runs exit (~0.7s) then enter (~0.7–0.85s) between beats —
+    // timers must leave real hold time AFTER each enter, or msg 2 / PLIEGO flash by.
+    let cancelled = false;
+    const sleep = (ms: number) =>
+      new Promise<void>((resolve) => {
+        window.setTimeout(resolve, ms);
+      });
+
+    void (async () => {
+      // Beat 0 “Diseñar…”: enter 0.7s + hold ~1.8s
+      await sleep(2500);
+      if (cancelled) return;
+      setIntro(1);
+      // Beat 1 “nunca…”: exit 0.7 + enter 0.7 + hold ~1.8s
+      await sleep(3200);
+      if (cancelled) return;
+      setIntro(2);
+      // Beat 2 PLIEGO: exit 0.7 + enter 0.9 + hold ~2.2s (mark needs time)
+      await sleep(3800);
+      if (cancelled) return;
+      setIntro(3);
+    })();
+
     return () => {
-      window.clearTimeout(t1);
-      window.clearTimeout(t2);
-      window.clearTimeout(t3);
+      cancelled = true;
     };
   }, []);
 
   useEffect(() => {
     if (location.hash === '#obra') return;
-    // Stay pinned to the hero while the intro plays / ends (no smooth scroll chase)
     window.scrollTo(0, 0);
   }, [intro, location.hash]);
 
@@ -549,7 +565,7 @@ export function LiveDemoPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.7, ease }}
+                  transition={{ duration: 0.75, ease }}
                   className="relative z-10 px-6 text-center text-3xl italic text-paper sm:text-5xl"
                   style={serif}
                 >
@@ -562,7 +578,7 @@ export function LiveDemoPage() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.7, ease }}
+                  transition={{ duration: 0.75, ease }}
                   className="relative z-10 px-6 text-center text-4xl font-extrabold tracking-[-0.04em] text-paper sm:text-6xl"
                   style={display}
                 >
@@ -572,10 +588,10 @@ export function LiveDemoPage() {
               {intro === 2 && (
                 <motion.div
                   key="c"
-                  initial={{ opacity: 0, letterSpacing: '0.28em' }}
-                  animate={{ opacity: 1, letterSpacing: '-0.06em' }}
-                  exit={{ opacity: 0, scale: 1.04 }}
-                  transition={{ duration: 0.85, ease }}
+                  initial={{ opacity: 0, letterSpacing: '0.22em', scale: 0.96 }}
+                  animate={{ opacity: 1, letterSpacing: '-0.05em', scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.03 }}
+                  transition={{ duration: 1.05, ease }}
                   className="relative z-10 text-center"
                 >
                   <p
