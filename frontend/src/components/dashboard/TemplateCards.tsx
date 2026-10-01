@@ -601,12 +601,15 @@ export function TemplateCard({
     >
       <div className="absolute inset-0 overflow-hidden">
         <KineticField accent={visual.accent} soft={visual.soft} />
-        {/* Artwork stays in the upper band — never crosses the title block */}
-        <div className="pointer-events-none absolute inset-x-[5%] top-[5%] h-[38%] overflow-hidden sm:inset-x-[8%] sm:top-[7%] sm:h-[40%]">
-          <PosterScene kind={visual.vector} />
+        {/* Strict upper band + bottom fade — white strokes never cross the title */}
+        <div className="pointer-events-none absolute inset-x-[6%] top-[3%] h-[30%] overflow-hidden sm:inset-x-[10%] sm:top-[5%] sm:h-[34%]">
+          <div className="relative mx-auto h-full w-[88%] origin-top scale-[0.92]">
+            <PosterScene kind={visual.vector} />
+          </div>
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-black/75 to-transparent" />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/25 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-[52%] bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-black/92 via-black/55 to-transparent" />
       </div>
 
       <span className="pointer-events-none absolute -right-1 -top-2 select-none font-display text-[3.75rem] font-extrabold leading-none tracking-tighter text-white/[0.14] sm:text-[7.5rem]">
