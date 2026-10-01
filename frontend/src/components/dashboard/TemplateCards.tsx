@@ -255,10 +255,10 @@ function VectorArt({ kind }: { kind: VectorKind }) {
   );
 }
 
-/** Vector plate — roomy enough to read structure; stroke scales with size. */
+/** Vector plate — stroke scales with size; light padding so art fills the color band. */
 function PosterScene({ kind }: { kind: VectorKind; featured?: boolean }) {
   return (
-    <div className="relative mx-auto aspect-square w-full p-[6%] drop-shadow-[0_0_16px_rgba(255,255,255,0.22)]">
+    <div className="relative mx-auto aspect-square w-full p-[4%] drop-shadow-[0_0_18px_rgba(255,255,255,0.3)] sm:p-[6%]">
       <VectorArt kind={kind} />
     </div>
   );
@@ -506,42 +506,57 @@ export function TemplateCard({
       >
         <div className="absolute inset-0" style={{ borderRadius: 'inherit', overflow: 'hidden' }}>
           <KineticField accent={visual.accent} soft={visual.soft} />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/5" />
+          {/* Soft fade only near the title band — keep the color field vivid behind the vector */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent sm:via-black/25 sm:to-black/5" />
         </div>
 
         <span className="pointer-events-none absolute -right-1 top-0 select-none font-display text-[2.75rem] font-extrabold leading-none tracking-tighter text-white/[0.12] sm:-top-2 sm:text-[7.5rem]">
           {visual.index}
         </span>
 
-        <div className="relative z-10 flex items-start justify-between gap-2 p-3 sm:gap-3 sm:p-5">
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <span className="rounded-full bg-black/45 px-2 py-0.5 font-mono text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-white ring-1 ring-white/35 backdrop-blur-md sm:px-2.5 sm:py-1 sm:text-[0.65rem] sm:tracking-[0.16em]">
-              {visual.index}
-            </span>
-            <span className="hidden rounded-full bg-white/18 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-white ring-1 ring-white/25 backdrop-blur-md sm:inline">
-              {visual.pages}
+        {/* Color band: grows and truly centers the vector on mobile */}
+        <div className="relative z-10 flex min-h-0 flex-1 flex-col">
+          <div className="flex items-start justify-between gap-2 p-3 sm:gap-3 sm:p-5">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <span className="rounded-full bg-black/45 px-2 py-0.5 font-mono text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-white ring-1 ring-white/35 backdrop-blur-md sm:px-2.5 sm:py-1 sm:text-[0.65rem] sm:tracking-[0.16em]">
+                {visual.index}
+              </span>
+              <span className="hidden rounded-full bg-white/18 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-white ring-1 ring-white/25 backdrop-blur-md sm:inline">
+                {visual.pages}
+              </span>
+            </div>
+            <span className="hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/75 sm:inline">
+              {visual.motif}
             </span>
           </div>
-          <span className="hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/75 sm:inline">
-            {visual.motif}
-          </span>
-        </div>
 
-        {/* Mobile: structured vector above title (room to breathe). Desktop: larger mid field. */}
-        <div
-          className={
-            featured
-              ? 'relative z-10 mx-auto flex h-[7.25rem] w-[7.25rem] shrink-0 items-center justify-center sm:absolute sm:left-1/2 sm:top-[34%] sm:h-auto sm:w-[min(68%,26rem)] sm:-translate-x-1/2 sm:-translate-y-1/2'
-              : 'relative z-10 mx-auto flex h-[5.75rem] w-[5.75rem] shrink-0 items-center justify-center sm:absolute sm:left-1/2 sm:top-[32%] sm:h-auto sm:w-[min(72%,20rem)] sm:-translate-x-1/2 sm:-translate-y-1/2'
-          }
-        >
-          <div className="pointer-events-none h-full w-full opacity-95 sm:opacity-100">
+          {/* Mobile: larger art, centered in the remaining color area */}
+          <div className="flex min-h-0 flex-1 items-center justify-center px-3 pb-1 sm:hidden">
+            <div
+              className={
+                featured
+                  ? 'pointer-events-none h-[min(10.5rem,42vw)] w-[min(10.5rem,42vw)]'
+                  : 'pointer-events-none h-[min(8.25rem,38vw)] w-[min(8.25rem,38vw)]'
+              }
+            >
+              <PosterScene kind={visual.vector} />
+            </div>
+          </div>
+
+          {/* Desktop: absolute mid-field vector */}
+          <div
+            className={
+              featured
+                ? 'pointer-events-none absolute left-1/2 top-[34%] hidden w-[min(68%,26rem)] -translate-x-1/2 -translate-y-1/2 sm:block'
+                : 'pointer-events-none absolute left-1/2 top-[32%] hidden w-[min(72%,20rem)] -translate-x-1/2 -translate-y-1/2 sm:block'
+            }
+          >
             <PosterScene kind={visual.vector} />
           </div>
         </div>
 
-        {/* Title block always on top of art — solid scrim on mobile */}
-        <div className="relative z-20 mt-auto min-w-0 bg-black/55 px-3 pb-3 pt-3 backdrop-blur-[2px] sm:bg-gradient-to-t sm:from-black/80 sm:via-black/45 sm:to-transparent sm:px-5 sm:pb-5 sm:pt-10 sm:backdrop-blur-0">
+        {/* Title block — solid scrim on mobile so type stays clear under larger art */}
+        <div className="relative z-20 mt-auto min-w-0 shrink-0 bg-black/60 px-3 pb-3 pt-2.5 backdrop-blur-[2px] sm:bg-gradient-to-t sm:from-black/80 sm:via-black/45 sm:to-transparent sm:px-5 sm:pb-5 sm:pt-10 sm:backdrop-blur-0">
           <p className="mb-1 hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/65 sm:mb-1.5 sm:block">
             {visual.tagline}
           </p>
