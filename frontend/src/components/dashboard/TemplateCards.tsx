@@ -687,9 +687,19 @@ export function TemplateGallery({
   const rowB = templates.slice(3, 6);
   const marquee = ['Manifiesto', 'Portfolio', 'Portada', 'Revista', 'Lookbook', 'Slide', 'PLIEGO'];
 
-  const spanA = ['lg:col-span-6', 'lg:col-span-3', 'lg:col-span-3'] as const;
+  // Mobile: magazine rhythm (full → pair / pair → full) so no orphan cell.
+  // Desktop (lg+): unchanged 12-col bento.
+  const spanA = [
+    'col-span-2 lg:col-span-6',
+    'col-span-1 lg:col-span-3',
+    'col-span-1 lg:col-span-3',
+  ] as const;
   const sizeA = ['hero', 'tall', 'tall'] as const;
-  const spanB = ['lg:col-span-3', 'lg:col-span-3', 'lg:col-span-6'] as const;
+  const spanB = [
+    'col-span-1 lg:col-span-3',
+    'col-span-1 lg:col-span-3',
+    'col-span-2 lg:col-span-6',
+  ] as const;
   const sizeB = ['tall', 'standard', 'wide'] as const;
 
   return (
