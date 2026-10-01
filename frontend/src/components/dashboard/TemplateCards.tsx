@@ -129,24 +129,35 @@ export const BLANK_FORMATS: {
   { id: 'presentation', label: 'Slide', short: '1920×1080', width: 1920, height: 1080, orientation: 'landscape' },
 ];
 
-/** Static poster atmosphere — blurs stay inside a clipped host (no square remates). */
-function KineticField({ accent, soft }: { accent: string; soft: string }) {
+/** Live poster atmosphere — slow drift inside a clipped host (no square remates). */
+function KineticField({
+  accent,
+  soft,
+  phase = 0,
+}: {
+  accent: string;
+  soft: string;
+  /** Stagger offset (seconds) so cards don’t pulse in lockstep. */
+  phase?: number;
+}) {
+  const delay = { animationDelay: `${-phase}s` };
   return (
     <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: 'inherit' }}>
       <div className="absolute inset-0" style={{ background: accent }} />
       <div
-        className="absolute inset-[-20%]"
+        className="pliego-field-wash absolute inset-[-22%]"
         style={{
+          ...delay,
           background: `conic-gradient(from 210deg at 42% 38%, ${accent}, ${soft}, rgba(255,255,255,0.45), ${accent})`,
         }}
       />
       <div
-        className="absolute -right-[20%] top-[-28%] h-[90%] w-[70%] rounded-full opacity-45 blur-2xl"
-        style={{ background: soft }}
+        className="pliego-field-blob-a absolute -right-[20%] top-[-28%] h-[90%] w-[70%] rounded-full opacity-45 blur-2xl"
+        style={{ ...delay, background: soft }}
       />
       <div
-        className="absolute -bottom-[28%] -left-[22%] h-[75%] w-[65%] rounded-full opacity-30 blur-2xl"
-        style={{ background: '#fff' }}
+        className="pliego-field-blob-b absolute -bottom-[28%] -left-[22%] h-[75%] w-[65%] rounded-full opacity-30 blur-2xl"
+        style={{ ...delay, background: '#fff' }}
       />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_12%,rgba(255,255,255,0.38),transparent_52%)]" />
       <div className="absolute inset-0 opacity-[0.16] [background-image:linear-gradient(rgba(255,255,255,0.6)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.6)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_72%)]" />
@@ -163,9 +174,9 @@ const stroke = {
   strokeLinejoin: 'round' as const,
 };
 const strokeSoft = { ...stroke, strokeOpacity: 0.55, strokeWidth: 5.5 };
-const svgClass = 'h-full w-full max-h-full max-w-full overflow-visible';
+const svgClass = 'pliego-vector-art h-full w-full max-h-full max-w-full overflow-visible';
 
-/** Diagramas vectoriales PLIEGO — estructura clara a cualquier escala. */
+/** Diagramas vectoriales PLIEGO — estructura clara + trazo que se dibuja al entrar. */
 function VectorArt({ kind }: { kind: VectorKind }) {
   if (kind === 'manifesto') {
     return (
@@ -255,10 +266,13 @@ function VectorArt({ kind }: { kind: VectorKind }) {
   );
 }
 
-/** Vector plate — stroke scales with size; light padding so art fills the color band. */
-function PosterScene({ kind }: { kind: VectorKind; featured?: boolean }) {
+/** Vector plate — floats gently; light padding so art fills the color band. */
+function PosterScene({ kind, phase = 0 }: { kind: VectorKind; featured?: boolean; phase?: number }) {
   return (
-    <div className="relative mx-auto aspect-square w-full p-[4%] drop-shadow-[0_0_18px_rgba(255,255,255,0.3)] sm:p-[6%]">
+    <div
+      className="pliego-vector-float relative mx-auto aspect-square w-full p-[4%] drop-shadow-[0_0_18px_rgba(255,255,255,0.3)] sm:p-[6%]"
+      style={{ animationDelay: `${-phase}s` }}
+    >
       <VectorArt kind={kind} />
     </div>
   );
@@ -298,8 +312,8 @@ export function BlankCanvasLaunch({
 
       <div className="relative overflow-hidden rounded-[1.35rem] border border-white/20 bg-[#E8ECF1] text-ink shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
         <div className="pointer-events-none absolute inset-0 opacity-[0.45] [background-image:radial-gradient(circle_at_1px_1px,rgba(5,6,8,0.06)_1px,transparent_0)] [background-size:18px_18px]" />
-        <div className="pointer-events-none absolute -right-16 top-[-20%] h-[70%] w-[45%] rounded-full bg-neon/25 blur-3xl" />
-        <div className="pointer-events-none absolute -left-10 bottom-[-30%] h-[55%] w-[40%] rounded-full bg-rosa/20 blur-3xl" />
+        <div className="pliego-blank-blob-a pointer-events-none absolute -right-16 top-[-20%] h-[70%] w-[45%] rounded-full bg-neon/25 blur-3xl" />
+        <div className="pliego-blank-blob-b pointer-events-none absolute -left-10 bottom-[-30%] h-[55%] w-[40%] rounded-full bg-rosa/20 blur-3xl" />
 
         <div className="relative grid gap-5 p-4 sm:gap-8 sm:p-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-stretch lg:gap-10 lg:p-9">
           <div className="flex min-w-0 flex-col">
@@ -505,7 +519,11 @@ export function TemplateCard({
         style={{ borderRadius: 'inherit' }}
       >
         <div className="absolute inset-0" style={{ borderRadius: 'inherit', overflow: 'hidden' }}>
-          <KineticField accent={visual.accent} soft={visual.soft} />
+          <KineticField
+            accent={visual.accent}
+            soft={visual.soft}
+            phase={Number(visual.index) * 2.4 || delay * 8}
+          />
           {/* Soft fade only near the title band — keep the color field vivid behind the vector */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent sm:via-black/25 sm:to-black/5" />
         </div>
@@ -539,7 +557,7 @@ export function TemplateCard({
                   : 'pointer-events-none h-[min(8.25rem,38vw)] w-[min(8.25rem,38vw)]'
               }
             >
-              <PosterScene kind={visual.vector} />
+              <PosterScene kind={visual.vector} phase={Number(visual.index) * 1.1 || 0} />
             </div>
           </div>
 
@@ -551,7 +569,7 @@ export function TemplateCard({
                 : 'pointer-events-none absolute left-1/2 top-[32%] hidden w-[min(72%,20rem)] -translate-x-1/2 -translate-y-1/2 sm:block'
             }
           >
-            <PosterScene kind={visual.vector} />
+            <PosterScene kind={visual.vector} phase={Number(visual.index) * 1.1 || 0} />
           </div>
         </div>
 
@@ -674,9 +692,9 @@ export function TemplateGallery({
         </div>
 
         <div className="relative mt-6 overflow-hidden border-t border-white/10 pt-3">
-          <div className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-[0.65rem] uppercase tracking-[0.06em] text-paper/40">
-            {marquee.map((label) => (
-              <span key={label} className="flex items-center gap-2 whitespace-nowrap">
+          <div className="pliego-template-marquee flex w-max gap-6 font-mono text-[0.65rem] uppercase tracking-[0.06em] text-paper/40">
+            {[...marquee, ...marquee].map((label, i) => (
+              <span key={`${label}-${i}`} className="flex items-center gap-6 whitespace-nowrap">
                 {label}
                 <span className="text-rosa/70">◆</span>
               </span>
