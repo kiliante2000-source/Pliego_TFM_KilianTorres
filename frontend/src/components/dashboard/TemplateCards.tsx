@@ -129,28 +129,28 @@ export const BLANK_FORMATS: {
   { id: 'presentation', label: 'Slide', short: '1920×1080', width: 1920, height: 1080, orientation: 'landscape' },
 ];
 
-/** Static poster atmosphere — no infinite motion (was causing seizure-like flicker). */
+/** Static poster atmosphere — blurs stay inside a clipped host (no square remates). */
 function KineticField({ accent, soft }: { accent: string; soft: string }) {
   return (
-    <>
+    <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: 'inherit' }}>
       <div className="absolute inset-0" style={{ background: accent }} />
       <div
-        className="absolute -inset-[40%]"
+        className="absolute inset-[-20%]"
         style={{
           background: `conic-gradient(from 210deg at 42% 38%, ${accent}, ${soft}, rgba(255,255,255,0.45), ${accent})`,
         }}
       />
       <div
-        className="absolute -right-[28%] top-[-38%] h-[115%] w-[85%] rounded-full opacity-50 blur-3xl"
+        className="absolute -right-[20%] top-[-28%] h-[90%] w-[70%] rounded-full opacity-45 blur-2xl"
         style={{ background: soft }}
       />
       <div
-        className="absolute -bottom-[42%] -left-[32%] h-[95%] w-[80%] rounded-full opacity-35 blur-3xl"
+        className="absolute -bottom-[28%] -left-[22%] h-[75%] w-[65%] rounded-full opacity-30 blur-2xl"
         style={{ background: '#fff' }}
       />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_12%,rgba(255,255,255,0.38),transparent_52%)]" />
       <div className="absolute inset-0 opacity-[0.16] [background-image:linear-gradient(rgba(255,255,255,0.6)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.6)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_72%)]" />
-    </>
+    </div>
   );
 }
 
@@ -465,117 +465,123 @@ export function TemplateCard({
   delay?: number;
 }) {
   const visual = POSTERS[template.id] ?? FALLBACK;
+  const featured = size === 'hero' || size === 'wide';
 
   /* Mobile: full-bleed hero/wide read taller; half-cells stay compact. Desktop unchanged. */
   const sizeClass =
     size === 'hero'
       ? 'min-h-[17.5rem] sm:min-h-[34rem]'
       : size === 'tall'
-        ? 'min-h-[14.5rem] sm:min-h-[36rem]'
+        ? 'min-h-[15rem] sm:min-h-[36rem]'
         : size === 'wide'
           ? 'min-h-[16.5rem] sm:min-h-[30rem]'
-          : 'min-h-[14.5rem] sm:min-h-[30rem]';
+          : 'min-h-[15rem] sm:min-h-[30rem]';
 
   return (
-    <motion.div
-      role="button"
-      tabIndex={0}
-      aria-label={opening ? `Abriendo ${template.name}` : `Abrir plantilla ${template.name}`}
-      aria-busy={opening || undefined}
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: Math.min(delay, 0.2), duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      onClick={() => onOpen?.()}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onOpen?.();
-        }
-      }}
-      title="Clic para abrir en el editor"
-      className={`group relative isolate flex h-full ${sizeClass} @container cursor-pointer flex-col overflow-hidden rounded-[1.35rem] text-left outline-none transition duration-400 focus-visible:ring-2 focus-visible:ring-neon/55`}
+    // Outer shell: NO transform — Safari clips border-radius reliably only without motion transforms.
+    <div
+      className={`h-full ${sizeClass}`}
       style={{
-        boxShadow: `0 0 0 1px rgba(255,255,255,0.14), 0 28px 70px ${visual.glow}`,
+        borderRadius: '1.35rem',
+        overflow: 'hidden',
+        // Force Safari to mask blurred/overflow children to the rounded rect
+        WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+        maskImage: 'radial-gradient(white, black)',
+        boxShadow: `0 0 0 1px rgba(255,255,255,0.14), 0 22px 48px ${visual.glow}`,
       }}
     >
-      {/* Matching radius on every paint layer — Safari otherwise shows square outer remates */}
-      <div className="absolute inset-0 overflow-hidden rounded-[1.35rem]">
-        <KineticField accent={visual.accent} soft={visual.soft} />
-        {/* Upper band, smaller on mobile so titles/CTA stay clear */}
+      <motion.div
+        role="button"
+        tabIndex={0}
+        aria-label={opening ? `Abriendo ${template.name}` : `Abrir plantilla ${template.name}`}
+        aria-busy={opening || undefined}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: Math.min(delay, 0.2), duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        onClick={() => onOpen?.()}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onOpen?.();
+          }
+        }}
+        title="Clic para abrir en el editor"
+        className="group relative flex h-full cursor-pointer flex-col outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-neon/55"
+        style={{ borderRadius: 'inherit' }}
+      >
+        <div className="absolute inset-0" style={{ borderRadius: 'inherit', overflow: 'hidden' }}>
+          <KineticField accent={visual.accent} soft={visual.soft} />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/5" />
+        </div>
+
+        <span className="pointer-events-none absolute -right-1 top-0 select-none font-display text-[2.75rem] font-extrabold leading-none tracking-tighter text-white/[0.12] sm:-top-2 sm:text-[7.5rem]">
+          {visual.index}
+        </span>
+
+        <div className="relative z-10 flex items-start justify-between gap-2 p-3 sm:gap-3 sm:p-5">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <span className="rounded-full bg-black/45 px-2 py-0.5 font-mono text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-white ring-1 ring-white/35 backdrop-blur-md sm:px-2.5 sm:py-1 sm:text-[0.65rem] sm:tracking-[0.16em]">
+              {visual.index}
+            </span>
+            <span className="hidden rounded-full bg-white/18 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-white ring-1 ring-white/25 backdrop-blur-md sm:inline">
+              {visual.pages}
+            </span>
+          </div>
+          <span className="hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/75 sm:inline">
+            {visual.motif}
+          </span>
+        </div>
+
+        {/* Mobile: small dedicated vector slot ABOVE the title. Desktop: larger mid field. */}
         <div
           className={
-            size === 'hero' || size === 'wide'
-              ? 'pointer-events-none absolute left-1/2 top-[22%] z-[1] w-[min(48%,11.5rem)] -translate-x-1/2 -translate-y-1/2 opacity-95 sm:top-[30%] sm:w-[min(62%,20rem)] sm:opacity-100 lg:top-[34%] lg:w-[min(68%,26rem)]'
-              : 'pointer-events-none absolute left-1/2 top-[20%] z-[1] w-[min(52%,8.5rem)] -translate-x-1/2 -translate-y-1/2 opacity-90 sm:top-[28%] sm:w-[min(70%,16rem)] sm:opacity-100 lg:top-[32%] lg:w-[min(78%,22rem)]'
+            featured
+              ? 'relative z-10 mx-auto flex h-[5.25rem] w-[5.25rem] shrink-0 items-center justify-center sm:absolute sm:left-1/2 sm:top-[34%] sm:h-auto sm:w-[min(68%,26rem)] sm:-translate-x-1/2 sm:-translate-y-1/2'
+              : 'relative z-10 mx-auto flex h-[4.25rem] w-[4.25rem] shrink-0 items-center justify-center sm:absolute sm:left-1/2 sm:top-[32%] sm:h-auto sm:w-[min(72%,20rem)] sm:-translate-x-1/2 sm:-translate-y-1/2'
           }
         >
-          <PosterScene kind={visual.vector} />
+          <div className="pointer-events-none h-full w-full opacity-95 drop-shadow-[0_0_14px_rgba(255,255,255,0.28)] sm:opacity-100">
+            <PosterScene kind={visual.vector} />
+          </div>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-black/10" />
-        <div className="absolute inset-x-0 bottom-0 h-[52%] bg-gradient-to-t from-black/92 via-black/55 to-transparent sm:h-[42%] sm:via-black/35" />
-      </div>
 
-      <span className="pointer-events-none absolute -right-1 -top-2 select-none font-display text-[3.75rem] font-extrabold leading-none tracking-tighter text-white/[0.14] sm:text-[7.5rem]">
-        {visual.index}
-      </span>
+        {/* Title block always on top of art — solid scrim on mobile */}
+        <div className="relative z-20 mt-auto min-w-0 bg-black/55 px-3 pb-3 pt-3 backdrop-blur-[2px] sm:bg-gradient-to-t sm:from-black/80 sm:via-black/45 sm:to-transparent sm:px-5 sm:pb-5 sm:pt-10 sm:backdrop-blur-0">
+          <p className="mb-1 hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/65 sm:mb-1.5 sm:block">
+            {visual.tagline}
+          </p>
+          <h4 className="w-full font-display text-[0.82rem] font-extrabold uppercase leading-[1.08] tracking-[-0.03em] text-white sm:text-[clamp(0.9rem,7.2cqi,1.75rem)] sm:leading-[0.95] sm:tracking-[-0.035em]">
+            {visual.category === 'Presentación' ? (
+              <>
+                <span className="sm:hidden">Slide</span>
+                <span className="hidden sm:inline">{visual.category}</span>
+              </>
+            ) : (
+              visual.category
+            )}
+          </h4>
+          <p className="mt-1 line-clamp-2 break-words font-serif text-[0.76rem] leading-snug text-white/92 sm:mt-2.5 sm:text-base">
+            {template.name}
+          </p>
+          <p className="mt-0.5 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-white/70 sm:mt-1 sm:text-sm">
+            {template.width}×{template.height}
+          </p>
 
-      <div className="relative z-10 flex items-start justify-between gap-2 p-3 sm:gap-3 sm:p-5">
-        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-          <span className="rounded-full bg-black/40 px-2 py-0.5 font-mono text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-white ring-1 ring-white/35 backdrop-blur-md sm:px-2.5 sm:py-1 sm:text-[0.65rem] sm:tracking-[0.16em]">
-            {visual.index}
-          </span>
-          <span className="hidden rounded-full bg-white/18 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-white ring-1 ring-white/25 backdrop-blur-md sm:inline">
-            {visual.pages}
-          </span>
+          <div className="mt-2 flex items-center justify-between gap-2 border-t border-white/25 pt-2 sm:mt-4 sm:gap-3 sm:pt-3">
+            <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-white/80 transition group-hover:text-white sm:text-[0.7rem] sm:tracking-[0.16em]">
+              {opening ? 'Abriendo…' : 'Abrir'}
+            </span>
+            <span
+              className="grid h-7 w-7 shrink-0 place-items-center rounded-full transition duration-300 group-hover:scale-110 group-hover:brightness-110 sm:h-9 sm:w-9"
+              style={{ background: visual.accent, color: '#050608' }}
+            >
+              <ArrowUpRight size={15} strokeWidth={2.4} className="sm:hidden" />
+              <ArrowUpRight size={17} strokeWidth={2.4} className="hidden sm:block" />
+            </span>
+          </div>
         </div>
-        <span className="hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/75 sm:inline">
-          {visual.motif}
-        </span>
-      </div>
-
-      <div className="relative z-10 mt-auto min-w-0 bg-gradient-to-t from-black/50 to-transparent px-3 pb-3 pt-8 sm:px-5 sm:pb-5 sm:pt-10">
-        <p className="mb-1 hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/65 sm:mb-1.5 sm:block">
-          {visual.tagline}
-        </p>
-        {/* Fit-to-card title: never under the vector on narrow 2-col phones */}
-        <h4 className="relative w-full font-display text-[0.78rem] font-extrabold uppercase leading-[1.05] tracking-[-0.03em] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)] sm:text-[clamp(0.9rem,7.2cqi,1.75rem)] sm:leading-[0.95] sm:tracking-[-0.035em]">
-          {visual.category === 'Presentación' ? (
-            <>
-              <span className="sm:hidden">Slide</span>
-              <span className="hidden sm:inline">{visual.category}</span>
-            </>
-          ) : (
-            visual.category
-          )}
-        </h4>
-        <p className="relative mt-1.5 line-clamp-2 break-words font-serif text-[0.78rem] leading-snug text-white/92 sm:mt-2.5 sm:text-base">
-          {template.name}
-        </p>
-        <p className="relative mt-0.5 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-white/70 sm:mt-1 sm:text-sm">
-          {template.width}×{template.height}
-        </p>
-
-        <div className="relative mt-2.5 flex items-center justify-between gap-2 border-t border-white/25 pt-2 sm:mt-4 sm:gap-3 sm:pt-3">
-          <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-white/75 transition group-hover:text-white sm:text-[0.7rem] sm:tracking-[0.16em]">
-            {opening ? 'Abriendo…' : 'Abrir'}
-          </span>
-          <span
-            className="grid h-7 w-7 shrink-0 place-items-center rounded-full transition duration-300 group-hover:scale-110 group-hover:brightness-110 sm:h-9 sm:w-9"
-            style={{ background: visual.accent, color: '#050608' }}
-          >
-            <ArrowUpRight size={15} strokeWidth={2.4} className="sm:hidden" />
-            <ArrowUpRight size={17} strokeWidth={2.4} className="hidden sm:block" />
-          </span>
-        </div>
-      </div>
-
-      <div
-        className="pointer-events-none absolute inset-0 rounded-[1.35rem] opacity-0 transition duration-400 group-hover:opacity-100"
-        style={{
-          boxShadow: `inset 0 0 0 2px rgba(255,255,255,0.5), 0 0 60px ${visual.glow}`,
-        }}
-      />
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 

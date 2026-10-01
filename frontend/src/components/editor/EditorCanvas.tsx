@@ -10,6 +10,7 @@ import {
   Group,
 } from 'react-konva';
 import type Konva from 'konva';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEditorStore } from '../../stores/editorStore';
 import { getActivePage, sortElements } from '../../utils/document';
 import type { CanvasElement, ShapeElement } from '../../types/document';
@@ -195,7 +196,8 @@ export function EditorCanvas({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoFit, docKey]);
 
-  // Pinch zoom + horizontal swipe between pages (mobile)
+  // Pinch zoom + pan + horizontal swipe between pages (mobile).
+  // Capture phase so Konva/canvas cannot swallow the gestures.
   useEffect(() => {
     if (!autoFit) return;
     const el = containerRef.current;
@@ -207,16 +209,19 @@ export function EditorCanvas({
       return Math.hypot(dx, dy);
     };
 
-    type SwipeState = {
+    type FingerState = {
       x: number;
       y: number;
+      t: number;
       scrollLeft: number;
       scrollTop: number;
+      mode: 'undecided' | 'pan' | 'swipe';
     };
-    let swipe: SwipeState | null = null;
+    let finger: FingerState | null = null;
 
     const goPage = (dir: -1 | 1) => {
-      const { document: doc, activePageId, setActivePage } = useEditorStore.getState();
+      const { document: doc, activePageId, setActivePage, flashAction } =
+        useEditorStore.getState();
       if (!doc?.pages.length) return;
       const ordered = [...doc.pages].sort((a, b) => a.order - b.order);
       const idx = ordered.findIndex((p) => p.id === activePageId);
@@ -224,99 +229,126 @@ export function EditorCanvas({
       const next = ordered[idx + dir];
       if (!next) return;
       setActivePage(next.id);
-      useEditorStore
-        .getState()
-        .flashAction(
-          dir > 0 ? `Página ${idx + 2}/${ordered.length}` : `Página ${idx}/${ordered.length}`,
-        );
+      flashAction(
+        dir > 0 ? `Página ${idx + 2}/${ordered.length}` : `Página ${idx}/${ordered.length}`,
+      );
+      // Re-center after page change
+      requestAnimationFrame(() => {
+        el.scrollLeft = Math.max(0, (el.scrollWidth - el.clientWidth) / 2);
+        el.scrollTop = Math.max(0, (el.scrollHeight - el.clientHeight) / 2);
+      });
     };
 
     const onStart = (e: TouchEvent) => {
-      if (e.touches.length === 2) {
-        swipe = null;
+      if (e.touches.length >= 2) {
+        finger = null;
         pinchRef.current = {
           startDist: dist(e.touches),
           startZoom: useEditorStore.getState().zoom,
         };
         return;
       }
-      if (e.touches.length === 1) {
-        pinchRef.current = null;
-        // Don't steal page-swipe while transforming a selected node
-        const stage = stageRef.current;
-        if (stage?.isDragging()) {
-          swipe = null;
-          return;
-        }
-        swipe = {
-          x: e.touches[0].clientX,
-          y: e.touches[0].clientY,
-          scrollLeft: el.scrollLeft,
-          scrollTop: el.scrollTop,
-          moved: false,
-        };
+      if (e.touches.length !== 1) return;
+      pinchRef.current = null;
+      const stage = stageRef.current;
+      // If user is dragging a Konva node, don't fight it
+      if (stage?.isDragging()) {
+        finger = null;
+        return;
       }
+      finger = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+        t: performance.now(),
+        scrollLeft: el.scrollLeft,
+        scrollTop: el.scrollTop,
+        mode: 'undecided',
+      };
     };
 
     const onMove = (e: TouchEvent) => {
-      if (e.touches.length === 2 && pinchRef.current) {
-        if (pinchRef.current.startDist < 12) return;
+      if (e.touches.length >= 2 && pinchRef.current) {
+        if (pinchRef.current.startDist < 10) return;
         e.preventDefault();
         userZoomLock.current = true;
         const ratio = dist(e.touches) / pinchRef.current.startDist;
         useEditorStore.getState().setZoom(pinchRef.current.startZoom * ratio);
-        swipe = null;
+        finger = null;
         return;
       }
 
-      if (e.touches.length !== 1 || !swipe) return;
-      const dx = e.touches[0].clientX - swipe.x;
-      const dy = e.touches[0].clientY - swipe.y;
-      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) swipe.moved = true;
+      if (e.touches.length !== 1 || !finger) return;
+      const dx = e.touches[0].clientX - finger.x;
+      const dy = e.touches[0].clientY - finger.y;
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
 
-      const horizontal = Math.abs(dx) > 28 && Math.abs(dx) > Math.abs(dy) * 1.4;
+      if (finger.mode === 'undecided' && (absX > 12 || absY > 12)) {
+        const canPan =
+          el.scrollWidth > el.clientWidth + 24 || el.scrollHeight > el.clientHeight + 24;
+        // Near fit: horizontal wins as page swipe. Zoomed: prefer pan unless clear flick later.
+        if (!canPan && absX > absY * 1.15) finger.mode = 'swipe';
+        else if (canPan) finger.mode = 'pan';
+        else if (absX > absY * 1.25) finger.mode = 'swipe';
+        else finger.mode = 'pan';
+      }
+
+      if (finger.mode === 'swipe') {
+        e.preventDefault();
+        el.scrollLeft = finger.scrollLeft;
+        el.scrollTop = finger.scrollTop;
+        return;
+      }
+
+      // Pan the viewport so the user can explore a zoomed artboard
       e.preventDefault();
-      if (horizontal) {
-        // Keep scroll locked — this is a page-change candidate
-        el.scrollLeft = swipe.scrollLeft;
-        el.scrollTop = swipe.scrollTop;
-        return;
-      }
-      // Manual pan (touch-action:none disables native scroll)
-      el.scrollLeft = swipe.scrollLeft - dx;
-      el.scrollTop = swipe.scrollTop - dy;
+      el.scrollLeft = finger.scrollLeft - dx;
+      el.scrollTop = finger.scrollTop - dy;
     };
 
     const onEnd = (e: TouchEvent) => {
-      if (pinchRef.current && e.touches.length < 2) {
-        pinchRef.current = null;
-      }
-      if (!swipe || e.touches.length > 0) {
-        if (e.touches.length === 0) swipe = null;
+      if (e.touches.length >= 2) return;
+      if (pinchRef.current && e.touches.length < 2) pinchRef.current = null;
+
+      if (!finger) return;
+      if (e.touches.length > 0) return; // still one finger down somehow
+
+      const t = e.changedTouches[0];
+      if (!t) {
+        finger = null;
         return;
       }
-      const t = e.changedTouches[0];
-      const dx = t.clientX - swipe.x;
-      const dy = t.clientY - swipe.y;
-      const panned =
-        Math.abs(el.scrollLeft - swipe.scrollLeft) > 14 ||
-        Math.abs(el.scrollTop - swipe.scrollTop) > 14;
-      swipe = null;
-      if (panned) return;
-      if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
-      // Finger left → next section; finger right → previous
-      goPage(dx < 0 ? 1 : -1);
+      const dx = t.clientX - finger.x;
+      const dy = t.clientY - finger.y;
+      const dt = Math.max(16, performance.now() - finger.t);
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+      const velocity = absX / dt;
+      const mode = finger.mode;
+      finger = null;
+
+      const horizontal = absX > absY * 1.2;
+      const swipeIntent =
+        mode === 'swipe' ||
+        (horizontal && absX > 64 && velocity > 0.45) ||
+        (horizontal && absX > 96);
+
+      if (swipeIntent && absX > 48) {
+        goPage(dx < 0 ? 1 : -1);
+      }
     };
 
-    el.addEventListener('touchstart', onStart, { passive: true });
-    el.addEventListener('touchmove', onMove, { passive: false });
-    el.addEventListener('touchend', onEnd);
-    el.addEventListener('touchcancel', onEnd);
+    const optsPassive = { passive: true, capture: true } as const;
+    const optsMove = { passive: false, capture: true } as const;
+    el.addEventListener('touchstart', onStart, optsPassive);
+    el.addEventListener('touchmove', onMove, optsMove);
+    el.addEventListener('touchend', onEnd, optsPassive);
+    el.addEventListener('touchcancel', onEnd, optsPassive);
     return () => {
-      el.removeEventListener('touchstart', onStart);
-      el.removeEventListener('touchmove', onMove);
-      el.removeEventListener('touchend', onEnd);
-      el.removeEventListener('touchcancel', onEnd);
+      el.removeEventListener('touchstart', onStart, true);
+      el.removeEventListener('touchmove', onMove, true);
+      el.removeEventListener('touchend', onEnd, true);
+      el.removeEventListener('touchcancel', onEnd, true);
     };
   }, [autoFit]);
 
@@ -377,12 +409,32 @@ export function EditorCanvas({
 
   const stagePad = autoFit ? 24 : 40;
 
+  const orderedPages = useMemo(
+    () =>
+      documentModel
+        ? [...documentModel.pages].sort((a, b) => a.order - b.order)
+        : [],
+    [documentModel],
+  );
+  const pageIndex = orderedPages.findIndex((p) => p.id === activePageId);
+  const goAdjacentPage = (dir: -1 | 1) => {
+    const next = orderedPages[pageIndex + dir];
+    if (!next) return;
+    useEditorStore.getState().setActivePage(next.id);
+    useEditorStore
+      .getState()
+      .flashAction(
+        `Página ${pageIndex + dir + 1}/${orderedPages.length}`,
+      );
+  };
+
   return (
+    <div className="relative h-full w-full">
     <div
       ref={containerRef}
       data-editor-canvas
       className="canvas-stage relative h-full w-full overflow-auto overscroll-contain scrollbar-thin"
-      /* none: we own pinch + swipe; pan still works via overflow scroll when not gesturing */
+      /* none: we own pinch + swipe + pan */
       style={autoFit ? { touchAction: 'none' } : undefined}
     >
       {page.elements.length === 0 ? (
@@ -403,7 +455,13 @@ export function EditorCanvas({
       >
         <div
           className="relative overflow-hidden rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/10"
-          style={{ width: stageW, height: stageH }}
+          style={{
+            width: stageW,
+            height: stageH,
+            borderRadius: 16,
+            WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+            maskImage: 'radial-gradient(white, black)',
+          }}
         >
           <Stage
             ref={stageRef}
@@ -546,6 +604,30 @@ export function EditorCanvas({
           ) : null}
         </div>
       </div>
+    </div>
+
+      {autoFit && orderedPages.length > 1 ? (
+        <div className="pointer-events-none absolute inset-x-0 top-1/2 z-30 flex -translate-y-1/2 items-center justify-between px-1.5">
+          <button
+            type="button"
+            aria-label="Página anterior"
+            disabled={pageIndex <= 0}
+            onClick={() => goAdjacentPage(-1)}
+            className="pointer-events-auto grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-ink/80 text-paper shadow-[0_10px_30px_rgba(0,0,0,0.45)] backdrop-blur-md transition enabled:active:scale-95 disabled:opacity-25"
+          >
+            <ChevronLeft size={22} />
+          </button>
+          <button
+            type="button"
+            aria-label="Página siguiente"
+            disabled={pageIndex < 0 || pageIndex >= orderedPages.length - 1}
+            onClick={() => goAdjacentPage(1)}
+            className="pointer-events-auto grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-ink/80 text-paper shadow-[0_10px_30px_rgba(0,0,0,0.45)] backdrop-blur-md transition enabled:active:scale-95 disabled:opacity-25"
+          >
+            <ChevronRight size={22} />
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }
