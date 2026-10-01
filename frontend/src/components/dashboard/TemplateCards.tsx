@@ -154,7 +154,7 @@ function KineticField({ accent, soft }: { accent: string; soft: string }) {
   );
 }
 
-const SW = 4.25;
+const SW = 5;
 const stroke = {
   fill: 'none' as const,
   stroke: '#FFFFFF',
@@ -263,7 +263,7 @@ function VectorArt({ kind }: { kind: VectorKind }) {
 /** Centered vector plate inside the template poster. */
 function PosterScene({ kind }: { kind: VectorKind; featured?: boolean }) {
   return (
-    <div className="relative mx-auto aspect-[5/4] h-auto w-full max-w-[13.5rem] drop-shadow-[0_0_18px_rgba(255,255,255,0.35)] sm:max-w-[18rem] lg:max-w-[20rem]">
+    <div className="relative mx-auto aspect-[5/4] w-full drop-shadow-[0_0_22px_rgba(255,255,255,0.4)]">
       <VectorArt kind={kind} />
     </div>
   );
@@ -500,8 +500,14 @@ export function TemplateCard({
     >
       <div className="absolute inset-0 overflow-hidden">
         <KineticField accent={visual.accent} soft={visual.soft} />
-        {/* Geometric center of the card (text sits on the lower third) */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-[12%] pb-[32%] pt-[6%] sm:px-[14%] sm:pb-[30%] sm:pt-[8%]">
+        {/* Dead-center of the poster body — scale with card (@container) so small cells stay readable */}
+        <div
+          className={
+            size === 'hero' || size === 'wide'
+              ? 'pointer-events-none absolute left-1/2 top-[34%] z-[1] w-[min(86%,22rem)] -translate-x-1/2 -translate-y-1/2 sm:top-[36%] sm:w-[min(78%,28rem)] lg:w-[min(72%,32rem)]'
+              : 'pointer-events-none absolute left-1/2 top-[32%] z-[1] w-[min(92%,18rem)] -translate-x-1/2 -translate-y-1/2 sm:top-[34%] sm:w-[min(90%,24rem)] lg:w-[min(88%,26rem)]'
+          }
+        >
           <PosterScene kind={visual.vector} />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
