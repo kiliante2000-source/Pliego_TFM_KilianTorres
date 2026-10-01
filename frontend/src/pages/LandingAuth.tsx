@@ -19,11 +19,12 @@ import { cn } from '../utils/cn';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-/** Same destination + behavior for hero and bottom CTA — no Magnetic (can steal taps). */
+/** Same for hero + bottom CTA: jump to /demo without scrolling the landing page up. */
 function DemoVivaButton({ className }: { className?: string }) {
+  const navigate = useNavigate();
   return (
-    <ButtonLink
-      to="/demo#demo-hero"
+    <Button
+      type="button"
       variant="soft"
       className={className}
       onClick={() => {
@@ -32,10 +33,15 @@ function DemoVivaButton({ className }: { className?: string }) {
         } catch {
           /* private mode */
         }
+        if ('scrollRestoration' in window.history) {
+          window.history.scrollRestoration = 'manual';
+        }
+        // Navigate without hash — a #hash from mid-page makes the view “scroll up”
+        navigate('/demo', { state: { demoEntry: 'hero' } });
       }}
     >
       <Play size={15} /> Ver demo viva
-    </ButtonLink>
+    </Button>
   );
 }
 

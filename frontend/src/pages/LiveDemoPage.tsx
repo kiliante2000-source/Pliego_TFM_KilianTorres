@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   AnimatePresence,
@@ -9,16 +9,6 @@ import {
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Logo, ButtonLink, BrandName } from '../components/ui/primitives';
 import { Magnetic, Marquee } from '../components/creative/Motion';
-
-function readDemoHeroEntry() {
-  if (typeof window === 'undefined') return false;
-  if (window.location.hash === '#demo-hero') return true;
-  try {
-    return sessionStorage.getItem('pliego-demo-entry') === 'hero';
-  } catch {
-    return false;
-  }
-}
 
 const ease = [0.16, 1, 0.3, 1] as const;
 const serif = { fontFamily: '"Instrument Serif", Georgia, serif' } as const;
@@ -482,39 +472,37 @@ export function LiveDemoPage() {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 28 });
   const hook = useCycle(HOOKS.length, 2600);
-  const heroJump = readDemoHeroEntry() || location.hash === '#demo-hero' || !location.hash;
+
+  // Lock at top before first paint — no visible “scroll up” from the landing bottom CTA
+  useLayoutEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    try {
+      sessionStorage.removeItem('pliego-demo-entry');
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   useEffect(() => {
-    // Pin to top immediately so the bottom CTA never inherits a mid-page scroll
-    window.scrollTo({ top: 0, behavior: 'auto' });
-    const t1 = window.setTimeout(() => setIntro(1), heroJump ? 700 : 1500);
-    const t2 = window.setTimeout(() => setIntro(2), heroJump ? 1500 : 3100);
-    const t3 = window.setTimeout(() => setIntro(3), heroJump ? 2400 : 4800);
+    // Original pacing — time to read each beat + PLIEGO mark
+    const t1 = window.setTimeout(() => setIntro(1), 1500);
+    const t2 = window.setTimeout(() => setIntro(2), 3100);
+    const t3 = window.setTimeout(() => setIntro(3), 4800);
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
       window.clearTimeout(t3);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount
   }, []);
 
   useEffect(() => {
-    if (intro < 3) return;
     if (location.hash === '#obra') return;
-    const el = document.getElementById('demo-hero');
-    const jump = () => {
-      window.scrollTo({ top: 0, behavior: 'auto' });
-      if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' });
-      try {
-        sessionStorage.removeItem('pliego-demo-entry');
-      } catch {
-        /* ignore */
-      }
-    };
-    jump();
-    const t = window.setTimeout(jump, 120);
-    return () => window.clearTimeout(t);
-  }, [intro, location.hash, heroJump]);
+    // Stay pinned to the hero while the intro plays / ends (no smooth scroll chase)
+    window.scrollTo(0, 0);
+  }, [intro, location.hash]);
 
   return (
     <div className="relative min-h-svh overflow-x-hidden bg-[#050608] text-paper">
@@ -661,7 +649,7 @@ export function LiveDemoPage() {
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: heroJump ? 0.15 : 2.7, duration: 0.8, ease }}
+            transition={{ delay: 2.7, duration: 0.8, ease }}
             className="mt-4 max-w-5xl overflow-visible pb-2 text-[clamp(2.1rem,10vw,8rem)] font-extrabold leading-[0.98] tracking-[-0.06em] sm:tracking-[-0.07em]"
             style={display}
           >
@@ -686,7 +674,7 @@ export function LiveDemoPage() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: heroJump ? 0.35 : 2.95, duration: 0.7, ease }}
+            transition={{ delay: 2.95, duration: 0.7, ease }}
             className="mt-5 max-w-xl text-base leading-snug text-paper/70 sm:mt-8 sm:text-2xl"
             style={serif}
           >
@@ -697,7 +685,7 @@ export function LiveDemoPage() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: heroJump ? 0.5 : 3.15, duration: 0.6, ease }}
+            transition={{ delay: 3.15, duration: 0.6, ease }}
             className="mt-10 flex flex-wrap items-center gap-4"
           >
             <Magnetic strength={0.35}>
