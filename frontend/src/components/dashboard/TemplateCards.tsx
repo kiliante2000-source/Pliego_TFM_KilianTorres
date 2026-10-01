@@ -712,8 +712,8 @@ export function TemplateGallery({
                 wordSpacing: 'normal',
               }}
             >
-              Seis estructuras{' '}
-              <span className="text-neon">con impacto</span>
+              Seis estructuras
+              <span className="mt-0.5 block text-neon">con impacto</span>
             </h3>
             <p
               className="mt-3 max-w-sm text-paper/75 sm:max-w-md"
@@ -733,7 +733,7 @@ export function TemplateGallery({
             <span className="font-display text-6xl font-extrabold tracking-[-0.06em] text-paper/15 sm:text-7xl">
               06
             </span>
-            <span className="font-mono text-xs uppercase tracking-[0.16em] text-paper/45">
+            <span className="font-mono text-[0.65rem] uppercase tracking-[0.08em] text-paper/45">
               formatos
               <br />
               editoriales
@@ -743,12 +743,12 @@ export function TemplateGallery({
 
         <div className="relative mt-6 overflow-hidden border-t border-white/10 pt-3">
           <motion.div
-            className="flex w-max gap-8 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-paper/40"
+            className="flex w-max gap-6 font-mono text-[0.65rem] uppercase tracking-[0.06em] text-paper/40"
             animate={{ x: ['0%', '-50%'] }}
             transition={{ duration: 28, ease: 'linear', repeat: Infinity }}
           >
             {[...marquee, ...marquee, ...marquee].map((label, i) => (
-              <span key={`${label}-${i}`} className="flex items-center gap-8">
+              <span key={`${label}-${i}`} className="flex items-center gap-6 whitespace-nowrap">
                 {label}
                 <span className="text-rosa/70">◆</span>
               </span>
