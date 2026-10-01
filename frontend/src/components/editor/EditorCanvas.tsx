@@ -195,7 +195,7 @@ export function EditorCanvas({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoFit, docKey]);
 
-  // Pinch to zoom — opt into manual mode so auto-fit stays off
+  // Pinch zoom + horizontal swipe between pages (mobile)
   useEffect(() => {
     if (!autoFit) return;
     const el = containerRef.current;
@@ -207,26 +207,105 @@ export function EditorCanvas({
       return Math.hypot(dx, dy);
     };
 
+    type SwipeState = {
+      x: number;
+      y: number;
+      scrollLeft: number;
+      scrollTop: number;
+    };
+    let swipe: SwipeState | null = null;
+
+    const goPage = (dir: -1 | 1) => {
+      const { document: doc, activePageId, setActivePage } = useEditorStore.getState();
+      if (!doc?.pages.length) return;
+      const ordered = [...doc.pages].sort((a, b) => a.order - b.order);
+      const idx = ordered.findIndex((p) => p.id === activePageId);
+      if (idx < 0) return;
+      const next = ordered[idx + dir];
+      if (!next) return;
+      setActivePage(next.id);
+      useEditorStore
+        .getState()
+        .flashAction(
+          dir > 0 ? `Página ${idx + 2}/${ordered.length}` : `Página ${idx}/${ordered.length}`,
+        );
+    };
+
     const onStart = (e: TouchEvent) => {
       if (e.touches.length === 2) {
+        swipe = null;
         pinchRef.current = {
           startDist: dist(e.touches),
           startZoom: useEditorStore.getState().zoom,
+        };
+        return;
+      }
+      if (e.touches.length === 1) {
+        pinchRef.current = null;
+        // Don't steal page-swipe while transforming a selected node
+        const stage = stageRef.current;
+        if (stage?.isDragging()) {
+          swipe = null;
+          return;
+        }
+        swipe = {
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY,
+          scrollLeft: el.scrollLeft,
+          scrollTop: el.scrollTop,
+          moved: false,
         };
       }
     };
 
     const onMove = (e: TouchEvent) => {
-      if (e.touches.length !== 2 || !pinchRef.current) return;
-      if (pinchRef.current.startDist < 12) return;
+      if (e.touches.length === 2 && pinchRef.current) {
+        if (pinchRef.current.startDist < 12) return;
+        e.preventDefault();
+        userZoomLock.current = true;
+        const ratio = dist(e.touches) / pinchRef.current.startDist;
+        useEditorStore.getState().setZoom(pinchRef.current.startZoom * ratio);
+        swipe = null;
+        return;
+      }
+
+      if (e.touches.length !== 1 || !swipe) return;
+      const dx = e.touches[0].clientX - swipe.x;
+      const dy = e.touches[0].clientY - swipe.y;
+      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) swipe.moved = true;
+
+      const horizontal = Math.abs(dx) > 28 && Math.abs(dx) > Math.abs(dy) * 1.4;
       e.preventDefault();
-      userZoomLock.current = true;
-      const ratio = dist(e.touches) / pinchRef.current.startDist;
-      useEditorStore.getState().setZoom(pinchRef.current.startZoom * ratio);
+      if (horizontal) {
+        // Keep scroll locked — this is a page-change candidate
+        el.scrollLeft = swipe.scrollLeft;
+        el.scrollTop = swipe.scrollTop;
+        return;
+      }
+      // Manual pan (touch-action:none disables native scroll)
+      el.scrollLeft = swipe.scrollLeft - dx;
+      el.scrollTop = swipe.scrollTop - dy;
     };
 
-    const onEnd = () => {
-      pinchRef.current = null;
+    const onEnd = (e: TouchEvent) => {
+      if (pinchRef.current && e.touches.length < 2) {
+        pinchRef.current = null;
+      }
+      if (!swipe || e.touches.length > 0) {
+        if (e.touches.length === 0) swipe = null;
+        return;
+      }
+      const t = e.changedTouches[0];
+      const dx = t.clientX - swipe.x;
+      const dy = t.clientY - swipe.y;
+      const panned =
+        Math.abs(el.scrollLeft - swipe.scrollLeft) > 14 ||
+        Math.abs(el.scrollTop - swipe.scrollTop) > 14;
+      swipe = null;
+      if (panned) return;
+      if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      // Finger left → next section; finger right → previous
+      goPage(dx < 0 ? 1 : -1);
     };
 
     el.addEventListener('touchstart', onStart, { passive: true });
@@ -303,7 +382,8 @@ export function EditorCanvas({
       ref={containerRef}
       data-editor-canvas
       className="canvas-stage relative h-full w-full overflow-auto overscroll-contain scrollbar-thin"
-      style={autoFit ? { touchAction: 'pan-x pan-y' } : undefined}
+      /* none: we own pinch + swipe; pan still works via overflow scroll when not gesturing */
+      style={autoFit ? { touchAction: 'none' } : undefined}
     >
       {page.elements.length === 0 ? (
         <CanvasStarter
@@ -322,7 +402,7 @@ export function EditorCanvas({
         }}
       >
         <div
-          className="relative shadow-[0_30px_80px_rgba(0,0,0,0.55)]"
+          className="relative overflow-hidden rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/10"
           style={{ width: stageW, height: stageH }}
         >
           <Stage

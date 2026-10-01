@@ -260,10 +260,10 @@ function VectorArt({ kind }: { kind: VectorKind }) {
   );
 }
 
-/** Centered vector plate — square so portrait drawings (portfolio/portada) fill the cell. */
+/** Vector plate — kept modest so titles stay readable on narrow cards. */
 function PosterScene({ kind }: { kind: VectorKind; featured?: boolean }) {
   return (
-    <div className="relative mx-auto aspect-square w-full drop-shadow-[0_0_22px_rgba(255,255,255,0.4)]">
+    <div className="relative mx-auto aspect-square w-full drop-shadow-[0_0_18px_rgba(255,255,255,0.28)]">
       <VectorArt kind={kind} />
     </div>
   );
@@ -493,25 +493,26 @@ export function TemplateCard({
         }
       }}
       title="Clic para abrir en el editor"
-      className={`group relative flex h-full ${sizeClass} @container cursor-pointer flex-col overflow-hidden rounded-[1.35rem] text-left outline-none transition duration-400 focus-visible:ring-2 focus-visible:ring-neon/55`}
+      className={`group relative isolate flex h-full ${sizeClass} @container cursor-pointer flex-col overflow-hidden rounded-[1.35rem] text-left outline-none transition duration-400 focus-visible:ring-2 focus-visible:ring-neon/55`}
       style={{
         boxShadow: `0 0 0 1px rgba(255,255,255,0.14), 0 28px 70px ${visual.glow}`,
       }}
     >
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Matching radius on every paint layer — Safari otherwise shows square outer remates */}
+      <div className="absolute inset-0 overflow-hidden rounded-[1.35rem]">
         <KineticField accent={visual.accent} soft={visual.soft} />
-        {/* Dead-center of the poster body — scale with card (@container) so small cells stay readable */}
+        {/* Upper band, smaller on mobile so titles/CTA stay clear */}
         <div
           className={
             size === 'hero' || size === 'wide'
-              ? 'pointer-events-none absolute left-1/2 top-[34%] z-[1] w-[min(86%,22rem)] -translate-x-1/2 -translate-y-1/2 sm:top-[36%] sm:w-[min(78%,28rem)] lg:w-[min(72%,32rem)]'
-              : 'pointer-events-none absolute left-1/2 top-[30%] z-[1] w-[min(96%,20rem)] -translate-x-1/2 -translate-y-1/2 sm:top-[32%] sm:w-[min(94%,26rem)] lg:w-[min(92%,28rem)]'
+              ? 'pointer-events-none absolute left-1/2 top-[22%] z-[1] w-[min(48%,11.5rem)] -translate-x-1/2 -translate-y-1/2 opacity-95 sm:top-[30%] sm:w-[min(62%,20rem)] sm:opacity-100 lg:top-[34%] lg:w-[min(68%,26rem)]'
+              : 'pointer-events-none absolute left-1/2 top-[20%] z-[1] w-[min(52%,8.5rem)] -translate-x-1/2 -translate-y-1/2 opacity-90 sm:top-[28%] sm:w-[min(70%,16rem)] sm:opacity-100 lg:top-[32%] lg:w-[min(78%,22rem)]'
           }
         >
           <PosterScene kind={visual.vector} />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-[38%] bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-black/10" />
+        <div className="absolute inset-x-0 bottom-0 h-[52%] bg-gradient-to-t from-black/92 via-black/55 to-transparent sm:h-[42%] sm:via-black/35" />
       </div>
 
       <span className="pointer-events-none absolute -right-1 -top-2 select-none font-display text-[3.75rem] font-extrabold leading-none tracking-tighter text-white/[0.14] sm:text-[7.5rem]">
@@ -532,12 +533,12 @@ export function TemplateCard({
         </span>
       </div>
 
-      <div className="relative z-10 mt-auto min-w-0 px-3 pb-3 pt-2 sm:px-5 sm:pb-5 sm:pt-4">
+      <div className="relative z-10 mt-auto min-w-0 bg-gradient-to-t from-black/50 to-transparent px-3 pb-3 pt-8 sm:px-5 sm:pb-5 sm:pt-10">
         <p className="mb-1 hidden font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/65 sm:mb-1.5 sm:block">
           {visual.tagline}
         </p>
-        {/* Fit-to-card title: never clip on narrow 2-col phones */}
-        <h4 className="w-full font-display text-[0.72rem] font-extrabold uppercase leading-[1.05] tracking-[-0.03em] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)] sm:text-[clamp(0.9rem,7.2cqi,1.75rem)] sm:leading-[0.95] sm:tracking-[-0.035em]">
+        {/* Fit-to-card title: never under the vector on narrow 2-col phones */}
+        <h4 className="relative w-full font-display text-[0.78rem] font-extrabold uppercase leading-[1.05] tracking-[-0.03em] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)] sm:text-[clamp(0.9rem,7.2cqi,1.75rem)] sm:leading-[0.95] sm:tracking-[-0.035em]">
           {visual.category === 'Presentación' ? (
             <>
               <span className="sm:hidden">Slide</span>
@@ -547,14 +548,14 @@ export function TemplateCard({
             visual.category
           )}
         </h4>
-        <p className="mt-1.5 line-clamp-2 break-words font-serif text-[0.78rem] leading-snug text-white/90 sm:mt-2.5 sm:text-base">
+        <p className="relative mt-1.5 line-clamp-2 break-words font-serif text-[0.78rem] leading-snug text-white/92 sm:mt-2.5 sm:text-base">
           {template.name}
         </p>
-        <p className="mt-0.5 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-white/65 sm:mt-1 sm:text-sm">
+        <p className="relative mt-0.5 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-white/70 sm:mt-1 sm:text-sm">
           {template.width}×{template.height}
         </p>
 
-        <div className="mt-2.5 flex items-center justify-between gap-2 border-t border-white/25 pt-2 sm:mt-4 sm:gap-3 sm:pt-3">
+        <div className="relative mt-2.5 flex items-center justify-between gap-2 border-t border-white/25 pt-2 sm:mt-4 sm:gap-3 sm:pt-3">
           <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-white/75 transition group-hover:text-white sm:text-[0.7rem] sm:tracking-[0.16em]">
             {opening ? 'Abriendo…' : 'Abrir'}
           </span>
@@ -678,7 +679,7 @@ export function TemplateGallery({
       </div>
       <div className="grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-12">
         {rowA.map((t, i) => (
-          <div key={t.id} className={spanA[i]}>
+          <div key={t.id} className={`${spanA[i]} overflow-hidden rounded-[1.35rem]`}>
             <TemplateCard
               template={t}
               size={sizeA[i]}
@@ -708,7 +709,7 @@ export function TemplateGallery({
       </div>
       <div className="grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-12">
         {rowB.map((t, i) => (
-          <div key={t.id} className={spanB[i]}>
+          <div key={t.id} className={`${spanB[i]} overflow-hidden rounded-[1.35rem]`}>
             <TemplateCard
               template={t}
               size={sizeB[i]}
