@@ -715,8 +715,8 @@ export function TemplateGallery({
                 con impacto
               </span>
             </h3>
-            <p className="mt-3 max-w-md font-serif text-base text-paper/65 sm:text-lg">
-              Bento vivo: cada formato con su tamaño, color y diagrama.
+            <p className="mt-3 max-w-md text-[0.95rem] font-normal leading-relaxed tracking-normal text-paper/70 sm:text-lg sm:leading-snug">
+              Seis plantillas listas para abrir: cada una con su tamaño, color y composición.
             </p>
           </div>
           <div className="flex items-baseline gap-3">
