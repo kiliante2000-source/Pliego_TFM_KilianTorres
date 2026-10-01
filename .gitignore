@@ -1,0 +1,29 @@
+node_modules/
+dist/
+build/
+coverage/
+.env
+.env.local
+*.log
+.DS_Store
+frontend/dist/
+backend/dist/
+backend/public/
+backend/prisma/*.db
+backend/prisma/*.db-journal
+backend/uploads/
+backend/exports/
+playwright-report/
+test-results/
+.vite/
+*.tsbuildinfo
+
+# SQLite runtime artifacts
+backend/prisma/*.db-wal
+backend/prisma/*.db-shm
+backend/prisma/*.db-journal
+
+# No checked-in dossier dumps (docs live as Markdown only)
+docs/*.pdf
+docs/*.html
+**/PLIEGO_DOSSIER.*

@@ -1,0 +1,40 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: file:/app/data/pliego.db
+      JWT_SECRET: change-me-in-production-pliego-secret
+      JWT_EXPIRES_IN: 7d
+      COOKIE_NAME: pliego_token
+      PORT: 45322
+      NODE_ENV: production
+      CORS_ORIGIN: http://localhost
+      FRONTEND_URL: http://localhost
+      UPLOAD_DIR: /app/uploads
+      EXPORT_DIR: /app/exports
+      MAX_UPLOAD_BYTES: 5242880
+      CHROME_PATH: /usr/bin/chromium
+    volumes:
+      - db_data:/app/data
+      - uploads_data:/app/uploads
+      - exports_data:/app/exports
+    ports:
+      - "45322:45322"
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+volumes:
+  db_data:
+  uploads_data:
+  exports_data:
