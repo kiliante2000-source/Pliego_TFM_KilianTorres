@@ -134,6 +134,7 @@ docker compose up --build
 
 ## Documentación
 
+- [**Dossier completo + preguntas de defensa**](docs/PLIEGO_DOSSIER.md) ([HTML imprimible](docs/PLIEGO_DOSSIER.html) · [PDF](docs/PLIEGO_DOSSIER.pdf))
 - [Arquitectura](docs/ARCHITECTURE.md)
 - [Base de datos](docs/DATABASE.md)
 - [Roadmap](docs/ROADMAP.md)
