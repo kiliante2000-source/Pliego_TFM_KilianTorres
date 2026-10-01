@@ -24,6 +24,7 @@ const CHAPTERS = [
   {
     id: '01',
     product: 'MANIFIESTO',
+    tileLines: ['MANI', 'FIESTO'] as const,
     short: 'Manifiesto digital',
     line: 'Un relato en tres actos.',
     detail: 'Portada, ensayo y cierre con motion: la pieza se siente campaña, no documento.',
@@ -33,6 +34,7 @@ const CHAPTERS = [
   {
     id: '02',
     product: 'PORTFOLIO',
+    tileLines: ['PORTFOLIO'] as const,
     short: 'Portfolio',
     line: 'Tu trabajo, con ritmo de portada.',
     detail: 'Hero tipográfico, case study y scroll que vende el proceso sin explicarlo de más.',
@@ -42,6 +44,7 @@ const CHAPTERS = [
   {
     id: '03',
     product: 'PORTADA',
+    tileLines: ['PORTADA'] as const,
     short: 'Portada',
     line: 'Una imagen que para el feed.',
     detail: 'Display brutal, orbe de marca y tipografía que manda en el primer golpe de vista.',
@@ -51,6 +54,7 @@ const CHAPTERS = [
   {
     id: '04',
     product: 'REVISTA',
+    tileLines: ['REVISTA'] as const,
     short: 'Páginas de revista',
     line: 'Maquetación que se lee como papel.',
     detail: 'Columnas, bloque visual y motion al scroll: página viva, no PDF plano.',
@@ -60,6 +64,7 @@ const CHAPTERS = [
   {
     id: '05',
     product: 'LOOKBOOK',
+    tileLines: ['LOOKBOOK'] as const,
     short: 'Catálogo / lookbook',
     line: 'Producto con aire editorial.',
     detail: 'Doble spread, caption corto y CTA que vende sin parecer e-commerce genérico.',
@@ -69,6 +74,7 @@ const CHAPTERS = [
   {
     id: '06',
     product: 'PRESENTACIÓN',
+    tileLines: ['PRESENTA', 'CIÓN'] as const,
     short: 'Presentación',
     line: 'Una idea. Una diapositiva. Un golpe.',
     detail: 'Widescreen, entrada con motion y un cierre que pide acción.',
@@ -205,11 +211,21 @@ function ChapterGallery() {
               </div>
               <div className="absolute inset-x-4 bottom-5 sm:inset-x-5 sm:bottom-6">
                 <p
-                  className="max-w-full break-words text-[1.2rem] font-extrabold leading-[1.02] tracking-[-0.035em] text-white sm:text-5xl sm:tracking-[-0.05em]"
+                  className="max-w-full text-[1.2rem] font-extrabold leading-[1.02] tracking-[-0.035em] text-white sm:text-5xl sm:tracking-[-0.05em]"
                   style={display}
                 >
                   <span className="sm:hidden">{chapter.short.toUpperCase()}</span>
-                  <span className="hidden sm:inline">{chapter.product}</span>
+                  <span className="hidden sm:inline">
+                    {chapter.tileLines.length > 1 ? (
+                      <>
+                        {chapter.tileLines[0]}
+                        <br />
+                        {chapter.tileLines[1]}
+                      </>
+                    ) : (
+                      chapter.product
+                    )}
+                  </span>
                 </p>
                 <p className="mt-1 text-sm italic text-white/80 sm:text-lg" style={serif}>
                   Hecho para detenerse.
@@ -246,13 +262,19 @@ function ChapterGallery() {
                 outlineOffset: 0,
               }}
             >
-              <div className="px-2.5 py-2.5 sm:px-3 sm:py-3">
+              <div className="flex h-full min-h-[4.5rem] flex-col justify-between px-2.5 py-2.5 sm:min-h-[5.25rem] sm:px-3 sm:py-3">
                 <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-white/75 sm:text-sm">
                   {ch.id}
                 </p>
-                <p className="mt-1 break-words font-display text-[0.7rem] font-extrabold leading-tight tracking-tight text-white sm:text-sm">
+                <p className="mt-1 font-display text-[0.7rem] font-extrabold leading-[1.05] tracking-tight text-white sm:text-sm sm:leading-[1.05]">
                   <span className="sm:hidden">{ch.short}</span>
-                  <span className="hidden sm:inline">{ch.product}</span>
+                  <span className="hidden sm:block">
+                    {ch.tileLines.map((line) => (
+                      <span key={line} className="block">
+                        {line}
+                      </span>
+                    ))}
+                  </span>
                 </p>
               </div>
             </button>
@@ -757,7 +779,7 @@ export function LiveDemoPage() {
       <GestureFilm />
 
       {/* CLOSING BILLBOARD */}
-      <section className="relative z-10 flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 text-center">
+      <section className="relative z-10 flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-20 text-center sm:pb-28 sm:pt-24">
         <motion.div
           className="pointer-events-none absolute inset-0"
           style={{
@@ -818,14 +840,19 @@ export function LiveDemoPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.25 }}
-          className="relative mt-10 flex flex-wrap justify-center gap-3"
+          className="relative mt-10 flex w-full max-w-xl flex-col items-stretch justify-center gap-3 sm:mt-12 sm:flex-row sm:items-center sm:gap-4"
         >
-          <Magnetic strength={0.4}>
-            <ButtonLink to="/register" className="min-w-56 px-8 py-4 text-base">
-              Crear mi cuenta <ArrowRight size={18} />
-            </ButtonLink>
-          </Magnetic>
-          <ButtonLink to="/login" variant="soft" className="px-8 py-4">
+          <ButtonLink
+            to="/register"
+            className="inline-flex h-14 w-full items-center justify-center px-8 text-base sm:w-auto sm:min-w-[15.5rem]"
+          >
+            Crear mi cuenta <ArrowRight size={18} />
+          </ButtonLink>
+          <ButtonLink
+            to="/login"
+            variant="soft"
+            className="inline-flex h-14 w-full items-center justify-center px-8 text-base sm:w-auto sm:min-w-[15.5rem]"
+          >
             Ya tengo acceso
           </ButtonLink>
         </motion.div>
