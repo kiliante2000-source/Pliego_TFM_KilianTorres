@@ -147,9 +147,9 @@ export function DashboardPage() {
 
       <motion.section
         id="studio-hello"
-        initial={{ opacity: 0, y: 14, filter: 'blur(6px)' }}
-        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         className="relative mb-8 scroll-mt-[7.5rem] sm:mb-12 sm:scroll-mt-6"
       >
         <p className="eyebrow text-neon">

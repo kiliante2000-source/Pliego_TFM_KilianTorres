@@ -1,21 +1,6 @@
-import { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowUpRight, Plus } from 'lucide-react';
 import type { TemplateInfo } from '../../types/document';
-
-/** Mobile + reduced-motion: freeze looping poster FX (photosensitivity / flicker). */
-function useCalmPosterMotion() {
-  const reduced = useReducedMotion();
-  const [narrow, setNarrow] = useState(true);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 900px)');
-    const sync = () => setNarrow(mq.matches);
-    sync();
-    mq.addEventListener('change', sync);
-    return () => mq.removeEventListener('change', sync);
-  }, []);
-  return Boolean(reduced) || narrow;
-}
 
 const BRAND = {
   neon: '#4F80FF',
@@ -144,52 +129,25 @@ export const BLANK_FORMATS: {
   { id: 'presentation', label: 'Slide', short: '1920×1080', width: 1920, height: 1080, orientation: 'landscape' },
 ];
 
+/** Static poster atmosphere — no infinite motion (was causing seizure-like flicker). */
 function KineticField({ accent, soft }: { accent: string; soft: string }) {
-  const calm = useCalmPosterMotion();
   return (
     <>
       <div className="absolute inset-0" style={{ background: accent }} />
-      {calm ? (
-        <>
-          <div
-            className="absolute -inset-[40%]"
-            style={{
-              background: `conic-gradient(from 210deg at 42% 38%, ${accent}, ${soft}, rgba(255,255,255,0.45), ${accent})`,
-            }}
-          />
-          <div
-            className="absolute -right-[28%] top-[-38%] h-[115%] w-[85%] rounded-full opacity-50 blur-3xl"
-            style={{ background: soft }}
-          />
-          <div
-            className="absolute -bottom-[42%] -left-[32%] h-[95%] w-[80%] rounded-full opacity-35 blur-3xl"
-            style={{ background: '#fff' }}
-          />
-        </>
-      ) : (
-        <>
-          <motion.div
-            className="absolute -inset-[50%]"
-            style={{
-              background: `conic-gradient(from 200deg at 42% 38%, ${accent}, ${soft}, rgba(255,255,255,0.55), ${accent})`,
-            }}
-            animate={{ rotate: [0, 28, 0], scale: [1, 1.1, 1] }}
-            transition={{ duration: 16, ease: 'easeInOut', repeat: Infinity }}
-          />
-          <motion.div
-            className="absolute -right-[28%] top-[-38%] h-[115%] w-[85%] rounded-full opacity-55 blur-3xl"
-            style={{ background: soft }}
-            animate={{ x: [0, -34, 0], y: [0, 24, 0] }}
-            transition={{ duration: 10, ease: 'easeInOut', repeat: Infinity }}
-          />
-          <motion.div
-            className="absolute -bottom-[42%] -left-[32%] h-[95%] w-[80%] rounded-full opacity-40 blur-3xl"
-            style={{ background: '#fff' }}
-            animate={{ x: [0, 22, 0], y: [0, -18, 0] }}
-            transition={{ duration: 12, ease: 'easeInOut', repeat: Infinity }}
-          />
-        </>
-      )}
+      <div
+        className="absolute -inset-[40%]"
+        style={{
+          background: `conic-gradient(from 210deg at 42% 38%, ${accent}, ${soft}, rgba(255,255,255,0.45), ${accent})`,
+        }}
+      />
+      <div
+        className="absolute -right-[28%] top-[-38%] h-[115%] w-[85%] rounded-full opacity-50 blur-3xl"
+        style={{ background: soft }}
+      />
+      <div
+        className="absolute -bottom-[42%] -left-[32%] h-[95%] w-[80%] rounded-full opacity-35 blur-3xl"
+        style={{ background: '#fff' }}
+      />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_12%,rgba(255,255,255,0.38),transparent_52%)]" />
       <div className="absolute inset-0 opacity-[0.16] [background-image:linear-gradient(rgba(255,255,255,0.6)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.6)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_72%)]" />
     </>
@@ -206,11 +164,13 @@ const stroke = {
   vectorEffect: 'non-scaling-stroke' as const,
 };
 
-/** Diagramas vectoriales PLIEGO — sin loops (evita parpadeo / fotosensibilidad). */
+const svgClass = 'h-full w-full max-h-full max-w-full';
+
+/** Diagramas vectoriales PLIEGO — estáticos y centrados en el contenedor. */
 function VectorArt({ kind }: { kind: VectorKind }) {
   if (kind === 'manifesto') {
     return (
-      <svg viewBox="0 0 280 200" className="absolute inset-0 h-full w-full" aria-hidden>
+      <svg viewBox="0 0 280 200" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
         <line x1="36" y1="28" x2="36" y2="172" {...stroke} />
         <line x1="52" y1="40" x2="168" y2="40" {...stroke} />
         <line x1="52" y1="62" x2="148" y2="62" {...stroke} />
@@ -225,7 +185,7 @@ function VectorArt({ kind }: { kind: VectorKind }) {
 
   if (kind === 'portfolio') {
     return (
-      <svg viewBox="0 0 220 260" className="absolute inset-0 h-full w-full" aria-hidden>
+      <svg viewBox="0 0 220 260" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
         <rect x="48" y="24" width="124" height="212" rx="8" {...stroke} />
         <rect x="64" y="42" width="92" height="72" rx="4" {...stroke} />
         <line x1="64" y1="136" x2="156" y2="136" {...stroke} />
@@ -238,7 +198,7 @@ function VectorArt({ kind }: { kind: VectorKind }) {
 
   if (kind === 'cover') {
     return (
-      <svg viewBox="0 0 260 220" className="absolute inset-0 h-full w-full" aria-hidden>
+      <svg viewBox="0 0 260 220" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
         <rect x="28" y="24" width="160" height="172" rx="6" {...stroke} />
         <line x1="48" y1="24" x2="48" y2="196" {...stroke} />
         <circle cx="188" cy="78" r="46" {...stroke} />
@@ -251,7 +211,7 @@ function VectorArt({ kind }: { kind: VectorKind }) {
 
   if (kind === 'magazine') {
     return (
-      <svg viewBox="0 0 280 200" className="absolute inset-0 h-full w-full" aria-hidden>
+      <svg viewBox="0 0 280 200" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
         <rect x="20" y="18" width="240" height="164" rx="6" {...stroke} />
         <line x1="110" y1="18" x2="110" y2="182" {...stroke} />
         <rect x="34" y="34" width="60" height="14" rx="2" {...stroke} />
@@ -269,7 +229,7 @@ function VectorArt({ kind }: { kind: VectorKind }) {
 
   if (kind === 'catalog') {
     return (
-      <svg viewBox="0 0 280 200" className="absolute inset-0 h-full w-full" aria-hidden>
+      <svg viewBox="0 0 280 200" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
         <g>
           <rect x="28" y="22" width="100" height="156" rx="6" {...stroke} />
           <rect x="42" y="38" width="72" height="72" rx="3" {...stroke} />
@@ -288,7 +248,7 @@ function VectorArt({ kind }: { kind: VectorKind }) {
 
   // slide
   return (
-    <svg viewBox="0 0 300 180" className="absolute inset-0 h-full w-full" aria-hidden>
+    <svg viewBox="0 0 300 180" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
       <rect x="18" y="28" width="264" height="124" rx="8" {...stroke} />
       <line x1="40" y1="58" x2="160" y2="58" {...stroke} />
       <line x1="40" y1="78" x2="140" y2="78" {...stroke} />
@@ -300,10 +260,10 @@ function VectorArt({ kind }: { kind: VectorKind }) {
   );
 }
 
-/** @deprecated kept name for call sites during rewrite */
+/** Centered vector plate inside the template poster. */
 function PosterScene({ kind }: { kind: VectorKind; featured?: boolean }) {
   return (
-    <div className="absolute inset-[6%] drop-shadow-[0_0_18px_rgba(255,255,255,0.35)]">
+    <div className="relative mx-auto aspect-[5/4] h-auto w-full max-w-[13.5rem] drop-shadow-[0_0_18px_rgba(255,255,255,0.35)] sm:max-w-[18rem] lg:max-w-[20rem]">
       <VectorArt kind={kind} />
     </div>
   );
@@ -343,16 +303,8 @@ export function BlankCanvasLaunch({
 
       <div className="relative overflow-hidden rounded-[1.35rem] border border-white/20 bg-[#E8ECF1] text-ink shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
         <div className="pointer-events-none absolute inset-0 opacity-[0.45] [background-image:radial-gradient(circle_at_1px_1px,rgba(5,6,8,0.06)_1px,transparent_0)] [background-size:18px_18px]" />
-        <motion.div
-          className="pointer-events-none absolute -right-16 top-[-20%] h-[70%] w-[45%] rounded-full bg-neon/25 blur-3xl"
-          animate={{ opacity: [0.35, 0.65, 0.35], x: [0, -12, 0] }}
-          transition={{ duration: 7, ease: 'easeInOut', repeat: Infinity }}
-        />
-        <motion.div
-          className="pointer-events-none absolute -left-10 bottom-[-30%] h-[55%] w-[40%] rounded-full bg-rosa/20 blur-3xl"
-          animate={{ y: [0, -14, 0] }}
-          transition={{ duration: 9, ease: 'easeInOut', repeat: Infinity }}
-        />
+        <div className="pointer-events-none absolute -right-16 top-[-20%] h-[70%] w-[45%] rounded-full bg-neon/25 blur-3xl" />
+        <div className="pointer-events-none absolute -left-10 bottom-[-30%] h-[55%] w-[40%] rounded-full bg-rosa/20 blur-3xl" />
 
         <div className="relative grid gap-5 p-4 sm:gap-8 sm:p-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-stretch lg:gap-10 lg:p-9">
           <div className="flex min-w-0 flex-col">
@@ -548,8 +500,8 @@ export function TemplateCard({
     >
       <div className="absolute inset-0 overflow-hidden">
         <KineticField accent={visual.accent} soft={visual.soft} />
-        {/* Slightly higher so white strokes clear the title */}
-        <div className="absolute inset-x-0 top-[2%] bottom-[47%] overflow-hidden">
+        {/* Geometric center of the card (text sits on the lower third) */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-[12%] pb-[32%] pt-[6%] sm:px-[14%] sm:pb-[30%] sm:pt-[8%]">
           <PosterScene kind={visual.vector} />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
@@ -630,7 +582,6 @@ export function TemplateGallery({
   openingId: string | null;
   onOpen: (template: TemplateInfo) => void;
 }) {
-  const calm = useCalmPosterMotion();
   const rowA = templates.slice(0, 3);
   const rowB = templates.slice(3, 6);
   const marquee = ['Manifiesto', 'Portfolio', 'Portada', 'Revista', 'Lookbook', 'Slide', 'PLIEGO'];
@@ -700,29 +651,14 @@ export function TemplateGallery({
         </div>
 
         <div className="relative mt-6 overflow-hidden border-t border-white/10 pt-3">
-          {calm ? (
-            <div className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-[0.65rem] uppercase tracking-[0.06em] text-paper/40">
-              {marquee.map((label) => (
-                <span key={label} className="flex items-center gap-2 whitespace-nowrap">
-                  {label}
-                  <span className="text-rosa/70">◆</span>
-                </span>
-              ))}
-            </div>
-          ) : (
-            <motion.div
-              className="flex w-max gap-6 font-mono text-[0.65rem] uppercase tracking-[0.06em] text-paper/40"
-              animate={{ x: ['0%', '-50%'] }}
-              transition={{ duration: 28, ease: 'linear', repeat: Infinity }}
-            >
-              {[...marquee, ...marquee, ...marquee].map((label, i) => (
-                <span key={`${label}-${i}`} className="flex items-center gap-6 whitespace-nowrap">
-                  {label}
-                  <span className="text-rosa/70">◆</span>
-                </span>
-              ))}
-            </motion.div>
-          )}
+          <div className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-[0.65rem] uppercase tracking-[0.06em] text-paper/40">
+            {marquee.map((label) => (
+              <span key={label} className="flex items-center gap-2 whitespace-nowrap">
+                {label}
+                <span className="text-rosa/70">◆</span>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 

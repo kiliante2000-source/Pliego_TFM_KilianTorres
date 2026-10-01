@@ -98,15 +98,16 @@ export function ZoomablePublicView({
     };
   }, [fitScale, userScale]);
 
-  // Keep the board centered after fit / zoom changes
+  // Center only when returning to fit (userScale null) — not on every pinch tick
   useEffect(() => {
+    if (userScale != null) return;
     const node = scrollerRef.current;
     if (!node) return;
     requestAnimationFrame(() => {
       node.scrollLeft = Math.max(0, (node.scrollWidth - node.clientWidth) / 2);
       node.scrollTop = Math.max(0, (node.scrollHeight - node.clientHeight) / 2);
     });
-  }, [scale, fitWidth]);
+  }, [userScale, fitScale]);
 
   return (
     <div ref={frameRef} className={className ?? 'relative flex min-h-[70svh] flex-col'}>
