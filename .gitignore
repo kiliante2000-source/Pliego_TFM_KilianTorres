@@ -23,3 +23,7 @@ backend/prisma/*.db-wal
 backend/prisma/*.db-shm
 backend/prisma/*.db-journal
 
+# No checked-in dossier dumps (docs live as Markdown only)
+docs/*.pdf
+docs/*.html
+**/PLIEGO_DOSSIER.*
