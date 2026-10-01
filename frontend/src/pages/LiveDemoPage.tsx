@@ -487,11 +487,10 @@ export function LiveDemoPage() {
   }, []);
 
   useEffect(() => {
-    // Crossfade beats (no mode="wait") so hold time isn’t eaten by exit/enter.
-    // Short first line → readable second → clear PLIEGO mark.
-    const t1 = window.setTimeout(() => setIntro(1), 1000);
-    const t2 = window.setTimeout(() => setIntro(2), 2650);
-    const t3 = window.setTimeout(() => setIntro(3), 4800);
+    // Exact beat lengths: browser 1.3s · nunca… 1.5s · PLIEGO 1.8s
+    const t1 = window.setTimeout(() => setIntro(1), 1300);
+    const t2 = window.setTimeout(() => setIntro(2), 2800);
+    const t3 = window.setTimeout(() => setIntro(3), 4600);
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
@@ -541,10 +540,10 @@ export function LiveDemoPage() {
               {intro === 0 && (
                 <motion.p
                   key="a"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.55, ease }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.45, ease }}
                   className="absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 px-6 text-center text-3xl italic text-paper sm:text-5xl"
                   style={serif}
                 >
@@ -554,10 +553,10 @@ export function LiveDemoPage() {
               {intro === 1 && (
                 <motion.p
                   key="b"
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.55, ease }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.45, ease }}
                   className="absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 px-6 text-center text-4xl font-extrabold tracking-[-0.04em] text-paper sm:text-6xl"
                   style={display}
                 >
@@ -570,7 +569,7 @@ export function LiveDemoPage() {
                   initial={{ opacity: 0, letterSpacing: '0.28em' }}
                   animate={{ opacity: 1, letterSpacing: '-0.06em' }}
                   exit={{ opacity: 0, scale: 1.04 }}
-                  transition={{ duration: 0.85, ease }}
+                  transition={{ duration: 0.7, ease }}
                   className="absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 text-center"
                 >
                   <p
