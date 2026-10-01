@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   AnimatePresence,
   motion,
@@ -468,13 +468,12 @@ function GestureFilm() {
 
 
 export function LiveDemoPage() {
-  const location = useLocation();
   const [intro, setIntro] = useState(0);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 28 });
   const hook = useCycle(HOOKS.length, 2600);
 
-  // Lock at top before first paint — no visible “scroll up” from the landing bottom CTA
+  // Pin once on entry only — never again while the user scrolls the page
   useLayoutEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
@@ -498,8 +497,6 @@ export function LiveDemoPage() {
       window.clearTimeout(t3);
     };
   }, []);
-
-  // Never force-scroll after mount — it fights the user when they read lower sections
 
   return (
     <div className="relative min-h-svh overflow-x-hidden bg-[#050608] text-paper">

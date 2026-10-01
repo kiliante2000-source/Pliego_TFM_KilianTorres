@@ -567,15 +567,15 @@ export function TemplateCard({
 }) {
   const visual = POSTERS[template.id] ?? FALLBACK;
 
-  /* Mobile: compact 2-col studio density (closer to desktop feel). Desktop heights unchanged. */
+  /* Mobile: full-bleed hero/wide read taller; half-cells stay compact. Desktop unchanged. */
   const sizeClass =
     size === 'hero'
-      ? 'min-h-[15.5rem] sm:min-h-[34rem]'
+      ? 'min-h-[17.5rem] sm:min-h-[34rem]'
       : size === 'tall'
-        ? 'min-h-[15.5rem] sm:min-h-[36rem]'
+        ? 'min-h-[14.5rem] sm:min-h-[36rem]'
         : size === 'wide'
-          ? 'min-h-[15.5rem] sm:min-h-[30rem]'
-          : 'min-h-[15.5rem] sm:min-h-[30rem]';
+          ? 'min-h-[16.5rem] sm:min-h-[30rem]'
+          : 'min-h-[14.5rem] sm:min-h-[30rem]';
 
   return (
     <motion.div
