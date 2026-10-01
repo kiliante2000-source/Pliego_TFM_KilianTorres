@@ -170,7 +170,7 @@ const svgClass = 'h-full w-full max-h-full max-w-full';
 function VectorArt({ kind }: { kind: VectorKind }) {
   if (kind === 'manifesto') {
     return (
-      <svg viewBox="0 0 280 200" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+      <svg viewBox="24 16 232 172" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
         <line x1="36" y1="28" x2="36" y2="172" {...stroke} />
         <line x1="52" y1="40" x2="168" y2="40" {...stroke} />
         <line x1="52" y1="62" x2="148" y2="62" {...stroke} />
@@ -185,7 +185,7 @@ function VectorArt({ kind }: { kind: VectorKind }) {
 
   if (kind === 'portfolio') {
     return (
-      <svg viewBox="0 0 220 260" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+      <svg viewBox="36 12 148 236" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
         <rect x="48" y="24" width="124" height="212" rx="8" {...stroke} />
         <rect x="64" y="42" width="92" height="72" rx="4" {...stroke} />
         <line x1="64" y1="136" x2="156" y2="136" {...stroke} />
@@ -198,7 +198,7 @@ function VectorArt({ kind }: { kind: VectorKind }) {
 
   if (kind === 'cover') {
     return (
-      <svg viewBox="0 0 260 220" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+      <svg viewBox="12 12 236 196" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
         <rect x="28" y="24" width="160" height="172" rx="6" {...stroke} />
         <line x1="48" y1="24" x2="48" y2="196" {...stroke} />
         <circle cx="188" cy="78" r="46" {...stroke} />
@@ -211,7 +211,7 @@ function VectorArt({ kind }: { kind: VectorKind }) {
 
   if (kind === 'magazine') {
     return (
-      <svg viewBox="0 0 280 200" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+      <svg viewBox="12 10 256 180" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
         <rect x="20" y="18" width="240" height="164" rx="6" {...stroke} />
         <line x1="110" y1="18" x2="110" y2="182" {...stroke} />
         <rect x="34" y="34" width="60" height="14" rx="2" {...stroke} />
@@ -229,7 +229,7 @@ function VectorArt({ kind }: { kind: VectorKind }) {
 
   if (kind === 'catalog') {
     return (
-      <svg viewBox="0 0 280 200" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+      <svg viewBox="16 12 248 176" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
         <g>
           <rect x="28" y="22" width="100" height="156" rx="6" {...stroke} />
           <rect x="42" y="38" width="72" height="72" rx="3" {...stroke} />
@@ -248,7 +248,7 @@ function VectorArt({ kind }: { kind: VectorKind }) {
 
   // slide
   return (
-    <svg viewBox="0 0 300 180" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+    <svg viewBox="8 18 284 150" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
       <rect x="18" y="28" width="264" height="124" rx="8" {...stroke} />
       <line x1="40" y1="58" x2="160" y2="58" {...stroke} />
       <line x1="40" y1="78" x2="140" y2="78" {...stroke} />
@@ -260,10 +260,10 @@ function VectorArt({ kind }: { kind: VectorKind }) {
   );
 }
 
-/** Centered vector plate inside the template poster. */
+/** Centered vector plate — square so portrait drawings (portfolio/portada) fill the cell. */
 function PosterScene({ kind }: { kind: VectorKind; featured?: boolean }) {
   return (
-    <div className="relative mx-auto aspect-[5/4] w-full drop-shadow-[0_0_22px_rgba(255,255,255,0.4)]">
+    <div className="relative mx-auto aspect-square w-full drop-shadow-[0_0_22px_rgba(255,255,255,0.4)]">
       <VectorArt kind={kind} />
     </div>
   );
@@ -505,7 +505,7 @@ export function TemplateCard({
           className={
             size === 'hero' || size === 'wide'
               ? 'pointer-events-none absolute left-1/2 top-[34%] z-[1] w-[min(86%,22rem)] -translate-x-1/2 -translate-y-1/2 sm:top-[36%] sm:w-[min(78%,28rem)] lg:w-[min(72%,32rem)]'
-              : 'pointer-events-none absolute left-1/2 top-[32%] z-[1] w-[min(92%,18rem)] -translate-x-1/2 -translate-y-1/2 sm:top-[34%] sm:w-[min(90%,24rem)] lg:w-[min(88%,26rem)]'
+              : 'pointer-events-none absolute left-1/2 top-[30%] z-[1] w-[min(96%,20rem)] -translate-x-1/2 -translate-y-1/2 sm:top-[32%] sm:w-[min(94%,26rem)] lg:w-[min(92%,28rem)]'
           }
         >
           <PosterScene kind={visual.vector} />
