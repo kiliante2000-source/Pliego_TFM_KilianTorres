@@ -226,7 +226,28 @@ export function EditorPage() {
       const res = await api.post<{ export: { id: string } }>(
         `/api/projects/${projectId}/export/pdf`,
       );
-      window.open(`/api/projects/exports/${res.export.id}/download`, '_blank');
+      // Fetch+blob avoids popup blockers (window.open after await is often blocked)
+      // and keeps the httpOnly session cookie via credentials: 'include'.
+      const dl = await fetch(`/api/projects/exports/${res.export.id}/download`, {
+        credentials: 'include',
+      });
+      if (!dl.ok) {
+        const err = await dl.json().catch(() => ({}));
+        throw new Error(
+          (err as { error?: string }).error || 'No se pudo descargar el PDF',
+        );
+      }
+      const blob = await dl.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const safeTitle = (project?.title || 'pliego').replace(/[^\w\-]+/g, '_').slice(0, 48);
+      a.href = url;
+      a.download = `${safeTitle || 'pliego'}.pdf`;
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 30_000);
     } catch (e) {
       alert(e instanceof Error ? e.message : 'Error al exportar');
     } finally {
