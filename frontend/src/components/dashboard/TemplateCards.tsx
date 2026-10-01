@@ -601,12 +601,12 @@ export function TemplateCard({
     >
       <div className="absolute inset-0 overflow-hidden">
         <KineticField accent={visual.accent} soft={visual.soft} />
-        {/* Vectores visibles — overlay suave, no los tapa */}
-        <div className="absolute inset-x-0 top-[8%] bottom-[36%] overflow-hidden">
+        {/* Artwork stays in the upper band — never crosses the title block */}
+        <div className="pointer-events-none absolute inset-x-[5%] top-[5%] h-[38%] overflow-hidden sm:inset-x-[8%] sm:top-[7%] sm:h-[40%]">
           <PosterScene kind={visual.vector} />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-[38%] bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/25 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-[52%] bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
       </div>
 
       <span className="pointer-events-none absolute -right-1 -top-2 select-none font-display text-[3.75rem] font-extrabold leading-none tracking-tighter text-white/[0.14] sm:text-[7.5rem]">

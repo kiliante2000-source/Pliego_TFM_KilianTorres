@@ -487,9 +487,10 @@ export function LiveDemoPage() {
   }, []);
 
   useEffect(() => {
-    // Original pacing — the timing that felt right before the speed tweaks
-    const t1 = window.setTimeout(() => setIntro(1), 1500);
-    const t2 = window.setTimeout(() => setIntro(2), 3100);
+    // Crossfade beats (no mode="wait") so hold time isn’t eaten by exit/enter.
+    // Short first line → readable second → clear PLIEGO mark.
+    const t1 = window.setTimeout(() => setIntro(1), 1000);
+    const t2 = window.setTimeout(() => setIntro(2), 2650);
     const t3 = window.setTimeout(() => setIntro(3), 4800);
     return () => {
       window.clearTimeout(t1);
@@ -536,15 +537,15 @@ export function LiveDemoPage() {
                 }}
               />
             </div>
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               {intro === 0 && (
                 <motion.p
                   key="a"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.7, ease }}
-                  className="relative z-10 px-6 text-center text-3xl italic text-paper sm:text-5xl"
+                  transition={{ duration: 0.55, ease }}
+                  className="absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 px-6 text-center text-3xl italic text-paper sm:text-5xl"
                   style={serif}
                 >
                   Diseñar en el browser
@@ -556,8 +557,8 @@ export function LiveDemoPage() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.7, ease }}
-                  className="relative z-10 px-6 text-center text-4xl font-extrabold tracking-[-0.04em] text-paper sm:text-6xl"
+                  transition={{ duration: 0.55, ease }}
+                  className="absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 px-6 text-center text-4xl font-extrabold tracking-[-0.04em] text-paper sm:text-6xl"
                   style={display}
                 >
                   nunca se sintió así.
@@ -570,7 +571,7 @@ export function LiveDemoPage() {
                   animate={{ opacity: 1, letterSpacing: '-0.06em' }}
                   exit={{ opacity: 0, scale: 1.04 }}
                   transition={{ duration: 0.85, ease }}
-                  className="relative z-10 text-center"
+                  className="absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 text-center"
                 >
                   <p
                     className="notranslate wordmark-cutout px-4 text-6xl font-extrabold sm:text-8xl"
