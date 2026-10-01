@@ -435,8 +435,14 @@ export function EditorPage() {
             open={guide.open}
             step={guide.step}
             onStep={guide.setStep}
-            onClose={() => guide.setOpen(false)}
-            onFinish={guide.finish}
+            onClose={() => {
+              guide.setOpen(false);
+              window.setTimeout(() => window.dispatchEvent(new Event('pliego-zoom-fit')), 40);
+            }}
+            onFinish={() => {
+              guide.finish();
+              window.setTimeout(() => window.dispatchEvent(new Event('pliego-zoom-fit')), 40);
+            }}
           />
         </div>
       ) : (
@@ -490,8 +496,14 @@ export function EditorPage() {
             open={guide.open}
             step={guide.step}
             onStep={guide.setStep}
-            onClose={() => guide.setOpen(false)}
-            onFinish={guide.finish}
+            onClose={() => {
+              guide.setOpen(false);
+              window.setTimeout(() => window.dispatchEvent(new Event('pliego-zoom-fit')), 40);
+            }}
+            onFinish={() => {
+              guide.finish();
+              window.setTimeout(() => window.dispatchEvent(new Event('pliego-zoom-fit')), 40);
+            }}
           />
         </div>
       )}

@@ -4,6 +4,7 @@ import { PublicRenderer } from './PublicRenderer';
 import { Button } from '../ui/primitives';
 import type { DocumentModel } from '../../types/document';
 import { cn } from '../../utils/cn';
+import { useElementSize } from '../../hooks/useElementSize';
 
 export function EditorPreviewOverlay({
   document: doc,
@@ -22,6 +23,17 @@ export function EditorPreviewOverlay({
   const [focusPageId, setFocusPageId] = useState(pageId ?? pages[0]?.id ?? null);
   const [mode, setMode] = useState<'story' | 'page'>('story');
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const { width: scrollerW, height: scrollerH } = useElementSize(scrollerRef);
+  const previewFitWidth = useMemo(() => {
+    if (scrollerW < 40) return Math.min(1100, typeof window !== 'undefined' ? window.innerWidth - 48 : 920);
+    // Fit full page into the preview pane (width and height), never crop landscape
+    const byW = scrollerW - 32;
+    const byH =
+      scrollerH > 40
+        ? ((scrollerH - 48) / doc.meta.height) * doc.meta.width
+        : byW;
+    return Math.min(1100, byW, byH);
+  }, [scrollerW, scrollerH, doc.meta.width, doc.meta.height]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -130,12 +142,12 @@ export function EditorPreviewOverlay({
         </div>
       ) : null}
 
-      <div ref={scrollerRef} className="relative flex-1 overflow-auto px-4 py-8 scrollbar-thin">
+      <div ref={scrollerRef} className="relative flex-1 overflow-auto px-3 py-6 scrollbar-thin sm:px-4 sm:py-8">
         <PublicRenderer
           document={doc}
           pageId={mode === 'page' ? focusPageId ?? pageId : null}
           replayKey={replayKey}
-          fitWidth={Math.min(1100, window.innerWidth - 48)}
+          fitWidth={previewFitWidth}
           className="mx-auto"
           scrollContainerRef={scrollerRef}
           onNavigate={(id) => {

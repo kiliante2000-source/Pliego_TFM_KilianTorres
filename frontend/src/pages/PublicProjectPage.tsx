@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { api } from '../services/api';
 import type { Project } from '../types/document';
-import { PublicRenderer } from '../components/editor/PublicRenderer';
+import { ZoomablePublicView } from '../components/editor/ZoomablePublicView';
 import { Logo, ButtonLink, PliegoWordmark, BrandName } from '../components/ui/primitives';
 
 export function PublicProjectPage() {
@@ -57,16 +57,16 @@ export function PublicProjectPage() {
   }
 
   return (
-    <div className="min-h-svh bg-ink mesh-bg-soft">
-      <header className="border-b border-white/8 bg-ink/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-5">
+    <div className="flex h-svh flex-col overflow-hidden bg-ink mesh-bg-soft">
+      <header className="shrink-0 border-b border-white/8 bg-ink/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-5">
           <Logo />
           <div className="min-w-0 text-right">
             <p className="eyebrow text-paper/70">Publicado</p>
-            <p className="mt-1 truncate font-display text-base font-bold tracking-tight text-paper sm:text-lg">
+            <p className="mt-1 truncate font-display text-sm font-bold tracking-tight text-paper sm:text-lg">
               {project.title}
             </p>
-            <p className="mt-0.5 font-mono text-sm uppercase tracking-[0.12em] text-paper/70">
+            <p className="mt-0.5 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-paper/70 sm:text-sm">
               por {project.authorName || 'autor'}
             </p>
           </div>
@@ -76,11 +76,12 @@ export function PublicProjectPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        className="mx-auto max-w-5xl px-6 py-12"
+        className="relative mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col"
       >
-        <PublicRenderer document={project.document} />
-        <div className="mt-14 text-center">
-          <div className="editorial-rule mx-auto mb-6 w-32" />
+        {/* Full artboard first; pinch / buttons to zoom */}
+        <ZoomablePublicView document={project.document} className="relative flex min-h-0 flex-1 flex-col" />
+        <div className="shrink-0 px-4 pb-4 pt-2 text-center sm:px-6">
+          <div className="editorial-rule mx-auto mb-3 w-24" />
           <p className="eyebrow text-paper/35">
             Publicado con{' '}
             <Link to="/" className="text-neon no-underline hover:underline">

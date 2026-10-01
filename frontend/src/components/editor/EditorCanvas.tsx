@@ -81,7 +81,9 @@ export function EditorCanvas({
   const stageRef = useRef<Konva.Stage>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
   const userZoomLock = useRef(false);
-  const [size, setSize] = useState({ width: 800, height: 600 });
+  const lastDocKey = useRef('');
+  const pinchRef = useRef<{ startDist: number; startZoom: number } | null>(null);
+  const [size, setSize] = useState({ width: 0, height: 0 });
   const [editing, setEditing] = useState<{
     id: string;
     text: string;
@@ -107,20 +109,60 @@ export function EditorCanvas({
     return () => ro.disconnect();
   }, []);
 
-  // Re-fit when the viewport changes unless the user picked a manual zoom
+  const centerBoard = () => {
+    requestAnimationFrame(() => {
+      const node = containerRef.current;
+      if (!node) return;
+      node.scrollLeft = Math.max(0, (node.scrollWidth - node.clientWidth) / 2);
+      node.scrollTop = Math.max(0, (node.scrollHeight - node.clientHeight) / 2);
+    });
+  };
+
+  const runFit = () => {
+    const el = containerRef.current;
+    if (!el) return false;
+    const w = el.clientWidth;
+    const h = el.clientHeight;
+    if (w < 40 || h < 40) return false;
+    // Extra padding so landscape slides show their full horizontal format
+    fitZoom(w, h, 40);
+    centerBoard();
+    return true;
+  };
+
+  // Re-fit when the viewport / document changes unless the user picked a manual zoom
   useEffect(() => {
     if (!autoFit || !documentModel) return;
+    const docKey = `${documentModel.meta.templateId ?? documentModel.meta.title}:${documentModel.meta.width}x${documentModel.meta.height}:${documentModel.pages.length}`;
+    if (lastDocKey.current !== docKey) {
+      lastDocKey.current = docKey;
+      userZoomLock.current = false;
+    }
     if (userZoomLock.current) return;
-    if (size.width < 40 || size.height < 40) return;
-    fitZoom(size.width, size.height, 16);
+    const run = () => {
+      if (userZoomLock.current) return;
+      runFit();
+    };
+    run();
+    const t1 = window.setTimeout(run, 80);
+    const t2 = window.setTimeout(run, 280);
+    const t3 = window.setTimeout(run, 600);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+      window.clearTimeout(t3);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- runFit closes over latest fitZoom/size
   }, [
     autoFit,
     size.width,
     size.height,
+    documentModel?.meta.templateId,
+    documentModel?.meta.title,
     documentModel?.meta.width,
     documentModel?.meta.height,
+    documentModel?.pages.length,
     fitZoom,
-    documentModel,
   ]);
 
   useEffect(() => {
@@ -130,15 +172,11 @@ export function EditorCanvas({
     };
     const onFitRequest = () => {
       userZoomLock.current = false;
-      const el = containerRef.current;
-      if (el) fitZoom(el.clientWidth, el.clientHeight, 16);
+      runFit();
     };
     const onOrientation = () => {
       userZoomLock.current = false;
-      window.setTimeout(() => {
-        const el = containerRef.current;
-        if (el) fitZoom(el.clientWidth, el.clientHeight, 16);
-      }, 180);
+      window.setTimeout(onFitRequest, 180);
     };
     window.addEventListener('pliego-zoom-manual', onManualZoom);
     window.addEventListener('pliego-zoom-fit', onFitRequest);
@@ -148,7 +186,55 @@ export function EditorCanvas({
       window.removeEventListener('pliego-zoom-fit', onFitRequest);
       window.removeEventListener('orientationchange', onOrientation);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoFit, fitZoom]);
+
+  // Pinch to zoom on mobile — after the full board is visible, user can enlarge/reduce
+  useEffect(() => {
+    if (!autoFit) return;
+    const el = containerRef.current;
+    if (!el) return;
+
+    const dist = (touches: TouchList) => {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.hypot(dx, dy);
+    };
+
+    const onStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        pinchRef.current = {
+          startDist: dist(e.touches),
+          startZoom: useEditorStore.getState().zoom,
+        };
+      }
+    };
+
+    const onMove = (e: TouchEvent) => {
+      if (e.touches.length !== 2 || !pinchRef.current) return;
+      if (pinchRef.current.startDist < 12) return;
+      e.preventDefault();
+      userZoomLock.current = true;
+      window.dispatchEvent(new Event('pliego-zoom-manual'));
+      const ratio = dist(e.touches) / pinchRef.current.startDist;
+      useEditorStore.getState().setZoom(pinchRef.current.startZoom * ratio);
+    };
+
+    const onEnd = () => {
+      pinchRef.current = null;
+    };
+
+    el.addEventListener('touchstart', onStart, { passive: true });
+    el.addEventListener('touchmove', onMove, { passive: false });
+    el.addEventListener('touchend', onEnd);
+    el.addEventListener('touchcancel', onEnd);
+    return () => {
+      el.removeEventListener('touchstart', onStart);
+      el.removeEventListener('touchmove', onMove);
+      el.removeEventListener('touchend', onEnd);
+      el.removeEventListener('touchcancel', onEnd);
+    };
+  }, [autoFit]);
 
   const page = useMemo(
     () => (documentModel ? getActivePage(documentModel, activePageId) : undefined),
@@ -205,7 +291,7 @@ export function EditorCanvas({
     setEditing(null);
   };
 
-  const stagePad = autoFit ? 12 : 40;
+  const stagePad = autoFit ? 20 : 40;
 
   return (
     <div

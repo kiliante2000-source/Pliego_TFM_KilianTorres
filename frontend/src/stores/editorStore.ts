@@ -168,20 +168,24 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       future: [],
       dirty: false,
       saveStatus: 'saved',
+      // Start small so landscape artboards never flash oversized on phones
+      zoom: 0.2,
     });
   },
 
   setTool: (tool) => set({ tool }),
-  setZoom: (zoom) => set({ zoom: Math.min(2.5, Math.max(0.12, zoom)) }),
-  fitZoom: (viewW, viewH, padding = 20) => {
+  setZoom: (zoom) => set({ zoom: Math.min(2.5, Math.max(0.08, zoom)) }),
+  fitZoom: (viewW, viewH, padding = 40) => {
     const doc = get().document;
     if (!doc || viewW < 40 || viewH < 40) return;
+    // Always contain the full artboard (landscape included) inside the viewport
     const next = Math.min(
       (viewW - padding) / doc.meta.width,
       (viewH - padding) / doc.meta.height,
-      1.25,
+      1,
     );
-    set({ zoom: Math.min(2.5, Math.max(0.12, next)) });
+    if (!Number.isFinite(next) || next <= 0) return;
+    set({ zoom: Math.min(2.5, Math.max(0.08, next)) });
   },
   select: (ids) => set({ selectedIds: ids }),
   setActivePage: (pageId) => set({ activePageId: pageId, selectedIds: [] }),
