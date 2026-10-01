@@ -4,16 +4,12 @@ import {
   ArrowLeft,
   Cloud,
   CloudOff,
-  Columns2,
   Download,
   Globe,
   History,
-  Layers,
   Loader2,
   Play,
   RotateCw,
-  SlidersHorizontal,
-  Wrench,
 } from 'lucide-react';
 import { useEditorStore } from '../stores/editorStore';
 import { EditorCanvas } from '../components/editor/EditorCanvas';
@@ -21,6 +17,7 @@ import { EditorToolbar } from '../components/editor/EditorToolbar';
 import { PropertiesPanel } from '../components/editor/PropertiesPanel';
 import { PagesLayersPanel } from '../components/editor/PagesLayersPanel';
 import { EditorPreviewOverlay } from '../components/editor/EditorPreviewOverlay';
+import { MobileEditorDock } from '../components/editor/MobileEditorDock';
 import {
   StudioGuideOverlay,
   StudioHelpButton,
@@ -33,9 +30,7 @@ import { LAYOUT_DEFAULTS, useStudioLayout } from '../hooks/useStudioLayout';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { api } from '../services/api';
 import type { ProjectVersion } from '../types/document';
-import { cn, formatDate } from '../utils/cn';
-
-type MobileStudioPanel = 'canvas' | 'tools' | 'layers' | 'inspector';
+import { formatDate } from '../utils/cn';
 
 export function EditorPage() {
   const { projectId } = useParams();
@@ -66,17 +61,12 @@ export function EditorPage() {
   const guide = useStudioGuide();
   const layout = useStudioLayout();
   const [layoutMenuOpen, setLayoutMenuOpen] = useState(false);
-  /** Phone / small tablet portrait — sheet UI */
+  /** Phone / small tablet portrait — canvas + dock */
   const isMobilePortrait = useMediaQuery('(max-width: 900px) and (orientation: portrait)');
   /** Phone landscape — compact studio columns (more like desktop) */
   const isMobileLandscape = useMediaQuery('(max-width: 960px) and (orientation: landscape)');
   const isCompact = isMobilePortrait || isMobileLandscape;
-  const [mobilePanel, setMobilePanel] = useState<MobileStudioPanel>('canvas');
   const [dismissRotateHint, setDismissRotateHint] = useState(false);
-
-  useEffect(() => {
-    if (!isMobilePortrait) setMobilePanel('canvas');
-  }, [isMobilePortrait]);
 
   useEffect(() => {
     if (!projectId) return;
@@ -264,13 +254,6 @@ export function EditorPage() {
     }
   };
 
-  const mobileTabs: { id: MobileStudioPanel; label: string; icon: typeof Wrench }[] = [
-    { id: 'canvas', label: 'Lienzo', icon: Columns2 },
-    { id: 'tools', label: 'Tools', icon: Wrench },
-    { id: 'layers', label: 'Capas', icon: Layers },
-    { id: 'inspector', label: 'Props', icon: SlidersHorizontal },
-  ];
-
   return (
     <div className="flex h-svh flex-col overflow-hidden bg-ink">
       <header className="flex items-center justify-between gap-2 border-b border-white/8 bg-[#080b0f]/95 px-2 py-2 backdrop-blur-md sm:gap-3 sm:px-3 sm:py-2.5">
@@ -430,7 +413,7 @@ export function EditorPage() {
             <div className="flex shrink-0 items-center gap-2 border-b border-neon/25 bg-neon/10 px-3 py-2">
               <RotateCw size={14} className="shrink-0 text-neon" />
               <p className="min-w-0 flex-1 font-mono text-[0.62rem] uppercase leading-snug tracking-[0.1em] text-paper/85">
-                Gira el móvil a horizontal — más lienzo, como en ordenador
+                Mejor en horizontal: más lienzo y paneles como en ordenador
               </p>
               <button
                 type="button"
@@ -443,42 +426,8 @@ export function EditorPage() {
           ) : null}
           <div className="relative min-h-0 flex-1">
             <EditorCanvas onOpenGuide={guide.openGuide} />
-            {mobilePanel !== 'canvas' ? (
-              <div className="absolute inset-0 z-40 flex flex-col bg-ink/55 backdrop-blur-[2px]">
-                <button
-                  type="button"
-                  className="h-10 shrink-0 bg-transparent text-center font-mono text-[0.65rem] uppercase tracking-[0.14em] text-paper/70"
-                  onClick={() => setMobilePanel('canvas')}
-                >
-                  Tocar para volver al lienzo
-                </button>
-                <div className="min-h-0 flex-1 overflow-hidden rounded-t-2xl border-t border-white/12 bg-ink shadow-[0_-20px_60px_rgba(0,0,0,0.45)]">
-                  {mobilePanel === 'tools' ? <EditorToolbar projectId={projectId} /> : null}
-                  {mobilePanel === 'layers' ? <PagesLayersPanel /> : null}
-                  {mobilePanel === 'inspector' ? <PropertiesPanel /> : null}
-                </div>
-              </div>
-            ) : null}
           </div>
-          <nav className="grid shrink-0 grid-cols-4 border-t border-white/10 bg-[#080b0f] pb-[env(safe-area-inset-bottom)]">
-            {mobileTabs.map((tab) => {
-              const on = mobilePanel === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setMobilePanel(tab.id)}
-                  className={cn(
-                    'flex flex-col items-center gap-0.5 px-1 py-2.5 font-mono text-[0.62rem] uppercase tracking-[0.12em] transition',
-                    on ? 'text-neon' : 'text-paper/55',
-                  )}
-                >
-                  <tab.icon size={17} strokeWidth={on ? 2.25 : 1.75} />
-                  {tab.label}
-                </button>
-              );
-            })}
-          </nav>
+          <MobileEditorDock projectId={projectId} />
           <StudioGuideOverlay
             open={guide.open}
             step={guide.step}
@@ -489,11 +438,11 @@ export function EditorPage() {
         </div>
       ) : isMobileLandscape ? (
         <div className="relative flex min-h-0 flex-1">
-          <EditorToolbar projectId={projectId} width={168} />
+          <EditorToolbar projectId={projectId} width={156} />
           <div className="relative min-w-0 flex-1">
             <EditorCanvas onOpenGuide={guide.openGuide} />
           </div>
-          <PropertiesPanel width={200} />
+          <PropertiesPanel width={188} />
           <StudioGuideOverlay
             open={guide.open}
             step={guide.step}

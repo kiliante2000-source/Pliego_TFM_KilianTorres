@@ -471,18 +471,39 @@ export function LiveDemoPage() {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 28 });
   const hook = useCycle(HOOKS.length, 2600);
+  const wantsHero =
+    typeof window !== 'undefined' &&
+    (window.location.hash === '#demo-hero' || window.location.hash === '' || window.location.hash === '#');
 
   useEffect(() => {
-    // Normal reading pace for short phrases (~1.4–1.6s each)
-    const t1 = window.setTimeout(() => setIntro(1), 1500);
-    const t2 = window.setTimeout(() => setIntro(2), 3100);
-    const t3 = window.setTimeout(() => setIntro(3), 4800);
+    // Faster path when arriving from “Ver demo viva” — land on the hero title
+    const heroJump = window.location.hash === '#demo-hero';
+    const t1 = window.setTimeout(() => setIntro(1), heroJump ? 700 : 1500);
+    const t2 = window.setTimeout(() => setIntro(2), heroJump ? 1500 : 3100);
+    const t3 = window.setTimeout(() => setIntro(3), heroJump ? 2400 : 4800);
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
       window.clearTimeout(t3);
     };
   }, []);
+
+  useEffect(() => {
+    if (intro < 3) return;
+    const hash = window.location.hash;
+    if (hash === '#obra') return;
+    // Always show “Haz algo que se recuerde” first when opening the demo
+    const el = document.getElementById('demo-hero');
+    if (!el) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    // Wait a frame so the intro overlay is gone and layout is stable
+    const id = window.requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [intro, wantsHero]);
 
   return (
     <div className="relative min-h-svh overflow-x-hidden bg-[#050608] text-paper">
@@ -590,8 +611,11 @@ export function LiveDemoPage() {
         </div>
       </header>
 
-      {/* BILLBOARD HERO */}
-      <section className="relative z-10 flex min-h-[calc(100svh-80px)] flex-col justify-end overflow-hidden px-5 pb-16 pt-10 sm:px-8">
+      {/* BILLBOARD HERO — entry point for “Ver demo viva” */}
+      <section
+        id="demo-hero"
+        className="relative z-10 flex min-h-[calc(100svh-80px)] scroll-mt-20 flex-col justify-center overflow-hidden px-5 pb-16 pt-10 sm:px-8 sm:justify-end"
+      >
         <motion.div
           className="pointer-events-none absolute -right-24 top-10 h-[70vmin] w-[70vmin] rounded-full opacity-95"
           style={{

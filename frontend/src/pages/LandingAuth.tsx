@@ -198,7 +198,7 @@ export function LandingPage() {
               </Magnetic>
               <Magnetic>
                 <ButtonLink
-                  to="/demo"
+                  to="/demo#demo-hero"
                   variant="soft"
                   className="w-full justify-center px-5 py-2.5 text-sm sm:w-auto sm:px-6 sm:py-3 sm:text-base"
                 >
@@ -308,7 +308,7 @@ export function LandingPage() {
                 </Magnetic>
                 <Magnetic>
                   <ButtonLink
-                    to="/demo"
+                    to="/demo#demo-hero"
                     variant="soft"
                     className="w-full justify-center px-5 py-2.5 text-sm sm:w-auto sm:px-8 sm:py-3.5 sm:text-base"
                   >
