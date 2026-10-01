@@ -701,19 +701,19 @@ export function TemplateGallery({
 
         <div className="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-rosa">
-              Colección PLIEGO
-            </p>
-            <h3
-              className="mt-2 max-w-xl text-[1.65rem] font-bold leading-tight text-paper sm:text-5xl"
-              style={{
-                fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
-                letterSpacing: '0',
-                wordSpacing: 'normal',
-              }}
-            >
+            <p className="eyebrow text-rosa">Colección PLIEGO</p>
+            <h3 className="mt-2 max-w-xl font-display text-[1.75rem] font-extrabold tracking-[-0.045em] text-paper sm:text-5xl">
               Seis estructuras
-              <span className="mt-0.5 block text-neon">con impacto</span>
+              <span
+                className="block text-transparent"
+                style={{
+                  backgroundImage: `linear-gradient(90deg, ${BRAND.neon}, ${BRAND.rosa}, ${BRAND.lima})`,
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                }}
+              >
+                con impacto
+              </span>
             </h3>
             <p
               className="mt-3 max-w-sm text-paper/75 sm:max-w-md"
