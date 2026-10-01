@@ -31,10 +31,11 @@ export function ZoomablePublicView({
     );
   }, [frameW, frameH, document.meta.width, document.meta.height]);
 
-  // Reset to fit whenever the document or viewport changes (orientation)
+  // Reset only on new artboard or real orientation change — not every RO tick
+  const frameBucket = `${Math.round(frameW / 80)}:${Math.round(frameH / 80)}`;
   useEffect(() => {
     setUserScale(null);
-  }, [document.meta.width, document.meta.height, frameW, frameH]);
+  }, [document.meta.width, document.meta.height, frameBucket]);
 
   const scale = userScale ?? fitScale;
   const fitWidth = document.meta.width * scale;

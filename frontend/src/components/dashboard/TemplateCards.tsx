@@ -1,6 +1,21 @@
-import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, Plus } from 'lucide-react';
 import type { TemplateInfo } from '../../types/document';
+
+/** Mobile + reduced-motion: freeze looping poster FX (photosensitivity / flicker). */
+function useCalmPosterMotion() {
+  const reduced = useReducedMotion();
+  const [narrow, setNarrow] = useState(true);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 900px)');
+    const sync = () => setNarrow(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+  return Boolean(reduced) || narrow;
+}
 
 const BRAND = {
   neon: '#4F80FF',
@@ -130,29 +145,51 @@ export const BLANK_FORMATS: {
 ];
 
 function KineticField({ accent, soft }: { accent: string; soft: string }) {
+  const calm = useCalmPosterMotion();
   return (
     <>
       <div className="absolute inset-0" style={{ background: accent }} />
-      <motion.div
-        className="absolute -inset-[50%]"
-        style={{
-          background: `conic-gradient(from 200deg at 42% 38%, ${accent}, ${soft}, rgba(255,255,255,0.55), ${accent})`,
-        }}
-        animate={{ rotate: [0, 28, 0], scale: [1, 1.1, 1] }}
-        transition={{ duration: 16, ease: 'easeInOut', repeat: Infinity }}
-      />
-      <motion.div
-        className="absolute -right-[28%] top-[-38%] h-[115%] w-[85%] rounded-full opacity-55 blur-3xl"
-        style={{ background: soft }}
-        animate={{ x: [0, -34, 0], y: [0, 24, 0] }}
-        transition={{ duration: 10, ease: 'easeInOut', repeat: Infinity }}
-      />
-      <motion.div
-        className="absolute -bottom-[42%] -left-[32%] h-[95%] w-[80%] rounded-full opacity-40 blur-3xl"
-        style={{ background: '#fff' }}
-        animate={{ x: [0, 22, 0], y: [0, -18, 0] }}
-        transition={{ duration: 12, ease: 'easeInOut', repeat: Infinity }}
-      />
+      {calm ? (
+        <>
+          <div
+            className="absolute -inset-[40%]"
+            style={{
+              background: `conic-gradient(from 210deg at 42% 38%, ${accent}, ${soft}, rgba(255,255,255,0.45), ${accent})`,
+            }}
+          />
+          <div
+            className="absolute -right-[28%] top-[-38%] h-[115%] w-[85%] rounded-full opacity-50 blur-3xl"
+            style={{ background: soft }}
+          />
+          <div
+            className="absolute -bottom-[42%] -left-[32%] h-[95%] w-[80%] rounded-full opacity-35 blur-3xl"
+            style={{ background: '#fff' }}
+          />
+        </>
+      ) : (
+        <>
+          <motion.div
+            className="absolute -inset-[50%]"
+            style={{
+              background: `conic-gradient(from 200deg at 42% 38%, ${accent}, ${soft}, rgba(255,255,255,0.55), ${accent})`,
+            }}
+            animate={{ rotate: [0, 28, 0], scale: [1, 1.1, 1] }}
+            transition={{ duration: 16, ease: 'easeInOut', repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute -right-[28%] top-[-38%] h-[115%] w-[85%] rounded-full opacity-55 blur-3xl"
+            style={{ background: soft }}
+            animate={{ x: [0, -34, 0], y: [0, 24, 0] }}
+            transition={{ duration: 10, ease: 'easeInOut', repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute -bottom-[42%] -left-[32%] h-[95%] w-[80%] rounded-full opacity-40 blur-3xl"
+            style={{ background: '#fff' }}
+            animate={{ x: [0, 22, 0], y: [0, -18, 0] }}
+            transition={{ duration: 12, ease: 'easeInOut', repeat: Infinity }}
+          />
+        </>
+      )}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_12%,rgba(255,255,255,0.38),transparent_52%)]" />
       <div className="absolute inset-0 opacity-[0.16] [background-image:linear-gradient(rgba(255,255,255,0.6)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.6)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_72%)]" />
     </>
@@ -169,187 +206,97 @@ const stroke = {
   vectorEffect: 'non-scaling-stroke' as const,
 };
 
-/** Diagramas vectoriales PLIEGO — mismo trazo, alto contraste, con motion. */
+/** Diagramas vectoriales PLIEGO — sin loops (evita parpadeo / fotosensibilidad). */
 function VectorArt({ kind }: { kind: VectorKind }) {
   if (kind === 'manifesto') {
     return (
-      <motion.svg
-        viewBox="0 0 280 200"
-        className="absolute inset-0 h-full w-full"
-        aria-hidden
-        initial={false}
-        animate={{ y: [0, -4, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <motion.line
-          x1="36" y1="28" x2="36" y2="172"
-          {...stroke}
-          animate={{ pathLength: [0.55, 1, 0.55] }}
-          transition={{ duration: 3.8, repeat: Infinity }}
-        />
+      <svg viewBox="0 0 280 200" className="absolute inset-0 h-full w-full" aria-hidden>
+        <line x1="36" y1="28" x2="36" y2="172" {...stroke} />
         <line x1="52" y1="40" x2="168" y2="40" {...stroke} />
         <line x1="52" y1="62" x2="148" y2="62" {...stroke} />
         <line x1="52" y1="84" x2="132" y2="84" {...stroke} />
-        <motion.line
-          x1="52" y1="28" x2="220" y2="172"
-          {...stroke}
-          strokeOpacity={0.55}
-          animate={{ pathLength: [0.3, 1, 0.3] }}
-          transition={{ duration: 5, repeat: Infinity }}
-        />
-        <motion.circle
-          cx="214" cy="56" r="28"
-          {...stroke}
-          animate={{ rotate: 360 }}
-          style={{ originX: '214px', originY: '56px' }}
-          transition={{ duration: 14, ease: 'linear', repeat: Infinity }}
-        />
+        <line x1="52" y1="28" x2="220" y2="172" {...stroke} strokeOpacity={0.55} />
+        <circle cx="214" cy="56" r="28" {...stroke} />
         <circle cx="214" cy="56" r="8" fill="#fff" />
         <rect x="52" y="148" width="56" height="20" rx="10" {...stroke} />
-      </motion.svg>
+      </svg>
     );
   }
 
   if (kind === 'portfolio') {
     return (
-      <motion.svg
-        viewBox="0 0 220 260"
-        className="absolute inset-0 h-full w-full"
-        aria-hidden
-        animate={{ y: [0, 5, 0] }}
-        transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
-      >
+      <svg viewBox="0 0 220 260" className="absolute inset-0 h-full w-full" aria-hidden>
         <rect x="48" y="24" width="124" height="212" rx="8" {...stroke} />
         <rect x="64" y="42" width="92" height="72" rx="4" {...stroke} />
         <line x1="64" y1="136" x2="156" y2="136" {...stroke} />
         <line x1="64" y1="152" x2="132" y2="152" {...stroke} />
         <line x1="64" y1="168" x2="120" y2="168" {...stroke} />
-        <motion.rect
-          x="64" y="196" width="92" height="10" rx="5"
-          {...stroke}
-          style={{ transformOrigin: '64px 201px' }}
-          animate={{ scaleX: [0.45, 1, 0.45] }}
-          transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </motion.svg>
+        <rect x="64" y="196" width="92" height="10" rx="5" {...stroke} />
+      </svg>
     );
   }
 
   if (kind === 'cover') {
     return (
-      <motion.svg
-        viewBox="0 0 260 220"
-        className="absolute inset-0 h-full w-full"
-        aria-hidden
-      >
+      <svg viewBox="0 0 260 220" className="absolute inset-0 h-full w-full" aria-hidden>
         <rect x="28" y="24" width="160" height="172" rx="6" {...stroke} />
         <line x1="48" y1="24" x2="48" y2="196" {...stroke} />
-        <motion.circle
-          cx="188" cy="78" r="46"
-          {...stroke}
-          animate={{ scale: [1, 1.08, 1] }}
-          style={{ originX: '188px', originY: '78px' }}
-          transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        <circle cx="188" cy="78" r="46" {...stroke} />
         <circle cx="188" cy="78" r="18" {...stroke} />
         <line x1="60" y1="150" x2="150" y2="150" {...stroke} />
         <line x1="60" y1="168" x2="120" y2="168" {...stroke} />
-      </motion.svg>
+      </svg>
     );
   }
 
   if (kind === 'magazine') {
     return (
-      <motion.svg
-        viewBox="0 0 280 200"
-        className="absolute inset-0 h-full w-full"
-        aria-hidden
-        animate={{ x: [0, 3, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-      >
+      <svg viewBox="0 0 280 200" className="absolute inset-0 h-full w-full" aria-hidden>
         <rect x="20" y="18" width="240" height="164" rx="6" {...stroke} />
         <line x1="110" y1="18" x2="110" y2="182" {...stroke} />
         <rect x="34" y="34" width="60" height="14" rx="2" {...stroke} />
         <rect x="34" y="60" width="60" height="58" rx="3" {...stroke} />
         <line x1="34" y1="136" x2="94" y2="136" {...stroke} />
         <line x1="34" y1="152" x2="80" y2="152" {...stroke} />
-        <motion.rect
-          x="128" y="34" width="116" height="18" rx="2"
-          {...stroke}
-          animate={{ opacity: [0.55, 1, 0.55] }}
-          transition={{ duration: 2.6, repeat: Infinity }}
-        />
+        <rect x="128" y="34" width="116" height="18" rx="2" {...stroke} />
         <line x1="128" y1="70" x2="244" y2="70" {...stroke} />
         <line x1="128" y1="88" x2="244" y2="88" {...stroke} />
         <line x1="128" y1="106" x2="220" y2="106" {...stroke} />
         <rect x="128" y="130" width="116" height="36" rx="3" {...stroke} />
-      </motion.svg>
+      </svg>
     );
   }
 
   if (kind === 'catalog') {
     return (
-      <motion.svg
-        viewBox="0 0 280 200"
-        className="absolute inset-0 h-full w-full"
-        aria-hidden
-      >
-        <motion.g
-          animate={{ y: [0, -6, 0] }}
-          transition={{ duration: 4.2, repeat: Infinity, ease: 'easeInOut' }}
-        >
+      <svg viewBox="0 0 280 200" className="absolute inset-0 h-full w-full" aria-hidden>
+        <g>
           <rect x="28" y="22" width="100" height="156" rx="6" {...stroke} />
           <rect x="42" y="38" width="72" height="72" rx="3" {...stroke} />
           <line x1="42" y1="128" x2="114" y2="128" {...stroke} />
           <line x1="42" y1="146" x2="96" y2="146" {...stroke} />
-        </motion.g>
-        <motion.g
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 4.2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-        >
+        </g>
+        <g>
           <rect x="152" y="22" width="100" height="156" rx="6" {...stroke} />
           <rect x="166" y="38" width="72" height="72" rx="3" {...stroke} />
           <line x1="166" y1="128" x2="238" y2="128" {...stroke} />
           <line x1="166" y1="146" x2="220" y2="146" {...stroke} />
-        </motion.g>
-      </motion.svg>
+        </g>
+      </svg>
     );
   }
 
   // slide
   return (
-    <motion.svg
-      viewBox="0 0 300 180"
-      className="absolute inset-0 h-full w-full"
-      aria-hidden
-      animate={{ y: [0, -3, 0] }}
-      transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-    >
+    <svg viewBox="0 0 300 180" className="absolute inset-0 h-full w-full" aria-hidden>
       <rect x="18" y="28" width="264" height="124" rx="8" {...stroke} />
       <line x1="40" y1="58" x2="160" y2="58" {...stroke} />
       <line x1="40" y1="78" x2="140" y2="78" {...stroke} />
       <line x1="40" y1="98" x2="120" y2="98" {...stroke} />
-      <motion.circle
-        cx="230" cy="90" r="26"
-        {...stroke}
-        animate={{ scale: [1, 1.12, 1] }}
-        style={{ originX: '230px', originY: '90px' }}
-        transition={{ duration: 2.2, repeat: Infinity }}
-      />
+      <circle cx="230" cy="90" r="26" {...stroke} />
       <path d="M222 78 L246 90 L222 102 Z" {...stroke} />
-      <motion.line
-        x1="18" y1="152" x2="282" y2="152"
-        {...stroke}
-        strokeOpacity={0.45}
-      />
-      <motion.line
-        x1="18" y1="152" x2="282" y2="152"
-        {...stroke}
-        style={{ transformOrigin: '18px 152px' }}
-        animate={{ scaleX: [0.28, 0.85, 0.28] }}
-        transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
-      />
-    </motion.svg>
+      <line x1="18" y1="152" x2="282" y2="152" {...stroke} strokeOpacity={0.45} />
+    </svg>
   );
 }
 
@@ -583,9 +530,9 @@ export function TemplateCard({
       tabIndex={0}
       aria-label={opening ? `Abriendo ${template.name}` : `Abrir plantilla ${template.name}`}
       aria-busy={opening || undefined}
-      initial={{ opacity: 0, y: 22, filter: 'blur(8px)' }}
-      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      transition={{ delay, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: Math.min(delay, 0.2), duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       onClick={() => onOpen?.()}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -683,6 +630,7 @@ export function TemplateGallery({
   openingId: string | null;
   onOpen: (template: TemplateInfo) => void;
 }) {
+  const calm = useCalmPosterMotion();
   const rowA = templates.slice(0, 3);
   const rowB = templates.slice(3, 6);
   const marquee = ['Manifiesto', 'Portfolio', 'Portada', 'Revista', 'Lookbook', 'Slide', 'PLIEGO'];
@@ -752,18 +700,29 @@ export function TemplateGallery({
         </div>
 
         <div className="relative mt-6 overflow-hidden border-t border-white/10 pt-3">
-          <motion.div
-            className="flex w-max gap-6 font-mono text-[0.65rem] uppercase tracking-[0.06em] text-paper/40"
-            animate={{ x: ['0%', '-50%'] }}
-            transition={{ duration: 28, ease: 'linear', repeat: Infinity }}
-          >
-            {[...marquee, ...marquee, ...marquee].map((label, i) => (
-              <span key={`${label}-${i}`} className="flex items-center gap-6 whitespace-nowrap">
-                {label}
-                <span className="text-rosa/70">◆</span>
-              </span>
-            ))}
-          </motion.div>
+          {calm ? (
+            <div className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-[0.65rem] uppercase tracking-[0.06em] text-paper/40">
+              {marquee.map((label) => (
+                <span key={label} className="flex items-center gap-2 whitespace-nowrap">
+                  {label}
+                  <span className="text-rosa/70">◆</span>
+                </span>
+              ))}
+            </div>
+          ) : (
+            <motion.div
+              className="flex w-max gap-6 font-mono text-[0.65rem] uppercase tracking-[0.06em] text-paper/40"
+              animate={{ x: ['0%', '-50%'] }}
+              transition={{ duration: 28, ease: 'linear', repeat: Infinity }}
+            >
+              {[...marquee, ...marquee, ...marquee].map((label, i) => (
+                <span key={`${label}-${i}`} className="flex items-center gap-6 whitespace-nowrap">
+                  {label}
+                  <span className="text-rosa/70">◆</span>
+                </span>
+              ))}
+            </motion.div>
+          )}
         </div>
       </div>
 

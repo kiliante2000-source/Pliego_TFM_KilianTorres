@@ -80,8 +80,11 @@ export function EditorCanvas({
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<Konva.Stage>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
+  /** User pinched / used +/- — never auto-fit again until they tap Encajar */
   const userZoomLock = useRef(false);
-  const lastDocKey = useRef('');
+  /** One successful fit per artboard identity — blocks scrollbar feedback loops */
+  const fittedDocKey = useRef('');
+  const lastSizeBucket = useRef('');
   const pinchRef = useRef<{ startDist: number; startZoom: number } | null>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [editing, setEditing] = useState<{
@@ -98,72 +101,97 @@ export function EditorCanvas({
     lineHeight: number;
   } | null>(null);
 
+  const docKey = documentModel
+    ? `${documentModel.meta.templateId ?? ''}:${documentModel.meta.width}x${documentModel.meta.height}`
+    : '';
+
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+    let raf = 0;
     const ro = new ResizeObserver(() => {
-      setSize({ width: el.clientWidth, height: el.clientHeight });
+      // Debounce RO → avoid zoom thrash when scrollbars appear/disappear
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const w = el.clientWidth;
+        const h = el.clientHeight;
+        setSize((prev) =>
+          Math.abs(prev.width - w) < 2 && Math.abs(prev.height - h) < 2
+            ? prev
+            : { width: w, height: h },
+        );
+      });
     });
     ro.observe(el);
     setSize({ width: el.clientWidth, height: el.clientHeight });
-    return () => ro.disconnect();
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
   }, []);
 
   const centerBoard = () => {
-    requestAnimationFrame(() => {
-      const node = containerRef.current;
-      if (!node) return;
-      node.scrollLeft = Math.max(0, (node.scrollWidth - node.clientWidth) / 2);
-      node.scrollTop = Math.max(0, (node.scrollHeight - node.clientHeight) / 2);
-    });
+    const node = containerRef.current;
+    if (!node) return;
+    node.scrollLeft = Math.max(0, (node.scrollWidth - node.clientWidth) / 2);
+    node.scrollTop = Math.max(0, (node.scrollHeight - node.clientHeight) / 2);
   };
 
-  const runFit = () => {
+  const runFit = (force = false) => {
+    if (!force && userZoomLock.current) return false;
     const el = containerRef.current;
     if (!el) return false;
-    const w = el.clientWidth;
-    const h = el.clientHeight;
+    // Clamp to the visible viewport — never trust an inflated clientWidth
+    // (that was producing ~44% zoom and cropping the right edge on phones).
+    const w = Math.min(el.clientWidth, document.documentElement.clientWidth, window.innerWidth);
+    const h = Math.min(el.clientHeight, window.innerHeight);
     if (w < 40 || h < 40) return false;
-    // Extra padding so landscape slides show their full horizontal format
-    fitZoom(w, h, 40);
-    centerBoard();
+    fitZoom(w, h, 56);
+    // Center after Konva stage commits the new zoom size
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        centerBoard();
+        // Self-heal: if the board still overflows width, shrink once more
+        const stage = el.querySelector(':scope > div > div.relative') as HTMLElement | null;
+        if (stage && stage.offsetWidth > el.clientWidth - 4) {
+          fitZoom(el.clientWidth, el.clientHeight, 64);
+          requestAnimationFrame(centerBoard);
+        }
+      });
+    });
     return true;
   };
 
-  // Re-fit when the viewport / document changes unless the user picked a manual zoom
+  // Fit ONCE when a project/artboard opens or the phone rotates.
+  // Never re-fit while editing elements — that caused the flash/jitter.
   useEffect(() => {
-    if (!autoFit || !documentModel) return;
-    const docKey = `${documentModel.meta.templateId ?? documentModel.meta.title}:${documentModel.meta.width}x${documentModel.meta.height}:${documentModel.pages.length}`;
-    if (lastDocKey.current !== docKey) {
-      lastDocKey.current = docKey;
+    if (!autoFit || !documentModel || !docKey) return;
+    if (size.width < 40 || size.height < 40) return;
+
+    const sizeBucket = `${Math.round(size.width / 80)}:${Math.round(size.height / 80)}`;
+    const isNewDoc = fittedDocKey.current !== docKey;
+    const isOrientation =
+      !!lastSizeBucket.current && lastSizeBucket.current !== sizeBucket;
+
+    if (!isNewDoc && !isOrientation) return;
+    if (!isNewDoc && userZoomLock.current) return;
+
+    if (isNewDoc) {
       userZoomLock.current = false;
     }
-    if (userZoomLock.current) return;
-    const run = () => {
-      if (userZoomLock.current) return;
-      runFit();
-    };
-    run();
-    const t1 = window.setTimeout(run, 80);
-    const t2 = window.setTimeout(run, 280);
-    const t3 = window.setTimeout(run, 600);
-    return () => {
-      window.clearTimeout(t1);
-      window.clearTimeout(t2);
-      window.clearTimeout(t3);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- runFit closes over latest fitZoom/size
-  }, [
-    autoFit,
-    size.width,
-    size.height,
-    documentModel?.meta.templateId,
-    documentModel?.meta.title,
-    documentModel?.meta.width,
-    documentModel?.meta.height,
-    documentModel?.pages.length,
-    fitZoom,
-  ]);
+
+    // Single settled frame — no retry spam
+    const t = window.setTimeout(() => {
+      if (runFit(isNewDoc || isOrientation)) {
+        fittedDocKey.current = docKey;
+        lastSizeBucket.current = sizeBucket;
+      }
+    }, 32);
+
+    return () => window.clearTimeout(t);
+    // Do NOT depend on documentModel — edits would re-enter this effect and jitter
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoFit, docKey, size.width, size.height]);
 
   useEffect(() => {
     if (!autoFit) return;
@@ -172,11 +200,15 @@ export function EditorCanvas({
     };
     const onFitRequest = () => {
       userZoomLock.current = false;
-      runFit();
+      if (runFit(true)) {
+        fittedDocKey.current = docKey;
+        lastSizeBucket.current = `${Math.round(size.width / 80)}:${Math.round(size.height / 80)}`;
+      }
     };
     const onOrientation = () => {
       userZoomLock.current = false;
-      window.setTimeout(onFitRequest, 180);
+      fittedDocKey.current = '';
+      window.setTimeout(onFitRequest, 200);
     };
     window.addEventListener('pliego-zoom-manual', onManualZoom);
     window.addEventListener('pliego-zoom-fit', onFitRequest);
@@ -187,9 +219,9 @@ export function EditorCanvas({
       window.removeEventListener('orientationchange', onOrientation);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoFit, fitZoom]);
+  }, [autoFit, docKey, size.width, size.height]);
 
-  // Pinch to zoom on mobile — after the full board is visible, user can enlarge/reduce
+  // Pinch to zoom — opt into manual mode so auto-fit stays off
   useEffect(() => {
     if (!autoFit) return;
     const el = containerRef.current;
@@ -215,7 +247,6 @@ export function EditorCanvas({
       if (pinchRef.current.startDist < 12) return;
       e.preventDefault();
       userZoomLock.current = true;
-      window.dispatchEvent(new Event('pliego-zoom-manual'));
       const ratio = dist(e.touches) / pinchRef.current.startDist;
       useEditorStore.getState().setZoom(pinchRef.current.startZoom * ratio);
     };
@@ -291,13 +322,14 @@ export function EditorCanvas({
     setEditing(null);
   };
 
-  const stagePad = autoFit ? 20 : 40;
+  const stagePad = autoFit ? 24 : 40;
 
   return (
     <div
       ref={containerRef}
       data-editor-canvas
-      className="canvas-stage relative h-full w-full overflow-auto scrollbar-thin"
+      className="canvas-stage relative h-full w-full overflow-auto overscroll-contain scrollbar-thin"
+      style={autoFit ? { touchAction: 'pan-x pan-y' } : undefined}
     >
       {page.elements.length === 0 ? (
         <CanvasStarter

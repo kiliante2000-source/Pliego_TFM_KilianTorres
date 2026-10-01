@@ -168,14 +168,26 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       future: [],
       dirty: false,
       saveStatus: 'saved',
-      // Start small so landscape artboards never flash oversized on phones
-      zoom: 0.2,
+      // Estimate fit from viewport so the first paint is already contained
+      zoom: (() => {
+        const doc = data.project.document;
+        if (typeof window === 'undefined') return 0.25;
+        const pad = 48;
+        const vw = Math.max(320, window.innerWidth);
+        const vh = Math.max(320, window.innerHeight - 140);
+        const next = Math.min((vw - pad) / doc.meta.width, (vh - pad) / doc.meta.height, 1);
+        return Math.min(2.5, Math.max(0.08, Number.isFinite(next) ? next : 0.25));
+      })(),
     });
   },
 
   setTool: (tool) => set({ tool }),
-  setZoom: (zoom) => set({ zoom: Math.min(2.5, Math.max(0.08, zoom)) }),
-  fitZoom: (viewW, viewH, padding = 40) => {
+  setZoom: (zoom) => {
+    const next = Math.min(2.5, Math.max(0.08, zoom));
+    if (Math.abs(get().zoom - next) < 0.004) return;
+    set({ zoom: next });
+  },
+  fitZoom: (viewW, viewH, padding = 48) => {
     const doc = get().document;
     if (!doc || viewW < 40 || viewH < 40) return;
     // Always contain the full artboard (landscape included) inside the viewport
@@ -185,7 +197,10 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       1,
     );
     if (!Number.isFinite(next) || next <= 0) return;
-    set({ zoom: Math.min(2.5, Math.max(0.08, next)) });
+    const clamped = Math.min(2.5, Math.max(0.08, next));
+    // Skip no-op updates — prevents render/scroll thrash ("epileptic" zoom)
+    if (Math.abs(get().zoom - clamped) < 0.004) return;
+    set({ zoom: clamped });
   },
   select: (ids) => set({ selectedIds: ids }),
   setActivePage: (pageId) => set({ activePageId: pageId, selectedIds: [] }),
