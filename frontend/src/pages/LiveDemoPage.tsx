@@ -165,6 +165,7 @@ function ChapterGallery() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.4, ease }}
+              className="min-h-[12.5rem] sm:min-h-[14rem]"
             >
               <p className="font-mono text-base uppercase tracking-[0.16em] text-white/80">
                 Cap. {chapter.id} · {chapter.product}
@@ -292,7 +293,7 @@ function GestureFilm() {
                 key={f.t}
                 animate={{
                   opacity: step === i ? 1 : 0.72,
-                  x: step === i ? 12 : 0,
+                  x: step === i ? 8 : 0,
                 }}
                 className="border-l-2 pl-4"
                 style={{ borderColor: step === i ? f.accent : 'rgba(255,255,255,0.22)' }}
@@ -309,19 +310,19 @@ function GestureFilm() {
                 >
                   {f.t}
                 </p>
-                <AnimatePresence>
-                  {step === i ? (
-                    <motion.p
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="mt-2 text-base leading-relaxed text-paper/80 sm:text-lg"
-                      style={serif}
-                    >
-                      {f.d}
-                    </motion.p>
-                  ) : null}
-                </AnimatePresence>
+                {/* Opacity only — never animate height (that was jumping the page scroll) */}
+                <p
+                  className="mt-2 min-h-[2.75rem] text-base leading-relaxed sm:min-h-[3.25rem] sm:text-lg"
+                  style={{
+                    ...serif,
+                    opacity: step === i ? 1 : 0,
+                    color: 'rgba(244,246,248,0.8)',
+                    transition: 'opacity 0.35s ease',
+                  }}
+                  aria-hidden={step !== i}
+                >
+                  {f.d}
+                </p>
               </motion.li>
             ))}
           </ol>
@@ -498,10 +499,7 @@ export function LiveDemoPage() {
     };
   }, []);
 
-  useEffect(() => {
-    if (location.hash === '#obra') return;
-    window.scrollTo(0, 0);
-  }, [intro, location.hash]);
+  // Never force-scroll after mount — it fights the user when they read lower sections
 
   return (
     <div className="relative min-h-svh overflow-x-hidden bg-[#050608] text-paper">
