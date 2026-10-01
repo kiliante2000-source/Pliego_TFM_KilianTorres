@@ -702,7 +702,14 @@ export function TemplateGallery({
         <div className="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="eyebrow text-rosa">Colección PLIEGO</p>
-            <h3 className="mt-2 max-w-xl font-display text-[1.75rem] font-extrabold tracking-[-0.02em] text-paper sm:text-5xl sm:tracking-[-0.04em]">
+            <h3
+              className="mt-2 max-w-xl text-[1.7rem] font-bold leading-[1.12] text-paper sm:text-5xl sm:leading-[1.05]"
+              style={{
+                fontFamily: '"Space Grotesk", system-ui, sans-serif',
+                letterSpacing: '-0.025em',
+                wordSpacing: '0em',
+              }}
+            >
               Seis estructuras
               <span
                 className="block text-transparent"
@@ -718,14 +725,12 @@ export function TemplateGallery({
             <p
               className="mt-3 max-w-sm text-paper/75 sm:max-w-md"
               style={{
-                fontFamily: '"DM Sans", system-ui, sans-serif',
+                fontFamily: '"Space Grotesk", system-ui, sans-serif',
                 fontSize: '15px',
                 fontWeight: 500,
-                lineHeight: 1.4,
-                letterSpacing: '-0.02em',
+                lineHeight: 1.45,
+                letterSpacing: '-0.01em',
                 wordSpacing: '0em',
-                fontOpticalSizing: 'none',
-                fontVariationSettings: '"opsz" 14',
               }}
             >
               Plantillas listas para abrir, con tamaño y color propios.
