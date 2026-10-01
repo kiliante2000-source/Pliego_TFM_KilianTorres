@@ -28,5 +28,5 @@ services:
         value: pliego_token
       - key: MAX_UPLOAD_BYTES
         value: "5242880"
-      - key: CHROME_PATH
-        value: /usr/bin/chromium
+      # Chromium: resolved at runtime via @sparticuz/chromium on native Node
+      # (Docker image still uses system /usr/bin/chromium when CHROME_PATH is set)

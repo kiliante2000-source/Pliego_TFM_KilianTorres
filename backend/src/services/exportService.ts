@@ -6,6 +6,7 @@ import { PDFDocument, PDFName, PDFArray, PDFString } from 'pdf-lib';
 import { prisma } from '../utils/prisma.js';
 import { env } from '../utils/env.js';
 import { AppError } from '../utils/errors.js';
+import { resolveChromeLaunch } from '../utils/chrome.js';
 import type { DocumentModel, CanvasElement, Page } from '../types/document.js';
 import { isDocumentModel } from '../types/document.js';
 import { projectService } from './projectService.js';
@@ -370,10 +371,11 @@ export class ExportService {
         publicBase,
         title: project.title || document.meta.title,
       });
+      const chrome = await resolveChromeLaunch();
       const browser = await puppeteer.launch({
-        executablePath: env.CHROME_PATH,
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+        executablePath: chrome.executablePath,
+        headless: chrome.headless,
+        args: chrome.args,
       });
 
       let pdfBytes: Uint8Array;
@@ -384,13 +386,16 @@ export class ExportService {
           height: document.meta.height,
           deviceScaleFactor: 1,
         });
-        await page.setContent(html, { waitUntil: 'load', timeout: 60_000 });
+        await page.setContent(html, { waitUntil: 'load', timeout: 90_000 });
+        // Give webfonts a beat after load (networkidle removed in newer puppeteer-core)
+        await new Promise((r) => setTimeout(r, 800));
 
         const raw = await page.pdf({
           width: `${document.meta.width}px`,
           height: `${document.meta.height}px`,
           printBackground: true,
           margin: { top: 0, right: 0, bottom: 0, left: 0 },
+          preferCSSPageSize: true,
         });
         pdfBytes = raw;
       } finally {

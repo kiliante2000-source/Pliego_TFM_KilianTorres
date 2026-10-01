@@ -13,7 +13,8 @@ export const envSchema = z.object({
   UPLOAD_DIR: z.string().default('./uploads'),
   EXPORT_DIR: z.string().default('./exports'),
   MAX_UPLOAD_BYTES: z.coerce.number().default(5_242_880),
-  CHROME_PATH: z.string().default('/usr/local/bin/google-chrome'),
+  /** Optional system Chrome path (Docker). Empty → auto-detect / @sparticuz */
+  CHROME_PATH: z.string().optional().default(''),
 });
 
 export type Env = z.infer<typeof envSchema>;
