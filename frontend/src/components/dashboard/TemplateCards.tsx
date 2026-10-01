@@ -707,8 +707,7 @@ export function TemplateGallery({
             <h3
               className="mt-2 max-w-xl text-[1.65rem] font-bold leading-tight text-paper sm:text-5xl"
               style={{
-                fontFamily:
-                  'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
                 letterSpacing: '0',
                 wordSpacing: 'normal',
               }}
@@ -719,8 +718,7 @@ export function TemplateGallery({
             <p
               className="mt-3 max-w-sm text-paper/75 sm:max-w-md"
               style={{
-                fontFamily:
-                  'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
                 fontSize: '15px',
                 fontWeight: 400,
                 lineHeight: 1.45,
