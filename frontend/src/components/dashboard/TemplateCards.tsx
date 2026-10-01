@@ -154,116 +154,111 @@ function KineticField({ accent, soft }: { accent: string; soft: string }) {
   );
 }
 
-const SW = 5;
+/** Stroke scales with the SVG (no non-scaling-stroke — that looked like chalk stubs on mobile). */
 const stroke = {
   fill: 'none' as const,
   stroke: '#FFFFFF',
-  strokeWidth: SW,
+  strokeWidth: 7,
   strokeLinecap: 'round' as const,
   strokeLinejoin: 'round' as const,
-  vectorEffect: 'non-scaling-stroke' as const,
 };
+const strokeSoft = { ...stroke, strokeOpacity: 0.55, strokeWidth: 5.5 };
+const svgClass = 'h-full w-full max-h-full max-w-full overflow-visible';
 
-const svgClass = 'h-full w-full max-h-full max-w-full';
-
-/** Diagramas vectoriales PLIEGO — estáticos y centrados en el contenedor. */
+/** Diagramas vectoriales PLIEGO — estructura clara a cualquier escala. */
 function VectorArt({ kind }: { kind: VectorKind }) {
   if (kind === 'manifesto') {
     return (
-      <svg viewBox="24 16 232 172" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
-        <line x1="36" y1="28" x2="36" y2="172" {...stroke} />
-        <line x1="52" y1="40" x2="168" y2="40" {...stroke} />
-        <line x1="52" y1="62" x2="148" y2="62" {...stroke} />
-        <line x1="52" y1="84" x2="132" y2="84" {...stroke} />
-        <line x1="52" y1="28" x2="220" y2="172" {...stroke} strokeOpacity={0.55} />
-        <circle cx="214" cy="56" r="28" {...stroke} />
-        <circle cx="214" cy="56" r="8" fill="#fff" />
-        <rect x="52" y="148" width="56" height="20" rx="10" {...stroke} />
+      <svg viewBox="0 0 280 200" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+        <line x1="32" y1="28" x2="32" y2="172" {...stroke} />
+        <line x1="52" y1="44" x2="176" y2="44" {...stroke} />
+        <line x1="52" y1="72" x2="152" y2="72" {...stroke} />
+        <line x1="52" y1="100" x2="128" y2="100" {...stroke} />
+        <line x1="52" y1="28" x2="228" y2="168" {...strokeSoft} />
+        <circle cx="226" cy="58" r="30" {...stroke} />
+        <circle cx="226" cy="58" r="7" fill="#fff" />
+        <rect x="52" y="148" width="64" height="22" rx="11" {...stroke} />
       </svg>
     );
   }
 
   if (kind === 'portfolio') {
     return (
-      <svg viewBox="36 12 148 236" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
-        <rect x="48" y="24" width="124" height="212" rx="8" {...stroke} />
-        <rect x="64" y="42" width="92" height="72" rx="4" {...stroke} />
-        <line x1="64" y1="136" x2="156" y2="136" {...stroke} />
-        <line x1="64" y1="152" x2="132" y2="152" {...stroke} />
-        <line x1="64" y1="168" x2="120" y2="168" {...stroke} />
-        <rect x="64" y="196" width="92" height="10" rx="5" {...stroke} />
+      <svg viewBox="0 0 200 260" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+        <rect x="36" y="20" width="128" height="220" rx="10" {...stroke} />
+        <rect x="54" y="42" width="92" height="78" rx="5" {...stroke} />
+        <line x1="54" y1="144" x2="146" y2="144" {...stroke} />
+        <line x1="54" y1="164" x2="128" y2="164" {...stroke} />
+        <line x1="54" y1="184" x2="114" y2="184" {...strokeSoft} />
+        <rect x="54" y="208" width="92" height="12" rx="6" {...stroke} />
       </svg>
     );
   }
 
   if (kind === 'cover') {
     return (
-      <svg viewBox="12 12 236 196" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
-        <rect x="28" y="24" width="160" height="172" rx="6" {...stroke} />
-        <line x1="48" y1="24" x2="48" y2="196" {...stroke} />
-        <circle cx="188" cy="78" r="46" {...stroke} />
-        <circle cx="188" cy="78" r="18" {...stroke} />
-        <line x1="60" y1="150" x2="150" y2="150" {...stroke} />
-        <line x1="60" y1="168" x2="120" y2="168" {...stroke} />
+      <svg viewBox="0 0 260 220" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+        <rect x="28" y="24" width="150" height="172" rx="8" {...stroke} />
+        <line x1="52" y1="24" x2="52" y2="196" {...stroke} />
+        <circle cx="198" cy="82" r="44" {...stroke} />
+        <circle cx="198" cy="82" r="16" {...strokeSoft} />
+        <line x1="64" y1="148" x2="148" y2="148" {...stroke} />
+        <line x1="64" y1="168" x2="118" y2="168" {...strokeSoft} />
       </svg>
     );
   }
 
   if (kind === 'magazine') {
     return (
-      <svg viewBox="12 10 256 180" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
-        <rect x="20" y="18" width="240" height="164" rx="6" {...stroke} />
-        <line x1="110" y1="18" x2="110" y2="182" {...stroke} />
-        <rect x="34" y="34" width="60" height="14" rx="2" {...stroke} />
-        <rect x="34" y="60" width="60" height="58" rx="3" {...stroke} />
-        <line x1="34" y1="136" x2="94" y2="136" {...stroke} />
-        <line x1="34" y1="152" x2="80" y2="152" {...stroke} />
-        <rect x="128" y="34" width="116" height="18" rx="2" {...stroke} />
-        <line x1="128" y1="70" x2="244" y2="70" {...stroke} />
-        <line x1="128" y1="88" x2="244" y2="88" {...stroke} />
-        <line x1="128" y1="106" x2="220" y2="106" {...stroke} />
-        <rect x="128" y="130" width="116" height="36" rx="3" {...stroke} />
+      <svg viewBox="0 0 280 200" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+        <rect x="20" y="20" width="240" height="160" rx="8" {...stroke} />
+        <line x1="112" y1="20" x2="112" y2="180" {...stroke} />
+        <rect x="36" y="36" width="60" height="14" rx="3" {...stroke} />
+        <rect x="36" y="62" width="60" height="56" rx="4" {...stroke} />
+        <line x1="36" y1="136" x2="96" y2="136" {...stroke} />
+        <line x1="36" y1="154" x2="82" y2="154" {...strokeSoft} />
+        <rect x="130" y="36" width="112" height="16" rx="3" {...stroke} />
+        <line x1="130" y1="72" x2="242" y2="72" {...stroke} />
+        <line x1="130" y1="92" x2="242" y2="92" {...stroke} />
+        <line x1="130" y1="112" x2="214" y2="112" {...strokeSoft} />
+        <rect x="130" y="132" width="112" height="32" rx="4" {...stroke} />
       </svg>
     );
   }
 
   if (kind === 'catalog') {
     return (
-      <svg viewBox="16 12 248 176" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
-        <g>
-          <rect x="28" y="22" width="100" height="156" rx="6" {...stroke} />
-          <rect x="42" y="38" width="72" height="72" rx="3" {...stroke} />
-          <line x1="42" y1="128" x2="114" y2="128" {...stroke} />
-          <line x1="42" y1="146" x2="96" y2="146" {...stroke} />
-        </g>
-        <g>
-          <rect x="152" y="22" width="100" height="156" rx="6" {...stroke} />
-          <rect x="166" y="38" width="72" height="72" rx="3" {...stroke} />
-          <line x1="166" y1="128" x2="238" y2="128" {...stroke} />
-          <line x1="166" y1="146" x2="220" y2="146" {...stroke} />
-        </g>
+      <svg viewBox="0 0 280 200" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+        <rect x="28" y="24" width="100" height="152" rx="8" {...stroke} />
+        <rect x="42" y="40" width="72" height="70" rx="4" {...stroke} />
+        <line x1="42" y1="128" x2="114" y2="128" {...stroke} />
+        <line x1="42" y1="148" x2="96" y2="148" {...strokeSoft} />
+        <rect x="152" y="24" width="100" height="152" rx="8" {...stroke} />
+        <rect x="166" y="40" width="72" height="70" rx="4" {...stroke} />
+        <line x1="166" y1="128" x2="238" y2="128" {...stroke} />
+        <line x1="166" y1="148" x2="220" y2="148" {...strokeSoft} />
       </svg>
     );
   }
 
   // slide
   return (
-    <svg viewBox="8 18 284 150" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
-      <rect x="18" y="28" width="264" height="124" rx="8" {...stroke} />
-      <line x1="40" y1="58" x2="160" y2="58" {...stroke} />
-      <line x1="40" y1="78" x2="140" y2="78" {...stroke} />
-      <line x1="40" y1="98" x2="120" y2="98" {...stroke} />
-      <circle cx="230" cy="90" r="26" {...stroke} />
-      <path d="M222 78 L246 90 L222 102 Z" {...stroke} />
-      <line x1="18" y1="152" x2="282" y2="152" {...stroke} strokeOpacity={0.45} />
+    <svg viewBox="0 0 300 180" preserveAspectRatio="xMidYMid meet" className={svgClass} aria-hidden>
+      <rect x="20" y="28" width="260" height="124" rx="10" {...stroke} />
+      <line x1="44" y1="58" x2="168" y2="58" {...stroke} />
+      <line x1="44" y1="80" x2="148" y2="80" {...stroke} />
+      <line x1="44" y1="102" x2="128" y2="102" {...strokeSoft} />
+      <circle cx="232" cy="90" r="28" {...stroke} />
+      <path d="M222 76 L248 90 L222 104 Z" fill="#fff" stroke="none" />
+      <line x1="20" y1="162" x2="280" y2="162" {...strokeSoft} />
     </svg>
   );
 }
 
-/** Vector plate — kept modest so titles stay readable on narrow cards. */
+/** Vector plate — roomy enough to read structure; stroke scales with size. */
 function PosterScene({ kind }: { kind: VectorKind; featured?: boolean }) {
   return (
-    <div className="relative mx-auto aspect-square w-full drop-shadow-[0_0_18px_rgba(255,255,255,0.28)]">
+    <div className="relative mx-auto aspect-square w-full p-[6%] drop-shadow-[0_0_16px_rgba(255,255,255,0.22)]">
       <VectorArt kind={kind} />
     </div>
   );
@@ -532,15 +527,15 @@ export function TemplateCard({
           </span>
         </div>
 
-        {/* Mobile: small dedicated vector slot ABOVE the title. Desktop: larger mid field. */}
+        {/* Mobile: structured vector above title (room to breathe). Desktop: larger mid field. */}
         <div
           className={
             featured
-              ? 'relative z-10 mx-auto flex h-[5.25rem] w-[5.25rem] shrink-0 items-center justify-center sm:absolute sm:left-1/2 sm:top-[34%] sm:h-auto sm:w-[min(68%,26rem)] sm:-translate-x-1/2 sm:-translate-y-1/2'
-              : 'relative z-10 mx-auto flex h-[4.25rem] w-[4.25rem] shrink-0 items-center justify-center sm:absolute sm:left-1/2 sm:top-[32%] sm:h-auto sm:w-[min(72%,20rem)] sm:-translate-x-1/2 sm:-translate-y-1/2'
+              ? 'relative z-10 mx-auto flex h-[7.25rem] w-[7.25rem] shrink-0 items-center justify-center sm:absolute sm:left-1/2 sm:top-[34%] sm:h-auto sm:w-[min(68%,26rem)] sm:-translate-x-1/2 sm:-translate-y-1/2'
+              : 'relative z-10 mx-auto flex h-[5.75rem] w-[5.75rem] shrink-0 items-center justify-center sm:absolute sm:left-1/2 sm:top-[32%] sm:h-auto sm:w-[min(72%,20rem)] sm:-translate-x-1/2 sm:-translate-y-1/2'
           }
         >
-          <div className="pointer-events-none h-full w-full opacity-95 drop-shadow-[0_0_14px_rgba(255,255,255,0.28)] sm:opacity-100">
+          <div className="pointer-events-none h-full w-full opacity-95 sm:opacity-100">
             <PosterScene kind={visual.vector} />
           </div>
         </div>

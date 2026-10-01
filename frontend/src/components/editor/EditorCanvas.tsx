@@ -8,6 +8,7 @@ import {
   Transformer,
   Ellipse,
   Group,
+  Line,
 } from 'react-konva';
 import type Konva from 'konva';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -31,6 +32,66 @@ function useHtmlImage(src?: string) {
     img.src = src;
   }, [src]);
   return image;
+}
+
+type AlignGuides = { v: number[]; h: number[] };
+
+/** Snap a dragged box to artboard + sibling edges/centers; return guides to draw. */
+function snapBoxToGuides(
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  canvasW: number,
+  canvasH: number,
+  others: { x: number; y: number; w: number; h: number }[],
+  threshold = 7,
+): { x: number; y: number; guides: AlignGuides } {
+  const xTargets: number[] = [0, canvasW / 2, canvasW];
+  const yTargets: number[] = [0, canvasH / 2, canvasH];
+  for (const o of others) {
+    xTargets.push(o.x, o.x + o.w / 2, o.x + o.w);
+    yTargets.push(o.y, o.y + o.h / 2, o.y + o.h);
+  }
+
+  type Cand = { dist: number; value: number; guide: number };
+  let bestX: Cand | null = null;
+  let bestY: Cand | null = null;
+
+  const considerX = (edge: number, offset: number, guide: number) => {
+    const dist = Math.abs(edge - guide);
+    if (dist > threshold) return;
+    const value = guide - offset;
+    if (!bestX || dist < bestX.dist) bestX = { dist, value, guide };
+  };
+  const considerY = (edge: number, offset: number, guide: number) => {
+    const dist = Math.abs(edge - guide);
+    if (dist > threshold) return;
+    const value = guide - offset;
+    if (!bestY || dist < bestY.dist) bestY = { dist, value, guide };
+  };
+
+  for (const g of xTargets) {
+    considerX(x, 0, g); // left
+    considerX(x + w / 2, w / 2, g); // center
+    considerX(x + w, w, g); // right
+  }
+  for (const g of yTargets) {
+    considerY(y, 0, g);
+    considerY(y + h / 2, h / 2, g);
+    considerY(y + h, h, g);
+  }
+
+  const nx = bestX ? bestX.value : x;
+  const ny = bestY ? bestY.value : y;
+  return {
+    x: nx,
+    y: ny,
+    guides: {
+      v: bestX ? [bestX.guide] : [],
+      h: bestY ? [bestY.guide] : [],
+    },
+  };
 }
 
 function shapeFillProps(el: ShapeElement) {
@@ -87,6 +148,7 @@ export function EditorCanvas({
   const fittedDocKey = useRef('');
   const pinchRef = useRef<{ startDist: number; startZoom: number } | null>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
+  const [alignGuides, setAlignGuides] = useState<AlignGuides>({ v: [], h: [] });
   const [editing, setEditing] = useState<{
     id: string;
     text: string;
@@ -397,8 +459,10 @@ export function EditorCanvas({
     );
   };
 
-  const snapValue = (value: number, target: number, threshold = 8) =>
-    Math.abs(value - target) <= threshold ? target : value;
+  const siblingBoxes = (exceptId: string) =>
+    page.elements
+      .filter((e) => e.id !== exceptId)
+      .map((e) => ({ x: e.x, y: e.y, w: e.width, h: e.height }));
 
   const commitEdit = () => {
     if (!editing) return;
@@ -472,6 +536,7 @@ export function EditorCanvas({
             onMouseDown={(e) => {
               if (e.target === e.target.getStage()) {
                 select([]);
+                setAlignGuides({ v: [], h: [] });
                 if (editing) commitEdit();
               }
             }}
@@ -503,20 +568,44 @@ export function EditorCanvas({
                       select([id]);
                     }
                   }}
-                  onDragStart={() => pushHistory()}
+                  onDragStart={() => {
+                    pushHistory();
+                    setAlignGuides({ v: [], h: [] });
+                  }}
+                  onDragMove={(id, x, y, w, h, node) => {
+                    const snapped = snapBoxToGuides(
+                      x,
+                      y,
+                      w,
+                      h,
+                      documentModel.meta.width,
+                      documentModel.meta.height,
+                      siblingBoxes(id),
+                    );
+                    const target = page.elements.find((e) => e.id === id);
+                    if (target?.type === 'shape' && target.shape === 'ellipse') {
+                      node.position({
+                        x: snapped.x + w / 2,
+                        y: snapped.y + h / 2,
+                      });
+                    } else {
+                      node.position({ x: snapped.x, y: snapped.y });
+                    }
+                    setAlignGuides(snapped.guides);
+                  }}
                   onChange={(id, patch) => patchElement(id, patch, false)}
                   onSnapChange={(id, x, y, w, h) => {
-                    const cx = documentModel.meta.width / 2;
-                    const cy = documentModel.meta.height / 2;
-                    let sx = x;
-                    let sy = y;
-                    sx = snapValue(sx, 0);
-                    sx = snapValue(sx, cx - w / 2);
-                    sx = snapValue(sx, documentModel.meta.width - w);
-                    sy = snapValue(sy, 0);
-                    sy = snapValue(sy, cy - h / 2);
-                    sy = snapValue(sy, documentModel.meta.height - h);
-                    patchElement(id, { x: sx, y: sy }, false);
+                    const snapped = snapBoxToGuides(
+                      x,
+                      y,
+                      w,
+                      h,
+                      documentModel.meta.width,
+                      documentModel.meta.height,
+                      siblingBoxes(id),
+                    );
+                    setAlignGuides({ v: [], h: [] });
+                    patchElement(id, { x: snapped.x, y: snapped.y }, false);
                   }}
                   onEditText={(node) => {
                     if (node.type !== 'text' || node.locked) return;
@@ -570,6 +659,30 @@ export function EditorCanvas({
                 />
               ) : null}
             </Layer>
+            {(alignGuides.v.length > 0 || alignGuides.h.length > 0) && (
+              <Layer listening={false}>
+                {alignGuides.v.map((gx) => (
+                  <Line
+                    key={`v-${gx}`}
+                    points={[gx, 0, gx, documentModel.meta.height]}
+                    stroke="#B2FF3A"
+                    strokeWidth={1.5 / Math.max(zoom, 0.08)}
+                    dash={[6 / Math.max(zoom, 0.08), 4 / Math.max(zoom, 0.08)]}
+                    opacity={0.95}
+                  />
+                ))}
+                {alignGuides.h.map((gy) => (
+                  <Line
+                    key={`h-${gy}`}
+                    points={[0, gy, documentModel.meta.width, gy]}
+                    stroke="#B2FF3A"
+                    strokeWidth={1.5 / Math.max(zoom, 0.08)}
+                    dash={[6 / Math.max(zoom, 0.08), 4 / Math.max(zoom, 0.08)]}
+                    opacity={0.95}
+                  />
+                ))}
+              </Layer>
+            )}
           </Stage>
 
           {editing ? (
@@ -661,6 +774,7 @@ function CanvasNode({
   onSelect,
   onChange,
   onSnapChange,
+  onDragMove,
   onEditText,
   onDragStart,
   onTransformStart,
@@ -672,6 +786,14 @@ function CanvasNode({
   onSelect: (id: string, multi: boolean) => void;
   onChange: (id: string, patch: Partial<CanvasElement>) => void;
   onSnapChange: (id: string, x: number, y: number, w: number, h: number) => void;
+  onDragMove: (
+    id: string,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    node: Konva.Node,
+  ) => void;
   onEditText: (el: CanvasElement) => void;
   onDragStart: () => void;
   onTransformStart: () => void;
@@ -679,6 +801,7 @@ function CanvasNode({
   const nodeRef = useRef<Konva.Node | null>(null);
   const image = useHtmlImage(el.type === 'image' ? el.src : undefined);
   const fx = konvaEffectsProps(el.effects);
+  const isEllipse = el.type === 'shape' && el.shape === 'ellipse';
 
   useKonvaNodeEffects(nodeRef, el.effects, [
     el.width,
@@ -701,12 +824,19 @@ function CanvasNode({
     nodeRef.current = node;
   };
 
+  const reportDragMove = (node: Konva.Node) => {
+    const boxX = isEllipse ? node.x() - el.width / 2 : node.x();
+    const boxY = isEllipse ? node.y() - el.height / 2 : node.y();
+    onDragMove(el.id, boxX, boxY, el.width, el.height, node);
+  };
+
   const selectHandlers = {
     onClick: (e: Konva.KonvaEventObject<MouseEvent>) => onSelect(el.id, e.evt.shiftKey),
     onTap: () => onSelect(el.id, false),
     onDblClick: () => onEditText(el),
     onDblTap: () => onEditText(el),
     onDragStart: () => onDragStart(),
+    onDragMove: (e: Konva.KonvaEventObject<DragEvent>) => reportDragMove(e.target),
     onTransformStart: () => onTransformStart(),
   };
 
