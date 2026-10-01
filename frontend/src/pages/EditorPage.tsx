@@ -398,7 +398,9 @@ export function EditorPage() {
             onClick={() => void exportPdf()}
           >
             <Download size={isCompact ? 14 : 15} />
-            <span className="hidden md:inline">{exporting ? 'Exportando…' : 'PDF interactivo'}</span>
+            {!isCompact ? (
+              <span className="hidden md:inline">{exporting ? 'Exportando…' : 'PDF interactivo'}</span>
+            ) : null}
           </Button>
           <Button
             variant={project.published ? 'primary' : 'soft'}
@@ -407,7 +409,9 @@ export function EditorPage() {
             onClick={() => void publishProject()}
           >
             <Globe size={isCompact ? 14 : 15} />
-            <span className="hidden md:inline">{project.published ? 'Publicado' : 'Publicar'}</span>
+            {!isCompact ? (
+              <span className="hidden md:inline">{project.published ? 'Publicado' : 'Publicar'}</span>
+            ) : null}
           </Button>
           {project.published && !isCompact ? (
             <Link
