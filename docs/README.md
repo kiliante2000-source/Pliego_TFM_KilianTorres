@@ -9,6 +9,6 @@
 | [DATABASE.md](./DATABASE.md) | Persistencia, auth DB, migración a Postgres/MySQL |
 | [FAQ.md](./FAQ.md) | Decisiones de diseño y preguntas frecuentes / defensa |
 | [ROADMAP.md](./ROADMAP.md) | Fases implementadas y evolución |
-| [AGENTS.md](./AGENTS.md) | Contexto para agentes de código |
+| [DEV_CONTEXT.md](./DEV_CONTEXT.md) | Contexto mínimo de desarrollo |
 
 Arranque y deploy: ver [README](../README.md) en la raíz.

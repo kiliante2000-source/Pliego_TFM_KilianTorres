@@ -141,7 +141,7 @@ docker compose up --build
 - [Base de datos](docs/DATABASE.md) — SQLite / Postgres
 - [FAQ y decisiones](docs/FAQ.md) — porqués técnicos y de producto
 - [Roadmap](docs/ROADMAP.md) — fases y siguiente evolución
-- [Guía para agentes](docs/AGENTS.md)
+- [Contexto de desarrollo](docs/DEV_CONTEXT.md)
 
 ## Fases implementadas
 
