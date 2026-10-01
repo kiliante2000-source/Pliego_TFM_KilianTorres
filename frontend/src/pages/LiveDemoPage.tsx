@@ -487,10 +487,10 @@ export function LiveDemoPage() {
   }, []);
 
   useEffect(() => {
-    // Exact beat lengths: browser 1.3s · nunca… 1.5s · PLIEGO 1.8s
-    const t1 = window.setTimeout(() => setIntro(1), 1300);
-    const t2 = window.setTimeout(() => setIntro(2), 2800);
-    const t3 = window.setTimeout(() => setIntro(3), 4600);
+    // Beat lengths: browser 1.4s · nunca… 1.6s · PLIEGO 1.9s
+    const t1 = window.setTimeout(() => setIntro(1), 1400);
+    const t2 = window.setTimeout(() => setIntro(2), 3000);
+    const t3 = window.setTimeout(() => setIntro(3), 4900);
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);

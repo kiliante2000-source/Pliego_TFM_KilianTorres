@@ -601,8 +601,8 @@ export function TemplateCard({
     >
       <div className="absolute inset-0 overflow-hidden">
         <KineticField accent={visual.accent} soft={visual.soft} />
-        {/* Slightly higher than before so white strokes clear the title */}
-        <div className="absolute inset-x-0 top-[4%] bottom-[44%] overflow-hidden">
+        {/* Slightly higher so white strokes clear the title */}
+        <div className="absolute inset-x-0 top-[2%] bottom-[47%] overflow-hidden">
           <PosterScene kind={visual.vector} />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
