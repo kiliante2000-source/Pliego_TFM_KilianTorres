@@ -2,6 +2,8 @@
 
 Plataforma web full stack para creación, gestión y publicación de proyectos editoriales digitales.
 
+Ver también: [PRODUCT.md](./PRODUCT.md) · [DATABASE.md](./DATABASE.md) · [FAQ.md](./FAQ.md) · [ROADMAP.md](./ROADMAP.md)
+
 ## 1. Visión de producto
 
 Producto SaaS situado entre InDesign (maquetación profesional) y Canva (simplicidad visual). El usuario gestiona el ciclo de vida completo: documento → diseño → versiones → exportación PDF → publicación pública.

@@ -134,10 +134,14 @@ docker compose up --build
 
 ## Documentación
 
-- [**Dossier completo + preguntas de defensa**](docs/PLIEGO_DOSSIER.md) ([HTML imprimible](docs/PLIEGO_DOSSIER.html) · [PDF](docs/PLIEGO_DOSSIER.pdf))
-- [Arquitectura](docs/ARCHITECTURE.md)
-- [Base de datos](docs/DATABASE.md)
-- [Roadmap](docs/ROADMAP.md)
+Índice: [docs/README.md](docs/README.md)
+
+- [Producto](docs/PRODUCT.md) — alcance, plantillas, identidad, deploy
+- [Arquitectura](docs/ARCHITECTURE.md) — canvas, auth, PDF, capas
+- [Base de datos](docs/DATABASE.md) — SQLite / Postgres
+- [FAQ y decisiones](docs/FAQ.md) — porqués técnicos y de producto
+- [Roadmap](docs/ROADMAP.md) — fases y siguiente evolución
+- [Guía para agentes](docs/AGENTS.md)
 
 ## Fases implementadas
 
