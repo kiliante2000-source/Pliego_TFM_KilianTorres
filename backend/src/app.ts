@@ -28,17 +28,24 @@ export function createApp() {
   app.set('trust proxy', 1);
   app.use(
     helmet({
-      // SPA + Google Fonts + inline styles from Vite build
+      // SPA + Google Fonts + inline styles from Vite build.
+      // frameguard off: the portfolio embeds this app in an iframe.
       contentSecurityPolicy: false,
       crossOriginResourcePolicy: { policy: 'cross-origin' },
       frameguard: false,
     }),
   );
   app.use((_req, res, next) => {
-    res.setHeader(
-      'Content-Security-Policy',
-      "frame-ancestors 'self' https://kiliante2000-source.github.io http://127.0.0.1:4174 http://localhost:4174",
-    );
+    const writeHead = res.writeHead.bind(res);
+    res.writeHead = ((...args: unknown[]) => {
+      res.removeHeader('X-Frame-Options');
+      res.setHeader(
+        'Content-Security-Policy',
+        "frame-ancestors 'self' https://kiliante2000-source.github.io http://127.0.0.1:4174 http://localhost:4174",
+      );
+      return writeHead(...(args as Parameters<typeof res.writeHead>));
+    }) as typeof res.writeHead;
+    res.removeHeader('X-Frame-Options');
     next();
   });
   const corsOrigins = new Set(

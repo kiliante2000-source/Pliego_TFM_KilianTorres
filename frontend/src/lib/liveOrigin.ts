@@ -19,6 +19,5 @@ export function openLiveStudio(path: string) {
     window.parent.postMessage({ type: 'pliego-embed', action: 'open', path: next }, '*');
     return true;
   }
-  window.location.href = href;
-  return true;
+  return false;
 }
