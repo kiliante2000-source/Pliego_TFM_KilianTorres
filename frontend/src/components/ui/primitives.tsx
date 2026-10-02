@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
-import { liveHref } from '../../lib/liveOrigin';
 
 /**
  * Brand lockup helpers.
@@ -179,14 +178,6 @@ export function ButtonLink({
 }: React.ComponentProps<typeof Link> & {
   variant?: ButtonVariant;
 }) {
-  const href = typeof to === 'string' ? liveHref(to) : null;
-  if (href) {
-    return (
-      <a href={href} target="_top" rel="noopener" className={buttonClassName(variant, className)}>
-        {children}
-      </a>
-    );
-  }
   return (
     <Link to={to} className={buttonClassName(variant, className)} {...props}>
       {children}

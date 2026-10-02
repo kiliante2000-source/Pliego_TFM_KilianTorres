@@ -16,7 +16,7 @@ import {
 import { CursorGlow, Magnetic, Marquee, Reveal } from '../components/creative/Motion';
 import { useAuthStore } from '../stores/authStore';
 import { cn } from '../utils/cn';
-import { liveHref, openLiveStudio } from '../lib/liveOrigin';
+import { openLiveStudio } from '../lib/liveOrigin';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -154,13 +154,12 @@ export function LandingPage() {
               </Magnetic>
             ) : (
               <>
-                <a
-                  href={liveHref('/login') ?? '/login'}
-                  {...(liveHref('/login') ? { target: '_top', rel: 'noopener' } : {})}
+                <Link
+                  to="/login"
                   className="rounded-full px-2.5 py-2 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-paper/85 no-underline transition hover:bg-white/5 hover:text-paper sm:px-4 sm:text-base sm:tracking-[0.14em]"
                 >
                   Entrar
-                </a>
+                </Link>
                 <Magnetic>
                   <ButtonLink to="/register" className="px-3 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base">
                     <span className="sm:hidden">Crear</span>
@@ -503,20 +502,13 @@ export function LoginPage() {
   const [email, setEmail] = useState('demo@pliego.app');
   const [password, setPassword] = useState('demo1234');
 
-  if (openLiveStudio('/login')) {
-    return (
-      <div className="grid min-h-svh place-items-center bg-ink text-paper/70">
-        Abriendo el estudio…
-      </div>
-    );
-  }
-
   return (
     <AuthShell title="Entrar al estudio" subtitle="Continúa tus proyectos editoriales.">
       <form
         className="space-y-4"
         onSubmit={async (e) => {
           e.preventDefault();
+          if (openLiveStudio('/login')) return;
           try {
             await login(email.trim().toLowerCase(), password);
             navigate('/app?tab=projects#studio-hello');
@@ -555,13 +547,9 @@ export function LoginPage() {
       </form>
       <p className="mt-7 text-sm text-paper/70">
         ¿No tienes cuenta?{' '}
-        <a
-          href={liveHref('/register') ?? '/register'}
-          {...(liveHref('/register') ? { target: '_top', rel: 'noopener' } : {})}
-          className="font-semibold text-neon no-underline hover:underline"
-        >
+        <Link to="/register" className="font-semibold text-neon no-underline hover:underline">
           Crear cuenta
-        </a>
+        </Link>
       </p>
     </AuthShell>
   );
@@ -578,14 +566,6 @@ export function RegisterPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
-
-  if (openLiveStudio('/register')) {
-    return (
-      <div className="grid min-h-svh place-items-center bg-ink text-paper/70">
-        Abriendo el estudio…
-      </div>
-    );
-  }
 
   const passwordHint =
     password.length === 0
@@ -610,6 +590,7 @@ export function RegisterPage() {
             setLocalError('La contraseña debe tener al menos 8 caracteres, una letra y un número');
             return;
           }
+          if (openLiveStudio('/register')) return;
           try {
             await register(name.trim(), email.trim().toLowerCase(), password, confirmPassword);
             navigate('/app?tab=projects#studio-hello');
