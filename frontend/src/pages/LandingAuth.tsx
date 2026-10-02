@@ -16,7 +16,6 @@ import {
 import { CursorGlow, Magnetic, Marquee, Reveal } from '../components/creative/Motion';
 import { useAuthStore } from '../stores/authStore';
 import { cn } from '../utils/cn';
-import { openLiveStudio } from '../lib/liveOrigin';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -508,7 +507,6 @@ export function LoginPage() {
         className="space-y-4"
         onSubmit={async (e) => {
           e.preventDefault();
-          if (openLiveStudio('/login')) return;
           try {
             await login(email.trim().toLowerCase(), password);
             navigate('/app?tab=projects#studio-hello');
@@ -590,7 +588,6 @@ export function RegisterPage() {
             setLocalError('La contraseña debe tener al menos 8 caracteres, una letra y un número');
             return;
           }
-          if (openLiveStudio('/register')) return;
           try {
             await register(name.trim(), email.trim().toLowerCase(), password, confirmPassword);
             navigate('/app?tab=projects#studio-hello');
