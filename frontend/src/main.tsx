@@ -2,6 +2,9 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { installPortfolioStudio } from './lib/portfolioStudio';
+
+installPortfolioStudio();
 
 try {
   const raw = localStorage.getItem('pliego-studio-prefs-v1');
