@@ -1,0 +1,220 @@
+{
+  "generatedAt": "2026-10-02T18:27:26.158Z",
+  "baseUrl": "http://127.0.0.1:45321",
+  "methodology": "Evaluación por escenarios con perfiles (personas). Cada persona ejecuta tareas guiadas sobre la app real; se registran éxito/fracaso, tiempo y fricciones observadas.",
+  "personas": [
+    {
+      "id": "ana",
+      "name": "Ana Ruiz",
+      "role": "Diseñadora freelance",
+      "goal": "Abrir una plantilla, editar en el estudio y exportar PDF interactivo",
+      "device": "Desktop 1440×900",
+      "tasks": [
+        {
+          "id": "landing",
+          "label": "Descubre PLIEGO en la landing",
+          "status": "pass",
+          "ms": 1919,
+          "notes": [
+            "Landing carga con identidad de marca reconocible"
+          ],
+          "screenshots": [
+            "capturas/ana-01-landing.png"
+          ]
+        },
+        {
+          "id": "login",
+          "label": "Inicia sesión con cuenta demo",
+          "status": "pass",
+          "ms": 2142,
+          "notes": [
+            "Login → /app sin fricción"
+          ],
+          "screenshots": [
+            "capturas/ana-02-studio.png"
+          ]
+        },
+        {
+          "id": "templates",
+          "label": "Explora la colección de plantillas",
+          "status": "pass",
+          "ms": 1806,
+          "notes": [
+            "6 plantillas visibles con vectores animados"
+          ],
+          "screenshots": [
+            "capturas/ana-03-plantillas.png"
+          ]
+        },
+        {
+          "id": "open-template",
+          "label": "Abre plantilla Manifiesto en el editor",
+          "status": "pass",
+          "ms": 1568,
+          "notes": [
+            "Editor abierto: http://127.0.0.1:45321/app/editor/cmuraphm90005pdg9x700wu58"
+          ],
+          "screenshots": [
+            "capturas/ana-04-editor.png"
+          ]
+        },
+        {
+          "id": "export-pdf",
+          "label": "Exporta PDF interactivo",
+          "status": "pass",
+          "ms": 2979,
+          "notes": [
+            "Descarga iniciada: Manifiesto_digital.pdf"
+          ],
+          "screenshots": [
+            "capturas/ana-05-pdf.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "luis",
+      "name": "Luis Ortega",
+      "role": "Estudiante de diseño",
+      "goal": "Ver la demo viva, registrarse y crear un lienzo en blanco",
+      "device": "Desktop 1280×800",
+      "tasks": [
+        {
+          "id": "demo",
+          "label": "Recorre la demo viva",
+          "status": "pass",
+          "ms": 1905,
+          "notes": [
+            "Demo viva accesible sin login"
+          ],
+          "screenshots": [
+            "capturas/luis-01-demo.png"
+          ]
+        },
+        {
+          "id": "register",
+          "label": "Crea una cuenta nueva",
+          "status": "pass",
+          "ms": 1592,
+          "notes": [
+            "Cuenta creada: luis.eval.1790965656758@pliego.test"
+          ],
+          "screenshots": [
+            "capturas/luis-02-registro.png"
+          ]
+        },
+        {
+          "id": "blank",
+          "label": "Abre un lienzo en blanco (Story)",
+          "status": "pass",
+          "ms": 2468,
+          "notes": [
+            "Lienzo Story abierto desde portal en blanco"
+          ],
+          "screenshots": [
+            "capturas/luis-03-lienzo.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "marta",
+      "name": "Marta Gil",
+      "role": "Community / social media",
+      "goal": "Usar PLIEGO en móvil: plantillas legibles y editor compacto",
+      "device": "iPhone 13 (390×844)",
+      "tasks": [
+        {
+          "id": "mobile-login",
+          "label": "Entra al estudio desde el móvil",
+          "status": "pass",
+          "ms": 2864,
+          "notes": [
+            "Studio usable en viewport móvil"
+          ],
+          "screenshots": [
+            "capturas/marta-01-studio-mobile.png"
+          ]
+        },
+        {
+          "id": "mobile-templates",
+          "label": "Revisa plantillas en móvil",
+          "status": "pass",
+          "ms": 3086,
+          "notes": [
+            "Animación vector: pliego-vector-float"
+          ],
+          "screenshots": [
+            "capturas/marta-02-plantillas-mobile.png"
+          ]
+        },
+        {
+          "id": "mobile-editor",
+          "label": "Abre plantilla en editor compacto",
+          "status": "pass",
+          "ms": 1698,
+          "notes": [
+            "Editor compacto en 390px"
+          ],
+          "screenshots": [
+            "capturas/marta-03-editor-mobile.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "carlos",
+      "name": "Carlos Méndez",
+      "role": "Editor de marca cultural",
+      "goal": "Publicar un proyecto y verificar la vista pública",
+      "device": "Desktop 1365×900",
+      "tasks": [
+        {
+          "id": "open-project",
+          "label": "Abre un proyecto existente del estudio",
+          "status": "pass",
+          "ms": 4225,
+          "notes": [
+            "Proyecto abierto desde listado"
+          ],
+          "screenshots": [
+            "capturas/carlos-01-proyectos.png",
+            "capturas/carlos-02-editor.png"
+          ]
+        },
+        {
+          "id": "publish",
+          "label": "Publica o confirma publicación",
+          "status": "pass",
+          "ms": 1764,
+          "notes": [
+            "Estado publicado visible"
+          ],
+          "screenshots": [
+            "capturas/carlos-03-publicado.png"
+          ]
+        },
+        {
+          "id": "public-view",
+          "label": "Visita la URL pública /p/:slug",
+          "status": "pass",
+          "ms": 1918,
+          "notes": [
+            "Vista pública OK: /p/manifiesto-digital-kjmle3"
+          ],
+          "screenshots": [
+            "capturas/carlos-04-publico.png"
+          ]
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "personas": 4,
+    "tasks": 14,
+    "pass": 14,
+    "fail": 0,
+    "passRate": 100,
+    "totalMs": 31934
+  }
+}

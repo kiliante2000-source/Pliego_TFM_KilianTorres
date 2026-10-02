@@ -10,5 +10,6 @@
 | [FAQ.md](./FAQ.md) | Decisiones de diseño y preguntas frecuentes / defensa |
 | [ROADMAP.md](./ROADMAP.md) | Fases implementadas y evolución |
 | [DEV_CONTEXT.md](./DEV_CONTEXT.md) | Contexto mínimo de desarrollo |
+| [evaluacion/](./evaluacion/) | E2E por personas, capturas y PDF para la memoria TFM |
 
 Arranque y deploy: ver [README](../README.md) en la raíz.

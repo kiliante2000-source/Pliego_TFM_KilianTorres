@@ -128,7 +128,7 @@ Desde el código y la evolución reciente, los focos duros han sido:
 - Postgres + storage S3 desde el día 1 del deploy.  
 - Cola de exportación y límites.  
 - Migraciones de `document.version` desde el primer cambio de schema.  
-- E2E Playwright en rutas críticas (login → editar → publish → pdf).  
+- Más cobertura E2E en CI (ya hay batería por personas en `docs/evaluacion/` + `scripts/persona-e2e-eval.mjs`).  
 - Conflictos multi-pestaña mínimos (`updatedAt`).  
 - A11y del editor (lista de capas teclado-first) en paralelo al canvas.
 

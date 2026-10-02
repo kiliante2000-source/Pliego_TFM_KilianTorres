@@ -142,6 +142,7 @@ docker compose up --build
 - [FAQ y decisiones](docs/FAQ.md) — porqués técnicos y de producto
 - [Roadmap](docs/ROADMAP.md) — fases y siguiente evolución
 - [Contexto de desarrollo](docs/DEV_CONTEXT.md)
+- [Evaluación E2E / usuarios](docs/evaluacion/) — personas, capturas y [PDF para la memoria](docs/evaluacion/PLIEGO_E2E_EVALUACION.pdf)
 
 ## Fases implementadas
 
@@ -153,6 +154,7 @@ docker compose up --build
 6. Exportación **PDF interactivo** (CTAs con GoTo entre páginas y URI externas vía pdf-lib)  
 7. Publicación pública `/p/:slug`  
 8. Tests + CI  
+9. Evaluación E2E por escenarios de usuario (anexo memoria)  
 
 ## Licencia
 
