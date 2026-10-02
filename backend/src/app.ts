@@ -31,8 +31,16 @@ export function createApp() {
       // SPA + Google Fonts + inline styles from Vite build
       contentSecurityPolicy: false,
       crossOriginResourcePolicy: { policy: 'cross-origin' },
+      frameguard: false,
     }),
   );
+  app.use((_req, res, next) => {
+    res.setHeader(
+      'Content-Security-Policy',
+      "frame-ancestors 'self' https://kiliante2000-source.github.io http://127.0.0.1:4174 http://localhost:4174",
+    );
+    next();
+  });
   const corsOrigins = new Set(
     [
       ...env.CORS_ORIGIN.split(',').map((s) => s.trim()),

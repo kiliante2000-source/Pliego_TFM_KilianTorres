@@ -8,6 +8,7 @@ import { EditorPage } from './pages/EditorPage';
 import { PublicProjectPage } from './pages/PublicProjectPage';
 import { LiveDemoPage } from './pages/LiveDemoPage';
 import { AppShell } from './components/AppShell';
+import { PortfolioBackBar } from './components/PortfolioBackBar';
 
 export default function App() {
   const bootstrap = useAuthStore((s) => s.bootstrap);
@@ -18,6 +19,7 @@ export default function App() {
 
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
+      <PortfolioBackBar />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />

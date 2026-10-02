@@ -9,6 +9,7 @@ services:
     runtime: node
     plan: free
     region: oregon
+    autoDeploy: true
     # --include=dev: Render injects NODE_ENV=production which would skip vite/tsc
     buildCommand: npm ci --include=dev && npm run build:web
     startCommand: npm run start:web
