@@ -30,8 +30,13 @@ export function PliegoMark({
   size?: number;
   variant?: 'default' | 'inverse';
 }) {
+  const base = import.meta.env.BASE_URL.endsWith('/')
+    ? import.meta.env.BASE_URL
+    : `${import.meta.env.BASE_URL}/`;
   const src =
-    variant === 'inverse' ? '/brand/pliego-mark-inverse.svg' : '/brand/pliego-mark.svg';
+    variant === 'inverse'
+      ? `${base}brand/pliego-mark-inverse.svg`
+      : `${base}brand/pliego-mark.svg`;
   return (
     <img
       src={src}

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { api } from '../services/api';
+import { api, setStoredToken } from '../services/api';
 import type { User } from '../types/document';
 
 type AuthState = {
@@ -40,7 +40,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (email, password) => {
     set({ loading: true, error: null });
     try {
-      const data = await api.post<{ user: User }>('/api/auth/login', { email, password });
+      const data = await api.post<{ user: User; token?: string }>('/api/auth/login', { email, password });
+      if (data.token) setStoredToken(data.token);
       set({ user: data.user, loading: false });
     } catch (e) {
       set({
@@ -54,12 +55,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   register: async (name, email, password, confirmPassword) => {
     set({ loading: true, error: null });
     try {
-      const data = await api.post<{ user: User }>('/api/auth/register', {
+      const data = await api.post<{ user: User; token?: string }>('/api/auth/register', {
         name,
         email,
         password,
         ...(confirmPassword !== undefined ? { confirmPassword } : {}),
       });
+      if (data.token) setStoredToken(data.token);
       set({ user: data.user, loading: false });
     } catch (e) {
       set({
@@ -77,7 +79,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: async () => {
-    await api.post('/api/auth/logout');
-    set({ user: null });
+    try {
+      await api.post('/api/auth/logout');
+    } finally {
+      setStoredToken(null);
+      set({ user: null });
+    }
   },
 }));

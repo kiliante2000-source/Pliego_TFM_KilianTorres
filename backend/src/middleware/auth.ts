@@ -7,9 +7,18 @@ export type AuthedRequest = Request & {
   user?: JwtPayload;
 };
 
+function readAccessToken(req: Request): string | undefined {
+  const header = req.headers.authorization;
+  if (typeof header === 'string' && header.startsWith('Bearer ')) {
+    return header.slice(7).trim() || undefined;
+  }
+  const cookie = req.cookies?.[env.COOKIE_NAME];
+  return typeof cookie === 'string' && cookie ? cookie : undefined;
+}
+
 export function requireAuth(req: AuthedRequest, _res: Response, next: NextFunction) {
   try {
-    const token = req.cookies?.[env.COOKIE_NAME] as string | undefined;
+    const token = readAccessToken(req);
     if (!token) {
       throw new AppError(401, 'No autenticado', 'UNAUTHORIZED');
     }
@@ -22,7 +31,7 @@ export function requireAuth(req: AuthedRequest, _res: Response, next: NextFuncti
 
 export function optionalAuth(req: AuthedRequest, _res: Response, next: NextFunction) {
   try {
-    const token = req.cookies?.[env.COOKIE_NAME] as string | undefined;
+    const token = readAccessToken(req);
     if (token) {
       req.user = verifyToken(token);
     }

@@ -33,10 +33,28 @@ export function createApp() {
       crossOriginResourcePolicy: { policy: 'cross-origin' },
     }),
   );
+  const corsOrigins = new Set(
+    [
+      ...env.CORS_ORIGIN.split(',').map((s) => s.trim()),
+      'http://127.0.0.1:45321',
+      'http://localhost:45321',
+      'http://127.0.0.1:4174',
+      'http://localhost:4174',
+      'https://kiliante2000-source.github.io',
+    ].filter(Boolean),
+  );
+
   app.use(
     cors({
-      origin: env.CORS_ORIGIN.split(',').map((s) => s.trim()),
+      origin(origin, callback) {
+        if (!origin || corsOrigins.has(origin)) {
+          callback(null, true);
+          return;
+        }
+        callback(null, false);
+      },
       credentials: true,
+      allowedHeaders: ['Content-Type', 'Authorization'],
     }),
   );
   app.use(express.json({ limit: '4mb' }));

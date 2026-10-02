@@ -26,7 +26,7 @@ export class AuthController {
     });
     const token = signToken({ sub: user.id, email: user.email, role: user.role });
     setAuthCookie(res, token);
-    res.status(201).json({ user });
+    res.status(201).json({ user, token });
   };
 
   login = async (req: AuthedRequest, res: Response) => {
@@ -34,7 +34,7 @@ export class AuthController {
     const user = await userRepository.verifyCredentials(body.email, body.password);
     const token = signToken({ sub: user.id, email: user.email, role: user.role });
     setAuthCookie(res, token);
-    res.json({ user });
+    res.json({ user, token });
   };
 
   logout = async (_req: AuthedRequest, res: Response) => {
