@@ -114,6 +114,9 @@ Modelo plausible: freemium (1–3 proyectos) + Pro (export PDF, custom domain, a
 Siguiente infra: Postgres + S3 + cola PDF + auth durable.  
 Go-to-market: portfolio cases publicados con PLIEGO, partnerships con escuelas de diseño, open-core demo.
 
+### ¿Hay pruebas E2E y evaluación con usuarios?
+Sí. En `docs/evaluacion/` hay una batería **E2E por escenarios** con 4 personas (diseñadora, estudiante, móvil, editor de marca), capturas funcionales y el PDF `PLIEGO_E2E_EVALUACION.pdf` para anexar a la memoria. Se reproduce con `node scripts/persona-e2e-eval.mjs` y `node scripts/build-eval-pdf.mjs`. Es evaluación task-based reproducible sobre la app real; un estudio de laboratorio con N voluntarios sería el siguiente paso.
+
 ### ¿Las 400 horas son reales o estimadas?
 **En el repositorio no hay registro de horas.** No digas “400” si no las has medido. Usa: diario de trabajo, commits, fases del README (1–8), y diferencia *estimación de planificación* vs *tiempo real*. Si tu memoria del máster pedía 400 h, aclara si es carga ECTS/estimada.
 
