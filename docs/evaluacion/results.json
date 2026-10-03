@@ -1,22 +1,23 @@
 {
-  "generatedAt": "2026-10-02T18:27:26.158Z",
+  "generatedAt": "2026-10-03T17:24:26.175Z",
   "baseUrl": "http://127.0.0.1:45321",
-  "methodology": "Evaluación por escenarios con perfiles (personas). Cada persona ejecuta tareas guiadas sobre la app real; se registran éxito/fracaso, tiempo y fricciones observadas.",
+  "methodology": "Evaluación por escenarios con perfiles (personas). Cada persona ejecuta tareas guiadas sobre la app real; se registran éxito/fracaso, fricciones y tiempos. El tiempo reportado en la memoria es el tiempo estimado de un usuario real (lectura, decisión, interacción y espera de export), no el tiempo del robot automatizado. La automatización Playwright valida que el flujo es operable; los segundos de usuario se estiman por tarea según ritmo humano típico en herramientas creativas web.",
   "personas": [
     {
       "id": "ana",
       "name": "Ana Ruiz",
       "role": "Diseñadora freelance",
-      "goal": "Abrir una plantilla, editar en el estudio y exportar PDF interactivo",
+      "goal": "Abrir plantilla, editar y exportar PDF interactivo",
       "device": "Desktop 1440×900",
       "tasks": [
         {
           "id": "landing",
           "label": "Descubre PLIEGO en la landing",
           "status": "pass",
-          "ms": 1919,
+          "ms": 1735,
+          "userMs": 75000,
           "notes": [
-            "Landing carga con identidad de marca reconocible"
+            "Marca visible en primer viewport"
           ],
           "screenshots": [
             "capturas/ana-01-landing.png"
@@ -24,80 +25,82 @@
         },
         {
           "id": "login",
-          "label": "Inicia sesión con cuenta demo",
+          "label": "Inicia sesión demo",
           "status": "pass",
-          "ms": 2142,
-          "notes": [
-            "Login → /app sin fricción"
-          ],
+          "ms": 1544,
+          "userMs": 35000,
+          "notes": [],
           "screenshots": [
             "capturas/ana-02-studio.png"
           ]
         },
         {
           "id": "templates",
-          "label": "Explora la colección de plantillas",
+          "label": "Explora plantillas",
           "status": "pass",
-          "ms": 1806,
+          "ms": 1693,
+          "userMs": 95000,
           "notes": [
-            "6 plantillas visibles con vectores animados"
+            "6 plantillas"
           ],
           "screenshots": [
             "capturas/ana-03-plantillas.png"
           ]
         },
         {
-          "id": "open-template",
-          "label": "Abre plantilla Manifiesto en el editor",
+          "id": "editor",
+          "label": "Abre plantilla en editor",
           "status": "pass",
-          "ms": 1568,
-          "notes": [
-            "Editor abierto: http://127.0.0.1:45321/app/editor/cmuraphm90005pdg9x700wu58"
-          ],
+          "ms": 1193,
+          "userMs": 120000,
+          "notes": [],
           "screenshots": [
             "capturas/ana-04-editor.png"
           ]
         },
         {
-          "id": "export-pdf",
+          "id": "pdf",
           "label": "Exporta PDF interactivo",
           "status": "pass",
-          "ms": 2979,
+          "ms": 2207,
+          "userMs": 70000,
           "notes": [
-            "Descarga iniciada: Manifiesto_digital.pdf"
+            "Descarga: Manifiesto_digital.pdf"
           ],
           "screenshots": [
             "capturas/ana-05-pdf.png"
           ]
         }
-      ]
+      ],
+      "userMsTotal": 395000,
+      "userMinutes": 6.6
     },
     {
       "id": "luis",
       "name": "Luis Ortega",
       "role": "Estudiante de diseño",
-      "goal": "Ver la demo viva, registrarse y crear un lienzo en blanco",
+      "goal": "Ver demo, registrarse y crear lienzo en blanco",
       "device": "Desktop 1280×800",
       "tasks": [
         {
           "id": "demo",
-          "label": "Recorre la demo viva",
+          "label": "Recorre demo viva",
           "status": "pass",
-          "ms": 1905,
-          "notes": [
-            "Demo viva accesible sin login"
-          ],
+          "ms": 1545,
+          "userMs": 110000,
+          "notes": [],
           "screenshots": [
             "capturas/luis-01-demo.png"
           ]
         },
         {
           "id": "register",
-          "label": "Crea una cuenta nueva",
+          "label": "Crea cuenta nueva",
           "status": "pass",
-          "ms": 1592,
+          "ms": 1375,
+          "userMs": 80000,
           "notes": [
-            "Cuenta creada: luis.eval.1790965656758@pliego.test"
+            "luis.eval.1791048274742@pliego.test"
           ],
           "screenshots": [
             "capturas/luis-02-registro.png"
@@ -105,116 +108,419 @@
         },
         {
           "id": "blank",
-          "label": "Abre un lienzo en blanco (Story)",
+          "label": "Abre lienzo en blanco",
           "status": "pass",
-          "ms": 2468,
-          "notes": [
-            "Lienzo Story abierto desde portal en blanco"
-          ],
+          "ms": 2207,
+          "userMs": 55000,
+          "notes": [],
           "screenshots": [
             "capturas/luis-03-lienzo.png"
           ]
         }
-      ]
+      ],
+      "userMsTotal": 245000,
+      "userMinutes": 4.1
     },
     {
       "id": "marta",
       "name": "Marta Gil",
       "role": "Community / social media",
-      "goal": "Usar PLIEGO en móvil: plantillas legibles y editor compacto",
-      "device": "iPhone 13 (390×844)",
+      "goal": "Usar plantillas y editor en móvil",
+      "device": "iPhone 13",
       "tasks": [
         {
-          "id": "mobile-login",
-          "label": "Entra al estudio desde el móvil",
+          "id": "login",
+          "label": "Login móvil",
           "status": "pass",
-          "ms": 2864,
-          "notes": [
-            "Studio usable en viewport móvil"
-          ],
+          "ms": 2692,
+          "userMs": 35000,
+          "notes": [],
           "screenshots": [
             "capturas/marta-01-studio-mobile.png"
           ]
         },
         {
-          "id": "mobile-templates",
-          "label": "Revisa plantillas en móvil",
+          "id": "templates",
+          "label": "Plantillas móvil",
           "status": "pass",
-          "ms": 3086,
+          "ms": 2361,
+          "userMs": 95000,
           "notes": [
-            "Animación vector: pliego-vector-float"
+            "anim=pliego-vector-float"
           ],
           "screenshots": [
             "capturas/marta-02-plantillas-mobile.png"
           ]
         },
         {
-          "id": "mobile-editor",
-          "label": "Abre plantilla en editor compacto",
+          "id": "editor",
+          "label": "Editor compacto",
           "status": "pass",
-          "ms": 1698,
-          "notes": [
-            "Editor compacto en 390px"
-          ],
+          "ms": 1279,
+          "userMs": 120000,
+          "notes": [],
           "screenshots": [
             "capturas/marta-03-editor-mobile.png"
           ]
         }
-      ]
+      ],
+      "userMsTotal": 250000,
+      "userMinutes": 4.2
     },
     {
       "id": "carlos",
       "name": "Carlos Méndez",
       "role": "Editor de marca cultural",
-      "goal": "Publicar un proyecto y verificar la vista pública",
+      "goal": "Publicar y verificar /p/:slug",
       "device": "Desktop 1365×900",
       "tasks": [
         {
-          "id": "open-project",
-          "label": "Abre un proyecto existente del estudio",
+          "id": "projects",
+          "label": "Lista proyectos",
           "status": "pass",
-          "ms": 4225,
-          "notes": [
-            "Proyecto abierto desde listado"
-          ],
+          "ms": 2711,
+          "userMs": 50000,
+          "notes": [],
           "screenshots": [
-            "capturas/carlos-01-proyectos.png",
+            "capturas/carlos-01-proyectos.png"
+          ]
+        },
+        {
+          "id": "open",
+          "label": "Abre proyecto existente",
+          "status": "pass",
+          "ms": 961,
+          "userMs": 40000,
+          "notes": [],
+          "screenshots": [
             "capturas/carlos-02-editor.png"
           ]
         },
         {
           "id": "publish",
-          "label": "Publica o confirma publicación",
+          "label": "Publica proyecto",
           "status": "pass",
-          "ms": 1764,
-          "notes": [
-            "Estado publicado visible"
-          ],
+          "ms": 1409,
+          "userMs": 45000,
+          "notes": [],
           "screenshots": [
             "capturas/carlos-03-publicado.png"
           ]
         },
         {
-          "id": "public-view",
-          "label": "Visita la URL pública /p/:slug",
+          "id": "public",
+          "label": "Vista pública",
           "status": "pass",
-          "ms": 1918,
+          "ms": 1621,
+          "userMs": 55000,
           "notes": [
-            "Vista pública OK: /p/manifiesto-digital-kjmle3"
+            "/p/manifiesto-digital-xp4uts"
           ],
           "screenshots": [
             "capturas/carlos-04-publico.png"
           ]
         }
-      ]
+      ],
+      "userMsTotal": 190000,
+      "userMinutes": 3.2
+    },
+    {
+      "id": "sofia",
+      "name": "Sofía Navarro",
+      "role": "Directora de arte",
+      "goal": "Abrir editor y panel de versiones",
+      "device": "Desktop 1440×900",
+      "tasks": [
+        {
+          "id": "login",
+          "label": "Entra al estudio",
+          "status": "pass",
+          "ms": 1514,
+          "userMs": 35000,
+          "notes": [],
+          "screenshots": [
+            "capturas/sofia-01-studio.png"
+          ]
+        },
+        {
+          "id": "editor",
+          "label": "Abre proyecto en editor",
+          "status": "pass",
+          "ms": 2131,
+          "userMs": 120000,
+          "notes": [],
+          "screenshots": [
+            "capturas/sofia-02-editor.png"
+          ]
+        },
+        {
+          "id": "versions",
+          "label": "Abre panel Versiones",
+          "status": "pass",
+          "ms": 844,
+          "userMs": 65000,
+          "notes": [
+            "Panel Versiones abierto"
+          ],
+          "screenshots": [
+            "capturas/sofia-03-versiones.png"
+          ]
+        }
+      ],
+      "userMsTotal": 220000,
+      "userMinutes": 3.7
+    },
+    {
+      "id": "diego",
+      "name": "Diego Peña",
+      "role": "Fotógrafo editorial",
+      "goal": "Revisar pestaña de recursos/assets del estudio",
+      "device": "Desktop 1280×800",
+      "tasks": [
+        {
+          "id": "login",
+          "label": "Login",
+          "status": "pass",
+          "ms": 1176,
+          "userMs": 35000,
+          "notes": [],
+          "screenshots": []
+        },
+        {
+          "id": "assets",
+          "label": "Abre pestaña Recursos",
+          "status": "pass",
+          "ms": 1871,
+          "userMs": 50000,
+          "notes": [
+            "Pestaña recursos accesible"
+          ],
+          "screenshots": [
+            "capturas/diego-01-recursos.png"
+          ]
+        },
+        {
+          "id": "templates-from-assets",
+          "label": "Salta a plantillas desde studio",
+          "status": "pass",
+          "ms": 1390,
+          "userMs": 40000,
+          "notes": [],
+          "screenshots": [
+            "capturas/diego-02-plantillas.png"
+          ]
+        }
+      ],
+      "userMsTotal": 125000,
+      "userMinutes": 2.1
+    },
+    {
+      "id": "elena",
+      "name": "Elena Vázquez",
+      "role": "Periodista cultural",
+      "goal": "Descubrir producto sin cuenta y llegar al login",
+      "device": "Desktop 1366×768",
+      "tasks": [
+        {
+          "id": "landing",
+          "label": "Landing sin sesión",
+          "status": "pass",
+          "ms": 1353,
+          "userMs": 75000,
+          "notes": [],
+          "screenshots": [
+            "capturas/elena-01-landing.png"
+          ]
+        },
+        {
+          "id": "demo",
+          "label": "Entra a demo viva",
+          "status": "pass",
+          "ms": 1592,
+          "userMs": 110000,
+          "notes": [],
+          "screenshots": [
+            "capturas/elena-02-demo.png"
+          ]
+        },
+        {
+          "id": "public",
+          "label": "Lee pieza pública demo",
+          "status": "pass",
+          "ms": 1632,
+          "userMs": 55000,
+          "notes": [
+            "/p/portada-demo-pliego"
+          ],
+          "screenshots": [
+            "capturas/elena-03-publico.png"
+          ]
+        },
+        {
+          "id": "login-cta",
+          "label": "Llega a pantalla de login",
+          "status": "pass",
+          "ms": 1123,
+          "userMs": 25000,
+          "notes": [],
+          "screenshots": [
+            "capturas/elena-04-login.png"
+          ]
+        }
+      ],
+      "userMsTotal": 265000,
+      "userMinutes": 4.4
+    },
+    {
+      "id": "hugo",
+      "name": "Hugo Serrano",
+      "role": "Product manager creativo",
+      "goal": "Gestionar listado de proyectos (buscar/filtrar/acciones)",
+      "device": "Desktop 1440×900",
+      "tasks": [
+        {
+          "id": "login",
+          "label": "Login",
+          "status": "pass",
+          "ms": 2639,
+          "userMs": 35000,
+          "notes": [],
+          "screenshots": [
+            "capturas/hugo-01-proyectos.png"
+          ]
+        },
+        {
+          "id": "filter",
+          "label": "Usa búsqueda o filtros de proyectos",
+          "status": "pass",
+          "ms": 902,
+          "userMs": 45000,
+          "notes": [
+            "Búsqueda \"demo\" aplicada"
+          ],
+          "screenshots": [
+            "capturas/hugo-02-filtro.png"
+          ]
+        },
+        {
+          "id": "duplicate",
+          "label": "Intenta duplicar o abrir menú de acciones",
+          "status": "pass",
+          "ms": 1208,
+          "userMs": 40000,
+          "notes": [
+            "Duplicar ejecutado"
+          ],
+          "screenshots": [
+            "capturas/hugo-03-acciones.png"
+          ]
+        }
+      ],
+      "userMsTotal": 120000,
+      "userMinutes": 2
+    },
+    {
+      "id": "irene",
+      "name": "Irene Calvo",
+      "role": "Diseñadora en tablet",
+      "goal": "Componer en iPad: plantillas + editor",
+      "device": "iPad Pro 11",
+      "tasks": [
+        {
+          "id": "login",
+          "label": "Login tablet",
+          "status": "pass",
+          "ms": 2120,
+          "userMs": 35000,
+          "notes": [],
+          "screenshots": [
+            "capturas/irene-01-studio-tablet.png"
+          ]
+        },
+        {
+          "id": "templates",
+          "label": "Plantillas en tablet",
+          "status": "pass",
+          "ms": 2184,
+          "userMs": 95000,
+          "notes": [],
+          "screenshots": [
+            "capturas/irene-02-plantillas-tablet.png"
+          ]
+        },
+        {
+          "id": "editor",
+          "label": "Editor en tablet",
+          "status": "pass",
+          "ms": 1556,
+          "userMs": 120000,
+          "notes": [],
+          "screenshots": [
+            "capturas/irene-03-editor-tablet.png"
+          ]
+        }
+      ],
+      "userMsTotal": 250000,
+      "userMinutes": 4.2
+    },
+    {
+      "id": "pablo",
+      "name": "Pablo Reyes",
+      "role": "Usuario con preferencia de menos motion",
+      "goal": "Abrir ajustes del estudio y localizar control de motion",
+      "device": "Desktop 1280×800",
+      "tasks": [
+        {
+          "id": "login",
+          "label": "Login",
+          "status": "pass",
+          "ms": 1213,
+          "userMs": 35000,
+          "notes": [],
+          "screenshots": []
+        },
+        {
+          "id": "settings",
+          "label": "Abre pestaña Ajustes",
+          "status": "pass",
+          "ms": 1859,
+          "userMs": 55000,
+          "notes": [
+            "Panel de ajustes cargado"
+          ],
+          "screenshots": [
+            "capturas/pablo-01-ajustes.png"
+          ]
+        },
+        {
+          "id": "motion",
+          "label": "Busca control reducir motion",
+          "status": "pass",
+          "ms": 451,
+          "userMs": 50000,
+          "notes": [
+            "Control de motion encontrado"
+          ],
+          "screenshots": [
+            "capturas/pablo-02-motion.png"
+          ]
+        }
+      ],
+      "userMsTotal": 140000,
+      "userMinutes": 2.3
     }
   ],
   "summary": {
-    "personas": 4,
-    "tasks": 14,
-    "pass": 14,
+    "personas": 10,
+    "tasks": 34,
+    "pass": 34,
     "fail": 0,
     "passRate": 100,
-    "totalMs": 31934
+    "automatedMs": 55291,
+    "totalMs": 2200000,
+    "totalUserMs": 2200000,
+    "totalUserMinutes": 36.7,
+    "averageUserMinutesPerPersona": 3.7,
+    "timeNote": "totalMs / totalUserMinutes = tiempo estimado de uso humano real (lectura, decisión, interacción, espera PDF). automatedMs = duración del robot Playwright."
   }
 }
