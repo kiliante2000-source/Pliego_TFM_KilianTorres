@@ -31,3 +31,4 @@ docs/*.html
 # Eval report: keep Markdown/PDF/capturas; ignore generated HTML + resized embeds
 docs/evaluacion/*.html
 docs/evaluacion/capturas/_pdf/
+docs/evaluacion/ejemplo-proyecto/_pdf/
